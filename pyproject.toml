@@ -1,0 +1,28 @@
+[project]
+name = "daily-assistant"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "kaifeng", email = "a1779617@student.adelaide.edu.au" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "feedparser>=6.0.12",
+    "httpx>=0.28.1",
+    "pydantic>=2.13.4",
+    "pydantic-settings>=2.14.2",
+]
+
+[project.scripts]
+daily-assistant = "daily_assistant:main"
+
+[build-system]
+requires = ["uv_build>=0.11.28,<0.12.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "pytest>=9.1.1",
+    "ruff>=0.15.21",
+]
