@@ -8,9 +8,6 @@ class Settings(BaseSettings):
     }
     anthropic_api_key: str
 
-# @lru_cache()
+@lru_cache()
 def get_settings() -> Settings:
     return Settings()
-
-get_settings()  # Load settings at startup to ensure they are available
-print(get_settings().anthropic_api_key)

@@ -1,4 +1,4 @@
-from daily_assistant.config import Settings, get_settings
+from daily_assistant.config import Settings
 
 def test_settings_loads_from_env(monkeypatch):
     # Set the environment variable for testing

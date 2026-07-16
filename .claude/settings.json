@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(D:/projects/Daily_AI_Assistant/.venv/Scripts/python.exe -c ' *)"
+    ]
+  }
+}
