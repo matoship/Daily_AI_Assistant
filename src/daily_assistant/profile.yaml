@@ -1,0 +1,22 @@
+identity:
+  location: Adelaide, South Australia
+  role: AI Engineer (ServiceNow / LLM applications)
+  career_goal: AI Application Engineer
+
+immigration:
+  pathway: AU skilled migration
+  watching:
+    - SA state nomination (190/491) invitation rounds and criteria changes
+    - ICT occupation list changes
+    - Department of Home Affairs policy / processing-time announcements
+  irrelevant:
+    - other states' nomination news unless it signals national policy shifts
+    - family/partner/humanitarian visa streams
+
+engineering:
+  interests:
+    - LLM application patterns (agents, RAG, structured outputs, evals)
+    - Claude API / model releases across major providers
+    - Python, Go, TypeScript ecosystem news relevant to backend + AI work
+  irrelevant:
+    - consumer gadget news, funding rounds without technical substance
