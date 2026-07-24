@@ -13,3 +13,8 @@ class TriageResult(BaseModel):
     category: str
     reason: str
     story_hint: str
+    
+class Source(BaseModel):
+    url: str
+    name: str
+    justification: str

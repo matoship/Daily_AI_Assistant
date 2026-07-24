@@ -1,0 +1,16 @@
+sources:
+  - url: https://migration.sa.gov.au/rss
+    name: SA Migration - State Nomination
+    justification: Primary source for 190/491 invitation round announcements
+  - url: https://immi.homeaffairs.gov.au/rss
+    name: Department of Home Affairs - News
+    justification: Official source for visa policy and processing-time announcements
+  - url: https://www.marktechpost.com/feed/
+    name: MarkTechPost - AI & Technology News
+    justification: Covers LLM application patterns, Claude API/model releases, and relevant backend/AI ecosystem news
+  - url: https://www.infoq.com/feed/
+    name: InfoQ - Software Development News
+    justification: Provides updates on Python, Go, TypeScript ecosystem news relevant to backend and AI work
+  - url: https://tldr.tech/
+    name: TLDR.Tech - Tech News Summary
+    justification: Summarizes tech news, useful for quick updates on relevant topics
