@@ -1,6 +1,3 @@
-
-import json
-
 from daily_assistant.models import Article, TriageResult
 from anthropic import Anthropic
 
@@ -29,7 +26,7 @@ def triage_article(article: Article, profile: dict, client: Anthropic) -> Triage
     response = client.messages.create(
         model="claude-haiku-4-5-20251001",
         max_tokens=300,
-        temperature=0.7,
+        temperature=0,
         tools=[{"name": "provide_triage_result", 
                 "description": "Provide a triage result with relevance, category, reason, and story hints",
                "input_schema": {
@@ -46,14 +43,13 @@ def triage_article(article: Article, profile: dict, client: Anthropic) -> Triage
                tool_choice={"type": "tool", "name": "provide_triage_result"},
                messages=[{"role": "user", "content": prompt}])
 
-    # Parse the response into a TriageResult
-    result_text = response.completion.strip()
-    
-    # Here you would parse result_text to extract relevance, category, reason, and story_hint
-    # For simplicity, let's assume the model returns a JSON-like string we can eval
-    try:
-        result_dict = json.loads(result_text)  # In production, use json.loads() with proper formatting
-        return TriageResult(**result_dict)
-    except Exception as e:
-        raise ValueError(f"Failed to parse model response: {e}")
-    
+    tool_use_block = None
+    for block in response.content:
+        if block.type == "tool_use":
+            tool_use_block = block
+            break
+
+    if tool_use_block is None:
+        raise ValueError("Claude did not return a tool_use block")
+
+    return TriageResult(**tool_use_block.input)

@@ -1,5 +1,8 @@
 from daily_assistant.triage import triage_article
 from daily_assistant.models import Article
+from types import SimpleNamespace
+
+
 
 def test_triage_article():
     # Mock Article and profile
@@ -16,21 +19,30 @@ def test_triage_article():
         "location": {"country": "USA"}
     }
 
+    fake_block = SimpleNamespace(
+    type="tool_use",
+    input={"relevance": 8, "category": "Technology",
+            "reason": "The article is relevant to the user's interests in technology.", 
+            "story_hint": "Follow up on the technology trends mentioned."},
+    )
+    fake_response = SimpleNamespace(content=[fake_block])
+
     # Mock the Anthropic client
     class MockMessages:
         def create(self, model, max_tokens, temperature, tools, tool_choice, messages):
             # Return a mock response that simulates the model's output
-            return type('Response', (object,), {
-                "completion": '{"relevance": 8, "category": "Technology", "reason": "The article is relevant to the user\'s interests in technology.", "story_hint": "Follow up on the technology trends mentioned."}'
-            })()
+            return fake_response
     class MockAnthropicClient:
         def __init__(self):
             self.messages = MockMessages()
+            
 
     mock_client = MockAnthropicClient()
 
     # Call the triage_article function
     result = triage_article(article, profile, mock_client)
+
+
 
     # Assertions to check if the result is as expected
     assert result.relevance == 8
