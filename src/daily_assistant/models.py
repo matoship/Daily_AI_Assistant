@@ -1,6 +1,5 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from datetime import datetime
-
 class Article(BaseModel):
     url:str
     source:str
@@ -9,7 +8,7 @@ class Article(BaseModel):
     summary:str
 
 class TriageResult(BaseModel):
-    relevance: int
+    relevance: int = Field(..., ge=0, le=10)
     category: str
     reason: str
     story_hint: str

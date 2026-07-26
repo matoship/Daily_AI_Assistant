@@ -1,4 +1,4 @@
-from daily_assistant.models import Article,Source
+from daily_assistant.models import Source
 from daily_assistant.source import fetch_articles
 from daily_assistant.storage import Storage
 

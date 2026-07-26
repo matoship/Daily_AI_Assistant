@@ -10,16 +10,16 @@ def fetch_articles(source:Source) -> list[Article]:
     articles = []
     
     for entry in feed.entries:
-        published_at = None
-        if 'published' in entry:
-            published_at = datetime(*entry.published_parsed[:6])
+        parsed = entry.get("published_parsed")
+        if parsed:
+            published_at = datetime(*parsed[:6])
         
         article = Article(
             url=entry.link,
             source=source.name,
             title=entry.title,
             published_at=published_at,
-            summary=entry.summary
+            summary=entry.get("summary", "")
         )
         articles.append(article)
     

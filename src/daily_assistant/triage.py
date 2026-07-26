@@ -1,5 +1,6 @@
 from daily_assistant.models import Article, TriageResult
 from anthropic import Anthropic
+from daily_assistant.profile import category_options 
 
 def triage_article(article: Article, profile: dict, client: Anthropic) -> TriageResult:
     """
@@ -21,7 +22,7 @@ def triage_article(article: Article, profile: dict, client: Anthropic) -> Triage
     
     Please provide a relevance score (0-10), a category, a reason for your decision, and any story hints.
     """
-
+    categories = category_options(profile) + ["other"]
     # Call the model
     response = client.messages.create(
         model="claude-haiku-4-5-20251001",
@@ -32,8 +33,8 @@ def triage_article(article: Article, profile: dict, client: Anthropic) -> Triage
                "input_schema": {
                     "type": "object",
                     "properties": {
-                        "relevance": {"type": "number","description": "Relevance score (0-10)"},
-                        "category": {"type": "string", "description": "Category of the article"},
+                        "relevance": {"type": "integer","description": "Relevance score (0-10)"},
+                        "category": {"type": "string", "enum": categories, "description": "Category of the article"},
                         "reason": {"type": "string", "description": "Reason for the triage decision"},
                         "story_hint": {"type": "string", "description": "Any story hints"}
                     },
