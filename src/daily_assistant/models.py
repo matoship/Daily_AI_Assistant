@@ -8,6 +8,7 @@ class Article(BaseModel):
     summary:str
 
 class TriageResult(BaseModel):
+    """Structured relevance judgment for one article, from triage_article()."""
     relevance: int = Field(..., ge=0, le=10)
     category: str
     reason: str
@@ -17,3 +18,10 @@ class Source(BaseModel):
     url: str
     name: str
     justification: str
+    
+class DigestItem(BaseModel):
+    headline: str
+    summary: str
+    why_it_matters: str
+    category: str
+    article_urls: list[str]
