@@ -9,5 +9,5 @@ def load_sources(path: str = "src/daily_assistant/source.yaml") -> list[dict]:
         return safe_load(f).get("sources", [])
     
 def category_options(profile: dict) -> list[str]:
-    interests = profile.get("Topics", {}).keys()
+    interests = profile.get("topics", {}).keys()
     return list(interests)

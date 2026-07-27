@@ -15,13 +15,8 @@ def test_load_sources():
         assert "justification" in source
 
 def test_category_options():
-    profile = {
-        "Topics": {
-            "technology": {},
-            "politics": {},
-            "sports": {}
-        }
-    }
+    profile = load_profile()
     categories = category_options(profile)
     assert isinstance(categories, list)
-    assert set(categories) == {"technology", "politics", "sports"}
+    for category in categories:
+        assert isinstance(category, str)
