@@ -17,3 +17,10 @@ class Source(BaseModel):
     url: str
     name: str
     justification: str
+    
+class DigestItem(BaseModel):
+    headline: str
+    summary: str
+    why_it_matters: str
+    category: str
+    article_urls: list[str]
