@@ -14,6 +14,9 @@ def synthesize(selected_articles: list[tuple[Article, TriageResult]],profile:dic
     Returns:
         list[DigestItem]: A list of synthesized digest items.
     """
+    if not selected_articles:
+        return []
+    
     digest_items = []
     
 
@@ -33,7 +36,6 @@ def synthesize(selected_articles: list[tuple[Article, TriageResult]],profile:dic
     5. The URL of the articles.
     6.if several articles cover the same event, merge them into one entry; if they're unrelated, give each its own entry.
 
-    Format your response as a JSON object with keys: headline, summary, why_it_matters, category, article_urls.
     """
     
     response = client.messages.create(
@@ -73,6 +75,7 @@ def synthesize(selected_articles: list[tuple[Article, TriageResult]],profile:dic
     if tool_use_block is None:
         raise ValueError("Claude did not return a tool_use block")
     
-    for item in tool_use_block.input["digest_items"]: digest_items.append(DigestItem(**item))
+    for item in tool_use_block.input["digest_items"]: 
+        digest_items.append(DigestItem(**item))
 
     return digest_items

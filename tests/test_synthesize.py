@@ -1,4 +1,4 @@
-from daily_assistant.models import Article, TriageResult, DigestItem
+from daily_assistant.models import Article, TriageResult
 from daily_assistant.synthesize import synthesize
 from daily_assistant.profile import load_profile
 from types import SimpleNamespace
