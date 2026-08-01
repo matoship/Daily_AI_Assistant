@@ -24,15 +24,16 @@ def synthesize(selected_articles: list[tuple[Article, TriageResult]],profile:dic
     You are a news summarization assistant. 
     Please summarize the following articles into a digest item. 
     The user is interested in the following topics: {', '.join(profile.get('topics', {}).keys())}.
-    
+    Here is my identity: {profile.get('identity',{})}
+
     here are selected articles and their triage results:
     {[(article.title, result.relevance, result.category, article.url) for article, result in selected_articles]}
     
     Please provide:
     1. A concise headline.
     2. A brief summary of the article.
-    3. Why it matters to the user based on their interests.
-    4. The category of the article based on the user's interests.
+    3. Why it matters to me based on my interests.
+    4. The category of the article based on my interests.
     5. The URL of the articles.
     6.if several articles cover the same event, merge them into one entry; if they're unrelated, give each its own entry.
 
