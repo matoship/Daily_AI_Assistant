@@ -1,3 +1,4 @@
+from daily_assistant import storage
 from daily_assistant.triage import triage_article
 from daily_assistant.selection import select_for_synthesis
 from daily_assistant.synthesize import synthesize
@@ -6,6 +7,9 @@ from daily_assistant.profile import load_profile,load_sources
 from daily_assistant.storage import Storage
 from anthropic import Anthropic
 from daily_assistant.config import get_settings
+from datetime import timedelta,datetime,timezone
+import logging
+logger = logging.getLogger(__name__)
 
 def run():
     """
@@ -16,6 +20,12 @@ def run():
     4. Select articles for synthesis.
     5. Synthesize a digest from selected articles.
     """
+
+    logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s %(levelname)-8s %(name)s: %(message)s",
+)
+    logging.getLogger("httpx").setLevel(logging.WARNING) 
     # Load user profile and sources
     profile = load_profile()
     sources = load_sources()
@@ -25,16 +35,42 @@ def run():
 
     # Initialize storage (assuming a Storage class is defined elsewhere)
     with Storage() as storage:
+
+        outdated=storage.mark_outdated_before((datetime.now(timezone.utc) - timedelta(hours=48)).isoformat())
+        logger.info(f"Marked {outdated} articles as outdated in storage.")
         # Ingest articles from sources
         new_articles = ingest(sources, storage)
-    
-    # Triage articles based on relevance to the user's profile
-    triaged_articles = [(article, triage_article(article, profile, client)) for article in new_articles]
-    
-    # Select articles for synthesis
-    selected_articles = select_for_synthesis(triaged_articles, threshold=5, top_n=5)
-    
-    # Synthesize a digest from selected articles
-    digest = synthesize(selected_articles,profile,client)
-    
-    return digest
+        logger.info(f"Total new articles ingested: {len(new_articles)}")
+
+        triaged_articles = []
+        article_count = len(new_articles)
+        for count, article in enumerate(new_articles, 1):
+            try:
+                result = triage_article(article, profile, client)
+                logger.info(
+                    "Triage article %s/%s: relevance=%s, category=%s, title=%s",
+                    count,
+                    article_count,
+                    result.relevance,
+                    result.category,
+                    article.title,
+                )
+                triaged_articles.append((article, result))
+                storage.mark_scored(article.url)
+            except Exception:
+                logger.exception("Error triaging article '%s'", article.title)
+
+        logger.info(f"Total articles triaged: {len(triaged_articles)}") 
+        # Select articles for synthesis
+        selected_articles = select_for_synthesis(triaged_articles, threshold=5, top_n_per_category=5)
+        logger.info(f"Total articles selected for synthesis: {len(selected_articles)}")
+        
+        # Synthesize a digest from selected articles
+        digest = synthesize(selected_articles,profile,client)
+        logger.info(f"Total articles in digest: {len(digest)}")
+        # Mark digested articles as digested in storage
+        for digesteditem in digest:
+            for url in digesteditem.article_urls:
+                storage.mark_digested(url)
+
+        return digest

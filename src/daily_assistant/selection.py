@@ -2,7 +2,6 @@
 from daily_assistant.models import Article, TriageResult
 from collections import defaultdict
 
-
 def select_for_synthesis(triaged: list[tuple[Article,TriageResult]],threshold:int,top_n_per_category:int) -> list[tuple[Article,TriageResult]]:
     """
     Select articles for synthesis based on their triage results.
