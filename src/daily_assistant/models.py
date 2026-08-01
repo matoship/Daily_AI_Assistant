@@ -1,5 +1,6 @@
 from pydantic import BaseModel, Field
 from datetime import datetime
+from typing import Literal
 class Article(BaseModel):
     url:str
     source:str
@@ -24,3 +25,5 @@ class DigestItem(BaseModel):
     why_it_matters: str
     category: str
     article_urls: list[str]
+
+ArticleStatus = Literal["fetched", "scored", "digested", "outdated"]

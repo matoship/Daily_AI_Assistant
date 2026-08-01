@@ -1,23 +1,38 @@
 from daily_assistant.storage import Storage
 from daily_assistant.models import Article
 
+
 def test_storage_add_and_retrieve_article():
-    # Initialize the storage
-    with Storage(":memory:") as storage:  # Use in-memory database for testing
-        # Create a test article
+    with Storage(":memory:") as storage:
         test_article = Article(
             url="https://example.com/test-article",
             source="Example Source",
             title="Test Article",
             published_at=None,
-            summary="This is a test article."
+            summary="This is a test article.",
         )
 
-        # Mark the article as seen
-        storage.mark_article_as_seen(test_article.url)
+        storage.mark_outdated(test_article.url)
+        assert storage.get_status(test_article.url) == "outdated"
 
-        # Check if the article has been marked as seen
-        assert storage.has_article_been_seen(test_article.url)
 
-        # Check if an unseen article returns False
-        assert not storage.has_article_been_seen("https://example.com/unseen-article")
+def test_mark_outdated_before_returns_updated_rows():
+    with Storage(":memory:") as storage:
+        storage.upsert_status("https://one.example", "fetched")
+        storage.upsert_status("https://two.example", "scored")
+
+        storage.conn.execute(
+            "UPDATE articles SET updated_at = ? WHERE url = ?",
+            ("2024-01-01T00:00:00", "https://one.example"),
+        )
+        storage.conn.execute(
+            "UPDATE articles SET updated_at = ? WHERE url = ?",
+            ("2026-01-01T00:00:00", "https://two.example"),
+        )
+        storage.conn.commit()
+
+        updated_count = storage.mark_outdated_before("2025-01-01T00:00:00")
+
+        assert updated_count == 1
+        assert storage.get_status("https://one.example") == "outdated"
+        assert storage.get_status("https://two.example") == "scored"

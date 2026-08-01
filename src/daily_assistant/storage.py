@@ -1,4 +1,7 @@
 import sqlite3
+from daily_assistant.models import ArticleStatus
+from datetime import datetime, timezone
+
 
 class Storage:
     def __init__(self, db_path: str = "seen.db"):
@@ -7,26 +10,69 @@ class Storage:
 
     def init_db(self) -> None:
         cursor = self.conn.cursor()
-        cursor.execute('''
-            CREATE TABLE IF NOT EXISTS seen_articles (
-                url TEXT PRIMARY KEY,
-                first_seen_at TEXT
+        cursor.execute(
+            """
+            CREATE TABLE IF NOT EXISTS articles (
+                url TEXT PRIMARY KEY,                
+                status TEXT NOT NULL,
+                updated_at TEXT NOT NULL,
+                first_seen_at TEXT NOT NULL
             )
-        ''')
+            """
+        )
         self.conn.commit()
 
-    def mark_article_as_seen(self, url: str) -> None:
+    def upsert_status(self, url: str, status: ArticleStatus) -> None:
         cursor = self.conn.cursor()
-        cursor.execute('''
-            INSERT OR IGNORE INTO seen_articles (url, first_seen_at)
-            VALUES (?, datetime('now'))
-        ''', (url,))
+        cursor.execute(
+            """
+            INSERT INTO articles (url, status, first_seen_at, updated_at)
+            VALUES (?, ?, ?, ?)
+            ON CONFLICT(url) DO UPDATE SET
+                status = excluded.status,
+                updated_at = excluded.updated_at
+            """,
+            (url, status, datetime.now(timezone.utc).isoformat(),datetime.now(timezone.utc).isoformat()),
+        )
         self.conn.commit()
 
-    def has_article_been_seen(self, url: str) -> bool:
+    def get_status(self, url: str) -> ArticleStatus | None:
         cursor = self.conn.cursor()
-        cursor.execute('SELECT 1 FROM seen_articles WHERE url = ?', (url,))
-        return cursor.fetchone() is not None
+        cursor.execute(
+            """
+            SELECT status FROM articles WHERE url = ?
+            """,
+            (url,),
+        )
+        row = cursor.fetchone()
+        return row[0] if row is not None else None
+
+    def mark_outdated_before(self, cutoff_iso: str) -> int:
+        """Mark articles WHERE first_seen_at < ? AND status in "fetched" as outdated"""
+        cursor = self.conn.cursor()
+        cursor.execute(
+            """
+            UPDATE articles
+            SET status = 'outdated', updated_at = ?
+            WHERE first_seen_at < ? AND status = 'fetched'
+            """,
+            (cutoff_iso,datetime.now(timezone.utc).isoformat()),
+        )
+        self.conn.commit()
+        return cursor.rowcount
+
+    def mark_outdated(self, url: str) -> None:
+        self.upsert_status(url, "outdated")
+
+    def mark_digested(self, url: str) -> None:
+        self.upsert_status(url, "digested")
+
+    def mark_scored(self, url: str) -> None:
+        self.upsert_status(url, "scored")
+
+    def mark_fetched(self, url: str) -> None:
+        self.upsert_status(url, "fetched")
+
 
     def close(self) -> None:
         self.conn.close()
@@ -35,4 +81,4 @@ class Storage:
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-        self.close()          # reuse close() — one place that knows how to clean up
+        self.close()

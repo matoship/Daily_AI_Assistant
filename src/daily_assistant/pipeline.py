@@ -1,6 +1,8 @@
 from daily_assistant.models import Source
 from daily_assistant.source import fetch_articles
 from daily_assistant.storage import Storage
+import logging
+logger = logging.getLogger(__name__)
 
 def ingest(sources: list[dict], storage: Storage):
     """
@@ -11,11 +13,15 @@ def ingest(sources: list[dict], storage: Storage):
         storage (Storage): An instance of the Storage class to store the ingested articles.
     """
     new_articles = []
+
     for source_dict in sources:
         source = Source(**source_dict)
+        logger.info(f"Fetching articles from source: {source.name} ({source.url})")
         articles = fetch_articles(source)
         for article in articles:
-            if not storage.has_article_been_seen(article.url):
-                storage.mark_article_as_seen(article.url)
+            status = storage.get_status(article.url)
+            if status is None or status == "fetched":
+                storage.mark_fetched(article.url)
                 new_articles.append(article)
+
     return new_articles
