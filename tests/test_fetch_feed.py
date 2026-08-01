@@ -13,20 +13,22 @@ def test_fetch_articles(monkeypatch):
 
     # Mock the feedparser.parse function to return a controlled response
     class MockFeed:
-        entries = [
-            feedparser.FeedParserDict({
-                "link": "http://example.com/article1",
-                "title": "Test Article 1",
-                "published_parsed": (2024, 6, 1, 12, 0, 0, 0, 0, 0),
-                "summary": "Summary of article 1",
-            }),
-            feedparser.FeedParserDict({
-                "link": "http://example.com/article2",
-                "title": "Test Article 2",
-                "published_parsed": (2024, 6, 2, 12, 0, 0, 0, 0, 0),
-                "summary": "Summary of article 2",
-            })
-        ]
+        def __init__(self):
+            self.bozo = False
+            self.entries = [
+                feedparser.FeedParserDict({
+                    "link": "http://example.com/article1",
+                    "title": "Test Article 1",
+                    "published_parsed": (2024, 6, 1, 12, 0, 0, 0, 0, 0),
+                    "summary": "Summary of article 1",
+                }),
+                feedparser.FeedParserDict({
+                    "link": "http://example.com/article2",
+                    "title": "Test Article 2",
+                    "published_parsed": (2024, 6, 2, 12, 0, 0, 0, 0, 0),
+                    "summary": "Summary of article 2",
+                }),
+            ]
 
     def mock_parse(url):
         return MockFeed()

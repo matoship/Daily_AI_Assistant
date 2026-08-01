@@ -1,16 +1,17 @@
 sources:
-  - url: https://migration.sa.gov.au/rss
-    name: SA Migration - State Nomination
-    justification: Primary source for 190/491 invitation round announcements
-  - url: https://immi.homeaffairs.gov.au/rss
-    name: Department of Home Affairs - News
-    justification: Official source for visa policy and processing-time announcements
   - url: https://www.marktechpost.com/feed/
     name: MarkTechPost - AI & Technology News
     justification: Covers LLM application patterns, Claude API/model releases, and relevant backend/AI ecosystem news
   - url: https://www.infoq.com/feed/
     name: InfoQ - Software Development News
     justification: Provides updates on Python, Go, TypeScript ecosystem news relevant to backend and AI work
-  - url: https://tldr.tech/
-    name: TLDR.Tech - Tech News Summary
-    justification: Summarizes tech news, useful for quick updates on relevant topics
+  - url: "https://news.google.com/rss/search?q=Australia%20skilled%20migration%20when%3A7d&hl=en-AU&gl=AU&ceid=AU:en"
+    name: Google News - Skilled Migration (AU)
+    justification: Fresh national skilled-migration policy news; replaces dead Home Affairs RSS
+  - url: "https://news.google.com/rss/search?q=Australia%20(%22485%20visa%22%20OR%20%22graduate%20visa%22)%20when%3A30d&hl=en-AU&gl=AU&ceid=AU:en"
+    name: Google News - Graduate/485 Visa
+    justification: Tracks post-study work visa policy changes affecting my visa pathway
+  - url: "https://news.google.com/rss/search?q=%22South%20Australia%22%20(%22skilled%20migration%22%20OR%20%22state%20nomination%22)%20when%3A90d&hl=en-AU&gl=AU&ceid=AU:en"
+    name: Google News - SA State Nomination
+    justification: Low-volume catch-all for SA-specific coverage; primary SA source (migration.sa.gov.au) needs scraping - Phase 4
+
