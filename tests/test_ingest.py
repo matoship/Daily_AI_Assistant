@@ -1,14 +1,14 @@
-from daily_assistant.models import Source,Article
-from daily_assistant.storage import Storage
+from daily_assistant.models import Article, Source
 from daily_assistant.pipeline import ingest
+from daily_assistant.storage import Storage
+
 
 def test_ingest(monkeypatch):
-    # Mock sources
-    sources: list[Source] = [
+    sources: list[dict] = [
         {
             "url": "http://example.com/rss",
             "name": "Example Source",
-            "justification": "Test source for unit testing"
+            "justification": "Test source for unit testing",
         }
     ]
     fake_articles = [
@@ -19,16 +19,20 @@ def test_ingest(monkeypatch):
             summary="Summary 1",
         )
     ]
-    monkeypatch.setattr("daily_assistant.pipeline.fetch_articles", lambda url: fake_articles)
+    monkeypatch.setattr(
+        "daily_assistant.pipeline.fetch_articles",
+        lambda source: fake_articles,
+    )
 
     with Storage(":memory:") as storage:
-        
-        # Call the ingest function
         first = ingest(sources, storage)
         second = ingest(sources, storage)
-        
-    assert len(first) == 1  # First ingestion should store the article
-    assert len(second) == 0  # Second ingestion should not store the same article again
 
-    
-    
+        assert len(first) == 1
+        assert first[0].url == fake_articles[0].url
+        assert len(second) == 1
+        assert second[0].url == fake_articles[0].url
+        assert storage.get_status(fake_articles[0].url) == "fetched"
+        storage.mark_scored(fake_articles[0].url)
+        thrid = ingest(sources, storage)
+        assert len(thrid) == 0

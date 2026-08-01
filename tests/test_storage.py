@@ -22,12 +22,12 @@ def test_mark_outdated_before_returns_updated_rows():
         storage.upsert_status("https://two.example", "scored")
 
         storage.conn.execute(
-            "UPDATE articles SET updated_at = ? WHERE url = ?",
+            "UPDATE articles SET first_seen_at = ? WHERE url = ?",
             ("2024-01-01T00:00:00", "https://one.example"),
         )
         storage.conn.execute(
-            "UPDATE articles SET updated_at = ? WHERE url = ?",
-            ("2026-01-01T00:00:00", "https://two.example"),
+            "UPDATE articles SET first_seen_at = ? WHERE url = ?",
+            ("2024-01-01T00:00:00", "https://two.example"),
         )
         storage.conn.commit()
 

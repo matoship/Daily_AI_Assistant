@@ -34,7 +34,7 @@ def test_select_articles():
 
     category_option_one = 0
     category_option_two = 0
-    for article, triage_results  in selected_articles:
+    for _article, triage_results  in selected_articles:
         if triage_results.category == "engineering":
            category_option_one += 1
         if triage_results.category == "immigration":
