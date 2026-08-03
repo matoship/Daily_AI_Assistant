@@ -32,7 +32,7 @@ def run():
     sources = load_sources()
 
     # Initialize the Anthropic client
-    client = TrackedClient(Anthropic(api_key=get_settings().anthropic_api_key))
+    tracked_client = TrackedClient(Anthropic(api_key=get_settings().anthropic_api_key))
 
     # Initialize storage (assuming a Storage class is defined elsewhere)
     with Storage() as storage:
@@ -52,7 +52,7 @@ def run():
             article_count = len(new_articles)
             for count, article in enumerate(new_articles, 1):
                 try:
-                    result = triage_article(article, profile, client)
+                    result = triage_article(article, profile, tracked_client)
                     logger.info(
                         "Triage article %s/%s: relevance=%s, category=%s, title=%s",
                         count,
@@ -72,7 +72,7 @@ def run():
             logger.info(f"Total articles selected for synthesis: {len(selected_articles)}")
             
             # Synthesize a digest from selected articles
-            digest = synthesize(selected_articles,profile,client)
+            digest = synthesize(selected_articles,profile,tracked_client)
             logger.info(f"Total articles in digest: {len(digest)}")
             # Mark digested articles as digested in storage
             for digesteditem in digest:
@@ -85,9 +85,9 @@ def run():
                 articles_scored=len(triaged_articles),
                 articles_relevant=len(selected_articles),
                 articles_digested= digested_count,
-                total_input_tokens=client.total_input_tokens,
-                total_output_tokens=client.total_output_tokens,
-                estimated_cost_usd=estimate_cost(client.usage_by_model),
+                total_input_tokens=tracked_client.total_input_tokens,
+                total_output_tokens=tracked_client.total_output_tokens,
+                estimated_cost_usd=estimate_cost(tracked_client.usage_by_model),
                 status="completed",
             )
             return digest
@@ -97,12 +97,12 @@ def run():
                 run_id,
                 status="failed",
                 error_message=str(e),
-                total_input_tokens=client.total_input_tokens, 
-                total_output_tokens=client.total_output_tokens,
+                total_input_tokens=tracked_client.total_input_tokens,
+                total_output_tokens=tracked_client.total_output_tokens,
                 articles_fetched=len(new_articles),
                 articles_scored=len(triaged_articles),
                 articles_relevant=len(selected_articles),
                 articles_digested= digested_count,
-                estimated_cost_usd=estimate_cost(client.usage_by_model)
+                estimated_cost_usd=estimate_cost(tracked_client.usage_by_model)
             )
             raise
