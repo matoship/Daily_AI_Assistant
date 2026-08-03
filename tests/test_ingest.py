@@ -11,6 +11,14 @@ def test_ingest(monkeypatch):
             "justification": "Test source for unit testing",
         }
     ]
+    source2: list[dict] = [
+        {
+            "url": "http://example.com/rss2",
+            "name": "Example Source 2",
+            "justification": "Test source for unit testing",
+        }
+    ]   
+
     fake_articles = [
         Article(
             url="http://example.com/article1",
@@ -26,7 +34,7 @@ def test_ingest(monkeypatch):
 
     with Storage(":memory:") as storage:
         first = ingest(sources, storage)
-        second = ingest(sources, storage)
+        second = ingest(source2, storage)
 
         assert len(first) == 1
         assert first[0].url == fake_articles[0].url
@@ -34,5 +42,5 @@ def test_ingest(monkeypatch):
         assert second[0].url == fake_articles[0].url
         assert storage.get_status(fake_articles[0].url) == "fetched"
         storage.mark_scored(fake_articles[0].url)
-        thrid = ingest(sources, storage)
-        assert len(thrid) == 0
+        third = ingest(sources, storage) 
+        assert len(third) == 0

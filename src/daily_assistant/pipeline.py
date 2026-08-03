@@ -13,15 +13,20 @@ def ingest(sources: list[dict], storage: Storage):
         storage (Storage): An instance of the Storage class to store the ingested articles.
     """
     new_articles = []
+    seen_urls = set()
 
     for source_dict in sources:
         source = Source(**source_dict)
         logger.info(f"Fetching articles from source: {source.name} ({source.url})")
         articles = fetch_articles(source)
         for article in articles:
+            if article.url in seen_urls:
+                logger.debug(f"Duplicate article URL found: {article.url}. Skipping.")
+                continue
             status = storage.get_status(article.url)
             if status is None or status == "fetched":
                 storage.mark_fetched(article.url)
                 new_articles.append(article)
+                seen_urls.add(article.url)
 
-    return new_articles
+    return new_articles 
