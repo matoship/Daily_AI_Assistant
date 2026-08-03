@@ -116,10 +116,10 @@ class Storage:
         cursor.execute(
             """
             UPDATE articles
-            SET status = 'outdated', updated_at = ?
-            WHERE first_seen_at < ? AND status = 'fetched'
+            SET status = 'outdated', updated_at = :now
+            WHERE first_seen_at < :cutoff AND status = 'fetched'
             """,
-            (cutoff_iso,datetime.now(timezone.utc).isoformat()),
+            {"now":datetime.now(timezone.utc).isoformat(), "cutoff": cutoff_iso},
         )
         self.conn.commit()
         return cursor.rowcount

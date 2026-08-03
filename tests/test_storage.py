@@ -20,6 +20,7 @@ def test_mark_outdated_before_returns_updated_rows():
     with Storage(":memory:") as storage:
         storage.upsert_status("https://one.example", "fetched")
         storage.upsert_status("https://two.example", "scored")
+        storage.upsert_status("https://three.example", "fetched")
 
         storage.conn.execute(
             "UPDATE articles SET first_seen_at = ? WHERE url = ?",
@@ -36,3 +37,4 @@ def test_mark_outdated_before_returns_updated_rows():
         assert updated_count == 1
         assert storage.get_status("https://one.example") == "outdated"
         assert storage.get_status("https://two.example") == "scored"
+        assert storage.get_status("https://three.example") == "fetched"
