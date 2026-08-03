@@ -102,8 +102,8 @@ Connectors are deliberately pluggable: adding a source is one small module.
 seen_articles(id, url, url_hash, content_hash, source, title, published_at, first_seen_at)
 digest_items(id, run_id, article_ids, story_key, headline, summary, relevance_score,
              why_it_matters, category, created_at)
-runs(id, started_at, finished_at, articles_fetched, articles_new, articles_relevant,
-     total_input_tokens, total_output_tokens, est_cost_usd, status, error)
+runs(id, started_at, finished_at, articles_fetched, articles_scored, articles_relevant,
+     articles_digested, total_input_tokens, total_output_tokens, est_cost_usd, status, error)
 ```
 
 `story_key` groups digest items that belong to the same evolving story across days —

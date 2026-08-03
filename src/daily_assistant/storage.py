@@ -20,6 +20,69 @@ class Storage:
             )
             """
         )
+        cursor.execute(
+            """
+                CREATE TABLE IF NOT EXISTS runs (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                started_at TEXT NOT NULL,
+                finished_at TEXT,
+                articles_fetched INTEGER,
+                articles_scored INTEGER,
+                articles_relevant INTEGER,
+                articles_digested INTEGER,
+                total_input_tokens INTEGER,
+                total_output_tokens INTEGER,
+                estimated_cost_usd REAL,
+                status TEXT NOT NULL,
+                error_message TEXT
+            )
+            """
+        )
+        self.conn.commit()
+
+    def start_run(self) -> int:
+        cursor = self.conn.cursor()
+        cursor.execute(
+            """
+            INSERT INTO runs (started_at, status)
+            VALUES (?, ?)
+            """,
+            (datetime.now(timezone.utc).isoformat(), "running"),
+        )
+        self.conn.commit()
+        return cursor.lastrowid
+
+    def finish_run(self, run_id: int, **metrics) -> None:
+        cursor = self.conn.cursor()
+        cursor.execute(
+            """
+            UPDATE runs
+            SET finished_at = ?, 
+                articles_fetched = ?, 
+                articles_scored = ?, 
+                articles_relevant = ?, 
+                articles_digested = ?, 
+                total_input_tokens = ?, 
+                total_output_tokens = ?, 
+                estimated_cost_usd = ?, 
+                status = ?, 
+                error_message = ?
+            WHERE id = ?
+            """,
+            (
+                datetime.now(timezone.utc).isoformat(),
+                metrics.get("articles_fetched"),
+                metrics.get("articles_scored"),
+                metrics.get("articles_relevant"),
+                metrics.get("articles_digested"),
+                metrics.get("total_input_tokens"),
+                metrics.get("total_output_tokens"),
+                metrics.get("estimated_cost_usd"),
+                metrics.get("status", "completed"),
+                metrics.get("error_message"),
+                run_id,
+            ),
+        )
         self.conn.commit()
 
     def upsert_status(self, url: str, status: ArticleStatus) -> None:
