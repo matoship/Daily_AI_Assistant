@@ -4,7 +4,7 @@ version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
 authors = [
-    { name = "kaifeng", email = "a1779617@student.adelaide.edu.au" }
+    { name = "kaifeng", email = "kaifeng.chen.ca@gmail.com" }
 ]
 requires-python = ">=3.12"
 dependencies = [
@@ -17,7 +17,7 @@ dependencies = [
 ]
 
 [project.scripts]
-daily-assistant = "daily_assistant:main"
+daily-assistant = "daily_assistant.run:main"
 
 [build-system]
 requires = ["uv_build>=0.11.28,<0.12.0"]
