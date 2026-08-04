@@ -8,6 +8,7 @@
 - [ ] Watch `runs` telemetry for a few days: `articles_fetched` suspiciously high may mean Google News redirect URLs are not stable across fetches (would weaken URL dedup)
 
 ## Soon (code quality)
+- [ ] Digest filename/title uses UTC date, so the 6 AM Adelaide run is stamped with yesterday's date — use `ZoneInfo("Australia/Adelaide")` for display date (keep UTC for storage timestamps)
 - [ ] `Storage()` default path `"seen.db"` is CWD-relative — anchor to repo root like `profile._resolve_path`
 - [ ] Define a `Protocol` for the LLM client seam (`messages.create`) so `Anthropic | TrackedClient` (and later a vLLM/OpenAI-compatible client) satisfy one honest type
 - [ ] Consistent logging style: `logger.info("… %s", x)` lazy formatting everywhere (some f-strings remain)
