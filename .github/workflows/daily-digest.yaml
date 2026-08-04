@@ -1,0 +1,37 @@
+name: daily-digest
+
+on:
+  schedule:
+    - cron: '30 22 * * *' # every day at 8 AM
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  digest:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: install uv  
+        uses: astral-sh/setup-uv@v5
+
+      - name: Write Profile
+        run: printf '%s' "$PROFILE_YAML" > src/daily_assistant/profile.yaml
+        env:
+          PROFILE_YAML: ${{ secrets.PROFILE_YAML }}
+
+      - name: Run Daily Digest
+        run: uv run daily-assistant
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+      
+      - name: Commit Results
+        run: |
+          git config user.name "digest-bot"
+          git config user.email "actions@user.noreply.github.com"
+          git add docs seen.db
+          git diff --staged --quiet || git commit -m "digest: $(date -u +%F)"
+          git push
