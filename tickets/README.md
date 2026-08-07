@@ -29,3 +29,5 @@ Each ticket: what broke, why, how it was fixed, and the generalizable lesson. Nu
 | [019](TICKET-019-index-orphaned-archive.md) | Archive index only ever linked the current day | design flaw |
 | [020](TICKET-020-ci-workflow-authoring-errors.md) | Three YAML authoring errors in the Actions workflow | CI/config |
 | [021](TICKET-021-env-secret-scoping-empty-key.md) | Environment-scoped secret invisible to the job; no validation caught it | CI/config + fail-fast gap |
+| [022](TICKET-022-scheduled-trigger-missed-firing.md) | Scheduled workflow trigger silently missed a daily firing | CI/config |
+| [023](TICKET-023-same-day-overwrite-utc-date-mismatch.md) | Same-day reruns silently overwrote the digest; UTC date caused archive gaps | design flaw + silent data bug |

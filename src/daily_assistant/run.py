@@ -1,6 +1,4 @@
 import os
-
-from daily_assistant import storage
 from daily_assistant.telemetry import TrackedClient, estimate_cost
 from daily_assistant.triage import triage_article
 from daily_assistant.selection import select_for_synthesis
@@ -13,25 +11,32 @@ from daily_assistant.config import get_settings
 from datetime import timedelta,datetime,timezone
 from daily_assistant.render import render_digest_page, render_index
 import webbrowser
+from zoneinfo import ZoneInfo
+import json
 from pathlib import Path
 import logging
 logger = logging.getLogger(__name__)
 
 def main() -> None:
     digest = run()
-    date = datetime.now(timezone.utc).strftime("%Y-%m-%d")
-    rendered_digest = render_digest_page(digest, date)
+    today = datetime.now(ZoneInfo("Australia/Adelaide")).strftime("%Y-%m-%d")
 
     output_dir = Path(__file__).resolve().parents[2] / "docs"
     output_dir.mkdir(exist_ok=True, parents=True)
 
-    output_path = output_dir / f"digest_{date}.html"
+    sidecar_path = output_dir / f".digest_{today}.json"
+    existing_items = json.loads(sidecar_path.read_text()) if sidecar_path.exists() else []
+    all_items = existing_items + [item.model_dump() for item in digest]
+    sidecar_path.write_text(json.dumps(all_items))
+
+    rendered_digest = render_digest_page(all_items, today)
+    output_path = output_dir / f"digest_{today}.html"
     output_path.write_text(rendered_digest, encoding="utf-8")
 
     dates = sorted(
     (p.stem.removeprefix("digest_") for p in output_dir.glob("digest_*.html")),
     reverse=True,
-)
+    )
     rendered_index = render_index(dates)
     index_path = output_dir / "index.html" 
 

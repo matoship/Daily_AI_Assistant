@@ -6,6 +6,7 @@
 - [ ] Failure floor in `run()`: if articles were ingested but zero triaged, raise instead of reporting a completed run
 - [ ] Empty-day message in `render_digest_page` ("No relevant news today") so a quiet day is distinguishable from a broken agent
 - [ ] Watch `runs` telemetry for a few days: `articles_fetched` suspiciously high may mean Google News redirect URLs are not stable across fetches (would weaken URL dedup)
+- [ ] Detect a missed scheduled run (TICKET-022): GitHub's cron trigger dropped a firing silently, no error, no run record — alert (or at least surface) if no new `runs` row appears within some window past the scheduled time
 
 ## Soon (code quality)
 - [ ] Digest filename/title uses UTC date, so the 6 AM Adelaide run is stamped with yesterday's date — use `ZoneInfo("Australia/Adelaide")` for display date (keep UTC for storage timestamps)
