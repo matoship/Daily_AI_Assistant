@@ -95,6 +95,15 @@ def run():
                     )
                     triaged_articles.append((article, result))
                     storage.mark_scored(article.url)
+                    storage.store_triage_log(
+                        url=article.url,
+                        source=article.source,
+                        title=article.title,
+                        summary=article.summary,
+                        relevance=result.relevance,
+                        category=result.category,
+                        reason=result.reason
+                    )
                 except Exception:
                     logger.exception("Error triaging article '%s'", article.title)
 

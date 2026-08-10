@@ -4,18 +4,15 @@
 - [ ] Fix CI profile: verify `PROFILE_YAML` secret exists with exact name; re-run workflow_dispatch
 - [ ] Fail fast on empty/missing profile and sources in `profile.py` (`safe_load` returns `None` for empty file)
 - [ ] Failure floor in `run()`: if articles were ingested but zero triaged, raise instead of reporting a completed run
-- [ ] Empty-day message in `render_digest_page` ("No relevant news today") so a quiet day is distinguishable from a broken agent
 - [ ] Watch `runs` telemetry for a few days: `articles_fetched` suspiciously high may mean Google News redirect URLs are not stable across fetches (would weaken URL dedup)
 - [ ] Detect a missed scheduled run (TICKET-022): GitHub's cron trigger dropped a firing silently, no error, no run record — alert (or at least surface) if no new `runs` row appears within some window past the scheduled time
 
 ## Soon (code quality)
-- [ ] Digest filename/title uses UTC date, so the 6 AM Adelaide run is stamped with yesterday's date — use `ZoneInfo("Australia/Adelaide")` for display date (keep UTC for storage timestamps)
 - [ ] `Storage()` default path `"seen.db"` is CWD-relative — anchor to repo root like `profile._resolve_path`
 - [ ] Define a `Protocol` for the LLM client seam (`messages.create`) so `Anthropic | TrackedClient` (and later a vLLM/OpenAI-compatible client) satisfy one honest type
 - [ ] Consistent logging style: `logger.info("… %s", x)` lazy formatting everywhere (some f-strings remain)
 - [ ] Bump `actions/checkout@v5`; bump `astral-sh/setup-uv` when a Node-24 release lands
 - [ ] `telemetry.PRICING`: warn when past Sonnet intro-pricing expiry (2026-08-31); update rates after
-- [ ] Drop `_coerce_digest_item` dict-acceptance in `render.py` if nothing produces dicts (single contract)
 
 ## Phase 3 (next up)
 - [ ] Eval harness: golden set of hand-labeled articles (design the data format first), triage-agreement metric

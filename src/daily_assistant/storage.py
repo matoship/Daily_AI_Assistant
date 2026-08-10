@@ -38,7 +38,59 @@ class Storage:
             )
             """
         )
+        cursor.execute(
+            
+            """
+                CREATE TABLE IF NOT EXISTS triage_logs (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                url TEXT NOT NULL,
+                source TEXT NOT NULL,
+                title TEXT NOT NULL,
+                summary TEXT NOT NULL,
+                relevance INTEGER NOT NULL,
+                category TEXT NOT NULL,
+                reason TEXT NOT NULL,
+                created_at TEXT NOT NULL
+            )
+            """
+        )
+       
         self.conn.commit()
+
+    def store_triage_log(self, url: str, source: str, title: str, summary: str, relevance: int, category: str, reason: str) -> None:
+        cursor = self.conn.cursor()
+        cursor.execute(
+            """
+            INSERT INTO triage_logs (url, source, title, summary, relevance, category, reason, created_at)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+            """,
+            (url, source, title, summary, relevance, category, reason, datetime.now(timezone.utc).isoformat()),
+        )
+        self.conn.commit()
+
+    def get_triage_logs(self) -> list[dict]:
+        cursor = self.conn.cursor()
+        cursor.execute(
+            """
+            SELECT url, source, title, summary, relevance, category, reason, created_at
+            FROM triage_logs
+            ORDER BY created_at DESC
+            """
+        )
+        rows = cursor.fetchall()
+        return [
+            {
+                "url": row[0],
+                "source": row[1],
+                "title": row[2],
+                "summary": row[3],
+                "relevance": row[4],
+                "category": row[5],
+                "reason": row[6],
+                "created_at": row[7],
+            }
+            for row in rows
+        ]    
 
     def start_run(self) -> int:
         cursor = self.conn.cursor()
