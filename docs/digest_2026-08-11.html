@@ -1,0 +1,99 @@
+<!doctype html><html lang='en'><head><meta charset='utf-8'><meta name='viewport' content='width=device-width, initial-scale=1'><title>Daily Digest - 2026-08-11</title><style>
+:root {
+    color-scheme: light dark;
+    --bg: #f7f7f8;
+    --surface: #ffffff;
+    --text: #1a1a1a;
+    --muted: #5b5f66;
+    --border: #e3e4e7;
+    --accent: #2f5fd8;
+    --callout-bg: #eef2fd;
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg: #14151a;
+        --surface: #1c1e24;
+        --text: #eceef1;
+        --muted: #9aa0aa;
+        --border: #2c2f37;
+        --accent: #7ea1ff;
+        --callout-bg: #1f2740;
+    }
+}
+* { box-sizing: border-box; }
+body {
+    margin: 0;
+    padding: 2.5rem 1.25rem;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.55;
+}
+main {
+    max-width: 42rem;
+    margin: 0 auto;
+}
+header { margin-bottom: 2rem; }
+h1 { font-size: 1.5rem; margin: 0 0 0.25rem; }
+.subtitle { color: var(--muted); font-size: 0.9rem; margin: 0; }
+nav.back { margin-bottom: 1.5rem; }
+nav.back a { color: var(--accent); text-decoration: none; font-size: 0.9rem; }
+nav.back a:hover { text-decoration: underline; }
+article.digest-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 1.25rem;
+}
+.badge {
+    display: inline-block;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    color: var(--accent);
+    background: var(--callout-bg);
+    border-radius: 999px;
+    padding: 0.2rem 0.65rem;
+    margin-bottom: 0.6rem;
+}
+article.digest-item h2 { font-size: 1.15rem; margin: 0 0 0.5rem; }
+article.digest-item p { margin: 0 0 0.75rem; color: var(--text); }
+.why-it-matters {
+    background: var(--callout-bg);
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    font-size: 0.92rem;
+}
+.why-it-matters strong { color: var(--accent); }
+.sources {
+    margin-top: 0.75rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--border);
+    font-size: 0.85rem;
+    color: var(--muted);
+}
+.sources a { color: var(--muted); margin-right: 0.75rem; }
+.sources a:hover { color: var(--accent); }
+.empty {
+    color: var(--muted);
+    text-align: center;
+    padding: 3rem 1rem;
+}
+ul.archive { list-style: none; margin: 0; padding: 0; }
+ul.archive li {
+    border: 1px solid var(--border);
+    background: var(--surface);
+    border-radius: 8px;
+    margin-bottom: 0.6rem;
+}
+ul.archive a {
+    display: block;
+    padding: 0.85rem 1.1rem;
+    color: var(--text);
+    text-decoration: none;
+    font-weight: 500;
+}
+ul.archive a:hover { color: var(--accent); }
+</style></head><body><main><nav class='back'><a href='index.html'>&larr; Archive</a></nav><header><h1>Daily Digest</h1><p class='subtitle'>2026-08-11</p></header><article class='digest-item'><span class='badge'>engineering</span><h2>LLM Observability Showdown: Langfuse, LangSmith, Braintrust, and Arize Compared for 2026</h2><p>A comprehensive comparison of the leading LLM observability and evaluation platforms heading into 2026, covering Langfuse, LangSmith, Braintrust, Arize, and other contenders. The piece breaks down tracing, evaluation pipelines, dataset management, and monitoring capabilities across these tools, helping teams choose the right stack for productionizing LLM applications.</p><p class='why-it-matters'><strong>Why it matters:</strong> As an AI Engineer building ServiceNow/LLM applications, observability and evaluation tooling is core infrastructure for shipping reliable agentic systems. This comparison directly informs tool selection for your work and aligns with your goal of growing into an AI Application Engineer role where production-grade monitoring is a key skill.</p><div class='sources'><a href='https://www.marktechpost.com/2026/08/09/top-llm-observability-and-evaluation-platforms-in-2026-langfuse-langsmith-braintrust-arize-and-more-compared/'>source 1</a></div></article><article class='digest-item'><span class='badge'>engineering</span><h2>New Open-Source Tools Push Agentic AI Forward: Shepherd, Muse Glimmer, Pokee-Isaac, and TencentDB Agent Memory</h2><p>Several major open-source releases are advancing the agentic AI ecosystem this week. Shepherd is a Python substrate enabling meta-agents to fork, replay, and revert any agent run, improving debuggability of complex agent workflows. Meta AI released Muse Glimmer, a 30B-parameter open-weights agentic model that runs on a single consumer GPU. Pokee AI launched Pokee-Isaac 28B, an agentic model with a 10-million-token context window designed to operate inside a customer&#x27;s security boundary. Tencent Cloud open-sourced TencentDB Agent Memory v2.0, a team-level shared memory hub built for AI coding agents.</p><p class='why-it-matters'><strong>Why it matters:</strong> These releases collectively lower the barrier to building and debugging production agentic systems—directly relevant to your work on LLM applications. Shepherd&#x27;s replay/revert capabilities and TencentDB&#x27;s shared agent memory offer patterns you could apply to ServiceNow agent workflows, while the efficient open-weight models (Muse Glimmer, Pokee-Isaac) signal viable self-hosted alternatives worth evaluating for cost or data-boundary constraints.</p><div class='sources'><a href='https://www.marktechpost.com/2026/08/08/meet-shepherd-an-open-source-python-substrate-that-lets-meta-agents-fork-replay-and-revert-any-agent-run/'>source 1</a><a href='https://www.marktechpost.com/2026/08/10/meta-ai-releases-muse-glimmer/'>source 2</a><a href='https://www.marktechpost.com/2026/08/08/pokee-ai-releases-pokee-isaac-28b-a-10m-token-context-agentic-model-built-to-run-inside-the-customer-boundary/'>source 3</a><a href='https://www.marktechpost.com/2026/08/07/tencent-cloud-open-sources-tencentdb-agent-memory-v2-0/'>source 4</a></div></article><article class='digest-item'><span class='badge'>immigration</span><h2>Albanese&#x27;s Leadership Group Overrides Cabinet on Migration Package</h2><p>According to the AFR, the Albanese government&#x27;s inner leadership group bypassed broader cabinet input to push through a migration package, signalling internal tension over immigration policy direction and decision-making processes within the government.</p><p class='why-it-matters'><strong>Why it matters:</strong> As a resident of Adelaide, South Australia, changes to Australia&#x27;s migration policy can directly affect visa pathways, skilled migration settings, and the broader labour market you operate in as an engineer—especially relevant if migration settings touch skilled/tech visa categories.</p><div class='sources'><a href='https://news.google.com/rss/articles/CBMiuAFBVV95cUxQdkFiUGlxR3JwWk5iMzRRVlc1cjVwaThyQnJpTl92WDV3bFZVWjlPb2dISUYtdEsxeHRGTWZUaXNLSjc4WHdqdE9JdHR0YmRFUmJ4blcwSDIwX2licXFpNFhfcG1GbzRIZy0xQTZOMC1zSWFZVUJjVUdLcXFqOFZjLU5PN2dlRlBPZHlRdU52dFZrNzRHVTlvLXUyMVRYTmNpQWVoSTFIZ29HdXVxQkJrQ0ZtSVRRNVdO?oc=5'>source 1</a></div></article></main></body></html>
