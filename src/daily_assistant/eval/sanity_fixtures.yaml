@@ -1,0 +1,57 @@
+# Sanity fixtures -- mechanical check that the eval harness plumbing works.
+#
+# NOT a golden set. These are real articles pulled from triage_logs on
+# 2026-08-12, chosen because the model's OWN past output on them was already
+# unambiguous (very high or very low relevance) -- not because a human
+# independently labeled them. A fixture passing here only proves "triage is
+# stable on easy cases", never "triage is correct". See golden_set.yaml for
+# real ground-truth data built from actual human-reviewed disagreements.
+#
+# expected.min_relevance / max_relevance are thresholds, not exact-match
+# targets: triage_article is not perfectly deterministic run to run, so
+# asserting an exact score would make this flaky for reasons unrelated to
+# whether triage is actually working.
+
+fixtures:
+- id: obvious-relevant-engineering
+  article:
+    url: https://www.marktechpost.com/2026/08/09/top-llm-observability-and-evaluation-platforms-in-2026-langfuse-langsmith-braintrust-arize-and-more-compared/
+    source: MarkTechPost - AI & Technology News
+    title: 'Top LLM Observability and Evaluation Platforms in 2026: Langfuse, LangSmith, Braintrust, Arize,
+      and More Compared'
+    summary: '<p>A verified 2026 comparison of LLM observability platforms covering tracing depth, evaluation
+      capability, production monitoring, and pricing.</p>
+
+      <p>The post <a href="https://www.marktechpost.com/2026/08/09/top-llm-observability-and-evaluation-platforms-in-2026-langfuse-langsmith-braintrust-arize-and-more-compared/">Top
+      LLM Observability and Evaluation Platforms in 2026: Langfuse, LangSmith, Braintrust, Arize, and
+      More Compared</a> appeared first on <a href="https://www.marktechpost.com">MarkTechPost</a>.</p>'
+  expected:
+    min_relevance: 7
+  note: 'Real triage_logs row (id 10, recorded 2026-08-12): scored relevance=9, category=engineering.
+    LLM observability/eval tooling is squarely inside the engineering beat -- picked as an unambiguous
+    high case, not fabricated.'
+- id: obvious-relevant-immigration
+  article:
+    url: https://news.google.com/rss/articles/CBMi3wFBVV95cUxQclR3Y2lPSlJGbExiUFJyNW9JQjIwWXRHc3VCVml0RURTRTd5VzBzWnFqQU8zWjBjdHdRUkl1VXl1TklIOWI5bXhGcjNTVUdXd3k0LUZ0VU1fRXZBVGNNWVExNHBLcnJIWm1FVVlqVGhYdnM1SnAwdnBwNm9ZUDZyV2tCVERkZFZuWmNkY3o0ZzZJUGlpZEJ0c1htbElvRjY0ci0xWUIxSnVLYVE3QjBVb3dpQXVEQXV4dGdJUHJDVzBUMV9BM2xSUkk0VTFoRkduVzVUaDA2VTRvNlpKaVgw?oc=5
+    source: Google News - Skilled Migration (AU)
+    title: Coalition wants to bring migration down to lowest level since Global Financial Crisis - smh.com.au
+    summary: <a href="https://news.google.com/rss/articles/CBMi3wFBVV95cUxQclR3Y2lPSlJGbExiUFJyNW9JQjIwWXRHc3VCVml0RURTRTd5VzBzWnFqQU8zWjBjdHdRUkl1VXl1TklIOWI5bXhGcjNTVUdXd3k0LUZ0VU1fRXZBVGNNWVExNHBLcnJIWm1FVVlqVGhYdnM1SnAwdnBwNm9ZUDZyV2tCVERkZFZuWmNkY3o0ZzZJUGlpZEJ0c1htbElvRjY0ci0xWUIxSnVLYVE3QjBVb3dpQXVEQXV4dGdJUHJDVzBUMV9BM2xSUkk0VTFoRkduVzVUaDA2VTRvNlpKaVgw?oc=5"
+      target="_blank">Coalition wants to bring migration down to lowest level since Global Financial Crisis</a>&nbsp;&nbsp;<font
+      color="#6f6f6f">smh.com.au</font>
+  expected:
+    min_relevance: 5
+  note: 'Real triage_logs row (id 31, recorded 2026-08-12): scored relevance=7, category=immigration.
+    National skilled-migration policy is on-topic for the immigration beat. min_relevance set to 5 (the
+    pipeline''s own selection threshold), not the recorded 7, to leave real margin for run-to-run variance.'
+- id: obvious-irrelevant
+  article:
+    url: https://news.google.com/rss/articles/CBMib0FVX3lxTE9heGdoSFFYLUg4NTN1bXRPU3hDcURzMjBKRnJ5OTZGRWQ0VGlBbVFhOGVCY3Vpc3F2ek1uSmlOejRiX05aV0RFOUNITGRHdllUOWRQOFFST0tROTNiWkJYS3djdTM2WU1XVi1zZ1ZhUQ?oc=5
+    source: Google News - Skilled Migration (AU)
+    title: Mining’s next wave of jobs - Australian Mining
+    summary: <a href="https://news.google.com/rss/articles/CBMib0FVX3lxTE9heGdoSFFYLUg4NTN1bXRPU3hDcURzMjBKRnJ5OTZGRWQ0VGlBbVFhOGVCY3Vpc3F2ek1uSmlOejRiX05aV0RFOUNITGRHdllUOWRQOFFST0tROTNiWkJYS3djdTM2WU1XVi1zZ1ZhUQ?oc=5"
+      target="_blank">Mining’s next wave of jobs</a>&nbsp;&nbsp;<font color="#6f6f6f">Australian Mining</font>
+  expected:
+    max_relevance: 4
+  note: 'Real triage_logs row (id 33, recorded 2026-08-12): scored relevance=2, category=other. Surfaced
+    by a migration-focused feed but about mining-industry jobs, not skilled migration or engineering --
+    picked as an unambiguous low case.'
