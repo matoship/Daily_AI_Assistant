@@ -26,4 +26,16 @@ class DigestItem(BaseModel):
     category: str
     article_urls: list[str]
 
+class ExpectedThreshold(BaseModel):
+    min_relevance: int | None = None
+    max_relevance: int | None = None
+
+
+class Fixture(BaseModel):
+    id: str
+    article: Article
+    expected: ExpectedThreshold
+    note: str | None = None
+
+
 ArticleStatus = Literal["fetched", "scored", "digested", "outdated"]
