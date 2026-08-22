@@ -4,10 +4,8 @@ from daily_assistant.models import Article, ExpectedThreshold, Fixture, TriageRe
 
 def test_load_fixtures_returns_fixture_list():
     fixtures = sanity.load_fixtures()
+    assert isinstance(fixtures[0], Fixture)
 
-    assert isinstance(fixtures, list)
-    assert len(fixtures) > 0
-    assert set(["id", "article", "expected"]).issubset(fixtures[0].keys())
 
 
 def test_check_fixture_thresholds():
@@ -38,18 +36,20 @@ def test_check_fixture_thresholds():
 
 
 def test_run_sanity_uses_fixture_thresholds(monkeypatch):
-    fixtures = [
-        {
-            "id": "demo",
-            "article": {
-                "url": "https://example.com/article",
-                "source": "Example Source",
-                "title": "Example Article",
-                "summary": "Example summary",
-            },
-            "expected": {"min_relevance": 5, "max_relevance": 8},
-        }
-    ]
+    fixtures = []
+    fixtures.append(
+        Fixture(
+            id="demo",
+            article=Article(
+                url="https://example.com/article",
+                source="Example Source",
+                title="Example Article",
+                summary="Example summary",
+            ),
+            expected=ExpectedThreshold(min_relevance=5, max_relevance=8),
+            note="Demo fixture",
+        )
+    )
 
     def fake_triage_article(article, profile, client):
         return TriageResult(relevance=7, category="engineering", reason="On topic", story_hint="AI")
@@ -79,16 +79,16 @@ def test_summarize_results_counts_pass_and_fail():
 
 
 def test_main_returns_nonzero_when_fixture_fails(monkeypatch):
-    fixtures = [{
-        "id": "demo",
-        "article": {
-            "url": "https://example.com/article",
-            "source": "Example Source",
-            "title": "Example Article",
-            "summary": "Example summary",
-        },
-        "expected": {"min_relevance": 10, "max_relevance": 10},
-    }]
+    fixtures = [Fixture(
+        id="demo",
+        article=Article(
+            url="https://example.com/article",
+            source="Example Source",
+            title="Example Article",
+            summary="Example summary",
+        ),
+        expected=ExpectedThreshold(min_relevance=10, max_relevance=10),
+    )]
 
     monkeypatch.setattr(sanity, "load_fixtures", lambda path="": fixtures)
 
