@@ -41,8 +41,9 @@ def triage_article(article: Article, profile: dict, client: Anthropic) -> Triage
                     "required": ["relevance", "category", "reason", "story_hint"]
                 }
                }],
-               tool_choice={"type": "tool", "name": "provide_triage_result"},
-               messages=[{"role": "user", "content": prompt}])
+        tool_choice={"type": "tool", "name": "provide_triage_result"},
+        messages=[{"role": "user", "content": prompt}]
+        )
 
     tool_use_block = None
     for block in response.content:
