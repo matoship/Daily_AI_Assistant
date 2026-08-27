@@ -1,9 +1,9 @@
 from daily_assistant.models import Article, TriageResult
 from daily_assistant.synthesize import synthesize
 from daily_assistant.profile import load_profile
-from types import SimpleNamespace
+from daily_assistant.protocol import LLMResponse
 
-def test_synthesize():
+def test_synthesize(fake_llm_client):
     # Mock articles and triage results
     articles = [
         Article(
@@ -32,12 +32,9 @@ def test_synthesize():
     # Load a mock profile
     profile = load_profile()
     
-    class MockMessages:
-        def create(self, model, max_tokens, tools, tool_choice, messages):
-            # Return a mock response that simulates the model's output
-            fake_block = SimpleNamespace(
-                type="tool_use",
-                input={
+
+    fake_response = LLMResponse(
+        tool_input={
                     "digest_items": [
                         {
                             "headline": "Synthesized Headline",
@@ -47,15 +44,13 @@ def test_synthesize():
                             "article_urls": ["https://example.com/news/article1", "https://example.com/news/article2"]
                         }
                     ]
-                }
-            )
-            return SimpleNamespace(content=[fake_block])
-
-    class MockAnthropicClient:
-        def __init__(self):
-            self.messages = MockMessages()
-    
-    mock_client = MockAnthropicClient()
+                },
+        model="test-model",
+        input_tokens=0,
+        output_tokens=0,
+        truncated=False,
+    )
+    mock_client = fake_llm_client(fake_response)
     
     # Call the synthesize function
     digest_items = synthesize(triaged, profile, mock_client)

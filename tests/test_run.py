@@ -54,5 +54,5 @@ def test_run_passes_tracked_client_to_pipeline(monkeypatch):
 
     run_module.run()
 
-    assert captured["triage_client"].__class__.__name__ == "TrackedClient"
-    assert captured["synthesize_client"].__class__.__name__ == "TrackedClient"
+    assert captured["triage_client"].__class__.__name__ == "AnthropicLLMClient"
+    assert captured["synthesize_client"].__class__.__name__ == "AnthropicLLMClient"

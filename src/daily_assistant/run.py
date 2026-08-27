@@ -8,6 +8,7 @@ from daily_assistant.profile import load_profile,load_sources
 from daily_assistant.storage import Storage
 from anthropic import Anthropic
 from daily_assistant.config import get_settings
+from daily_assistant.adapters import AnthropicLLMClient
 from datetime import timedelta,datetime,timezone
 from daily_assistant.render import render_digest_page, render_index
 import webbrowser
@@ -65,7 +66,7 @@ def run():
 
     # Initialize the Anthropic client
     tracked_client = TrackedClient(Anthropic(api_key=get_settings().anthropic_api_key))
-
+    llm = AnthropicLLMClient(tracked_client)
     # Initialize storage (assuming a Storage class is defined elsewhere)
     with Storage() as storage:
         run_id = storage.start_run()
@@ -84,7 +85,7 @@ def run():
             article_count = len(new_articles)
             for count, article in enumerate(new_articles, 1):
                 try:
-                    result = triage_article(article, profile, tracked_client)
+                    result = triage_article(article, profile, llm)
                     logger.info(
                         "Triage article %s/%s: relevance=%s, category=%s, title=%s",
                         count,
@@ -113,7 +114,7 @@ def run():
             logger.info(f"Total articles selected for synthesis: {len(selected_articles)}")
             
             # Synthesize a digest from selected articles
-            digest = synthesize(selected_articles,profile,tracked_client)
+            digest = synthesize(selected_articles,profile,llm)
             logger.info(f"Total articles in digest: {len(digest)}")
             # Mark digested articles as digested in storage
             for digesteditem in digest:

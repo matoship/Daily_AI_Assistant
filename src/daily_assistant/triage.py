@@ -1,8 +1,8 @@
 from daily_assistant.models import Article, TriageResult
-from anthropic import Anthropic
+from daily_assistant.protocol import LLMResponse,LLMClient
 from daily_assistant.profile import category_options 
 
-def triage_article(article: Article, profile: dict, client: Anthropic) -> TriageResult:
+def triage_article(article: Article, profile: dict, client: LLMClient) -> TriageResult:
     """
     Triage an article based on the user's profile and return a TriageResult.
     """
@@ -24,13 +24,13 @@ def triage_article(article: Article, profile: dict, client: Anthropic) -> Triage
     """
     categories = category_options(profile) + ["other"]
     # Call the model
-    response = client.messages.create(
-        model="claude-haiku-4-5-20251001",
-        max_tokens=300,
-        temperature=0,
-        tools=[{"name": "provide_triage_result", 
-                "description": "Provide a triage result with relevance, category, reason, and story hints",
-               "input_schema": {
+    response: LLMResponse = client.create(
+    model = "claude-haiku-4-5-20251001",
+    max_tokens = 300,
+    prompt = prompt,
+    tool_name = "provide_triage_result",
+    tool_description="Provide a triage result with relevance, category, reason, and story hints",
+    tool_schema={
                     "type": "object",
                     "properties": {
                         "relevance": {"type": "integer","description": "Relevance score (0-10)"},
@@ -39,19 +39,10 @@ def triage_article(article: Article, profile: dict, client: Anthropic) -> Triage
                         "story_hint": {"type": "string", "description": "Any story hints"}
                     },
                     "required": ["relevance", "category", "reason", "story_hint"]
-                }
-               }],
-        tool_choice={"type": "tool", "name": "provide_triage_result"},
-        messages=[{"role": "user", "content": prompt}]
-        )
+                },
+     temperature=0,
 
-    tool_use_block = None
-    for block in response.content:
-        if block.type == "tool_use":
-            tool_use_block = block
-            break
+    )
 
-    if tool_use_block is None:
-        raise ValueError("Claude did not return a tool_use block")
 
-    return TriageResult(**tool_use_block.input)
+    return TriageResult(**response.tool_input)

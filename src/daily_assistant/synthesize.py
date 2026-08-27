@@ -1,25 +1,21 @@
 
 from daily_assistant.models import Article, TriageResult, DigestItem
-from anthropic import Anthropic
-
-def synthesize(selected_articles: list[tuple[Article, TriageResult]],profile:dict,client:Anthropic ) -> list[DigestItem]:
+from daily_assistant.protocol import LLMResponse,LLMClient
+def synthesize(selected_articles: list[tuple[Article, TriageResult]],profile:dict,client:LLMClient ) -> list[DigestItem]:
     """
-    Synthesize selected articles into digest items using the Anthropic API.
+    Synthesize selected articles into digest items using the Anthropic API wrapped in LLMclient.
     
     Args:
         selected_articles (list[tuple[Article, TriageResult]]): A list of tuples containing articles and their corresponding triage results.
         profile (dict): The user profile containing preferences and interests.
-        client (Anthropic): An instance of the Anthropic API client.
+        client (LLMclient): An instance of the wrapped Anthropic API client.
     
     Returns:
         list[DigestItem]: A list of synthesized digest items.
     """
     if not selected_articles:
         return []
-    
-    digest_items = []
-    
-
+ 
     prompt = f"""
     You are a news summarization assistant. 
     Please summarize the following articles into a digest item. 
@@ -38,13 +34,14 @@ def synthesize(selected_articles: list[tuple[Article, TriageResult]],profile:dic
     6.if several articles cover the same event, merge them into one entry; if they're unrelated, give each its own entry.
 
     """
-    
-    response = client.messages.create(
-        model="claude-sonnet-5",
-        max_tokens=800 * len(selected_articles),
-        tools=[{"name": "synthesize_article", 
-                "description": "Synthesize an article into a digest item based on the user's profile",
-                "input_schema": {
+
+    response: LLMResponse = client.create(
+        model = "claude-sonnet-5",
+        max_tokens = 800 * len(selected_articles),
+        prompt = prompt,
+        tool_name = "synthesize_article",
+        tool_description="Synthesize an article into a digest item based on the user's profile",
+        tool_schema={
                     "type": "object",
                     "properties": {
                         "digest_items": {
@@ -63,20 +60,12 @@ def synthesize(selected_articles: list[tuple[Article, TriageResult]],profile:dic
                     }
                 },
                 "required": ["digest_items"],
-            }}],
-            tool_choice={"type": "tool", "name": "synthesize_article"},
-            messages=[{"role": "user", "content": prompt}])
+            },
 
-    tool_use_block = None
-    for block in response.content:
-        if block.type == "tool_use":
-            tool_use_block = block
-            break
+    )
 
-    if tool_use_block is None:
-        raise ValueError("Claude did not return a tool_use block")
-    
-    for item in tool_use_block.input["digest_items"]: 
+    digest_items = []
+    for item in response.tool_input["digest_items"]: 
         digest_items.append(DigestItem(**item))
 
     return digest_items

@@ -1,10 +1,10 @@
 from daily_assistant.triage import triage_article
 from daily_assistant.models import Article
-from types import SimpleNamespace
+from daily_assistant.protocol import LLMResponse
 
 
 
-def test_triage_article():
+def test_triage_article(fake_llm_client):
     # Mock Article and profile
     article =  Article(
         url="https://example.com/news/article1",
@@ -19,25 +19,16 @@ def test_triage_article():
         "location": {"country": "USA"}
     }
 
-    fake_block = SimpleNamespace(
-    type="tool_use",
-    input={"relevance": 8, "category": "Technology",
+    fake_response = LLMResponse(
+        tool_input={"relevance": 8, "category": "Technology",
             "reason": "The article is relevant to the user's interests in technology.", 
             "story_hint": "Follow up on the technology trends mentioned."},
+        model="test-model",
+        input_tokens=0,
+        output_tokens=0,
+        truncated=False,
     )
-    fake_response = SimpleNamespace(content=[fake_block])
-
-    # Mock the Anthropic client
-    class MockMessages:
-        def create(self, model, max_tokens, temperature, tools, tool_choice, messages):
-            # Return a mock response that simulates the model's output
-            return fake_response
-    class MockAnthropicClient:
-        def __init__(self):
-            self.messages = MockMessages()
-            
-
-    mock_client = MockAnthropicClient()
+    mock_client = fake_llm_client(fake_response)
 
     # Call the triage_article function
     result = triage_article(article, profile, mock_client)

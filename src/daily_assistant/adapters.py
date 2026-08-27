@@ -1,8 +1,8 @@
-from daily_assistant.protocol import LLMClient, LLMResponse
+from daily_assistant.protocol import LLMResponse, LLMClient
 from anthropic import Anthropic
 from typing import Any
 
-class AnthropicLLMClient():
+class AnthropicLLMClient(LLMClient):
     def __init__(self, client:Anthropic):
         self._client = client
 
