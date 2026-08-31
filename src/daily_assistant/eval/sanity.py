@@ -8,6 +8,7 @@ from anthropic import Anthropic
 from daily_assistant.telemetry import TrackedClient
 from daily_assistant.config import get_settings
 from daily_assistant.telemetry import estimate_cost
+from daily_assistant.adapters import AnthropicLLMClient
 logger = logging.getLogger(__name__)
 
 def _resolve_path(path: str | Path) -> Path:
@@ -80,7 +81,8 @@ def main(path: str | Path = "src/daily_assistant/eval/sanity_fixtures.yaml") -> 
     fixtures: list[Fixture] = load_fixtures(path)
     profile = load_profile()
     tracked_client = TrackedClient(Anthropic(api_key=get_settings().anthropic_api_key))
-    results = run_sanity(fixtures, profile, tracked_client)
+    llm = AnthropicLLMClient(tracked_client)
+    results = run_sanity(fixtures, profile, llm)
     failed = [result for result in results if not result["passed"]]
     summary = summarize_results(results)
     for result in results:

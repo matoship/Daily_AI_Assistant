@@ -5,3 +5,5 @@ __pycache__/
 .pytest_cache/
 .ruff_cache/
 notes/
+seen.db.bak
+src/daily_assistant/eval/labeler.html

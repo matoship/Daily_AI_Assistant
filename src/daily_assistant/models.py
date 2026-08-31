@@ -37,5 +37,13 @@ class Fixture(BaseModel):
     expected: ExpectedThreshold
     note: str | None = None
 
+class GoldLabel(BaseModel):        # parsed from YAML -> validate at the boundary
+    article: Article
+    gold_relevance: int = Field(..., ge=0, le=10)
+    gold_category: str
+    input_insufficient: bool = False
+    justification: str = ""
+    model_relevance: int           # frozen snapshot from labelling time
+    model_category: str
 
 ArticleStatus = Literal["fetched", "scored", "digested", "outdated"]
