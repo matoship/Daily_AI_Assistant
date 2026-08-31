@@ -1,0 +1,99 @@
+<!doctype html><html lang='en'><head><meta charset='utf-8'><meta name='viewport' content='width=device-width, initial-scale=1'><title>Daily Digest - 2026-08-31</title><style>
+:root {
+    color-scheme: light dark;
+    --bg: #f7f7f8;
+    --surface: #ffffff;
+    --text: #1a1a1a;
+    --muted: #5b5f66;
+    --border: #e3e4e7;
+    --accent: #2f5fd8;
+    --callout-bg: #eef2fd;
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg: #14151a;
+        --surface: #1c1e24;
+        --text: #eceef1;
+        --muted: #9aa0aa;
+        --border: #2c2f37;
+        --accent: #7ea1ff;
+        --callout-bg: #1f2740;
+    }
+}
+* { box-sizing: border-box; }
+body {
+    margin: 0;
+    padding: 2.5rem 1.25rem;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.55;
+}
+main {
+    max-width: 42rem;
+    margin: 0 auto;
+}
+header { margin-bottom: 2rem; }
+h1 { font-size: 1.5rem; margin: 0 0 0.25rem; }
+.subtitle { color: var(--muted); font-size: 0.9rem; margin: 0; }
+nav.back { margin-bottom: 1.5rem; }
+nav.back a { color: var(--accent); text-decoration: none; font-size: 0.9rem; }
+nav.back a:hover { text-decoration: underline; }
+article.digest-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 1.25rem;
+}
+.badge {
+    display: inline-block;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    color: var(--accent);
+    background: var(--callout-bg);
+    border-radius: 999px;
+    padding: 0.2rem 0.65rem;
+    margin-bottom: 0.6rem;
+}
+article.digest-item h2 { font-size: 1.15rem; margin: 0 0 0.5rem; }
+article.digest-item p { margin: 0 0 0.75rem; color: var(--text); }
+.why-it-matters {
+    background: var(--callout-bg);
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    font-size: 0.92rem;
+}
+.why-it-matters strong { color: var(--accent); }
+.sources {
+    margin-top: 0.75rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--border);
+    font-size: 0.85rem;
+    color: var(--muted);
+}
+.sources a { color: var(--muted); margin-right: 0.75rem; }
+.sources a:hover { color: var(--accent); }
+.empty {
+    color: var(--muted);
+    text-align: center;
+    padding: 3rem 1rem;
+}
+ul.archive { list-style: none; margin: 0; padding: 0; }
+ul.archive li {
+    border: 1px solid var(--border);
+    background: var(--surface);
+    border-radius: 8px;
+    margin-bottom: 0.6rem;
+}
+ul.archive a {
+    display: block;
+    padding: 0.85rem 1.1rem;
+    color: var(--text);
+    text-decoration: none;
+    font-weight: 500;
+}
+ul.archive a:hover { color: var(--accent); }
+</style></head><body><main><nav class='back'><a href='index.html'>&larr; Archive</a></nav><header><h1>Daily Digest</h1><p class='subtitle'>2026-08-31</p></header><article class='digest-item'><span class='badge'>engineering</span><h2>Anthropic Previews Model Hardware Standard for Physical AI Agents</h2><p>Anthropic has launched a research preview of the Model Hardware Standard (MHS), a shared specification designed to let AI agents safely operate physical devices. The standard aims to create a common protocol layer between AI models and hardware, addressing safety and interoperability concerns as agentic AI moves beyond software into robotics and IoT control.</p><p class='why-it-matters'><strong>Why it matters:</strong> As an AI engineer working on LLM applications, understanding emerging standards for agent-hardware interaction could be relevant if your ServiceNow/LLM work expands into IoT or robotics integrations. It&#x27;s also a signal of where agentic AI safety frameworks are heading industry-wide.</p><div class='sources'><a href='https://www.marktechpost.com/2026/08/29/anthropic-opens-a-research-preview-of-the-model-hardware-standard-mhs-a-shared-specification-for-ai-agents-to-safely-operate-physical-devices/'>source 1</a></div></article><article class='digest-item'><span class='badge'>engineering</span><h2>New Benchmark Ranks Lowest-Latency Inference APIs for Voice and Realtime Agents</h2><p>A new benchmark evaluates inference APIs based on Time to First Token (TTFT), specifically targeting voice and realtime agent use cases. The study compares latency performance across providers to help engineers choose infrastructure for responsive conversational AI applications.</p><p class='why-it-matters'><strong>Why it matters:</strong> Latency benchmarks like this are directly useful for building responsive LLM applications—critical if you&#x27;re designing ServiceNow chatbots or realtime assistants where user experience depends on fast first-token response.</p><div class='sources'><a href='https://www.marktechpost.com/2026/08/30/lowest-latency-inference-apis-for-voice-and-realtime-agents-a-time-to-first-token-ttft-first-benchmark/'>source 1</a></div></article><article class='digest-item'><span class='badge'>engineering</span><h2>Google AI&#x27;s EnvHarness Turns Static Agent Environments into Adaptive Training Worlds</h2><p>Google AI introduced EnvHarness, a programmable layer that converts static agent training environments into dynamic, adaptive worlds. This allows AI agents to be trained and tested against evolving scenarios rather than fixed benchmarks, improving generalization and robustness.</p><p class='why-it-matters'><strong>Why it matters:</strong> This tooling could inform how you approach testing and validating LLM-based agents at scale, especially if you&#x27;re building agents that need to handle varied, unpredictable enterprise workflows in ServiceNow.</p><div class='sources'><a href='https://www.marktechpost.com/2026/08/30/google-ai-introduces-envharness-a-programmable-layer-that-turns-static-agent-environments-into-adaptive-training-worlds/'>source 1</a></div></article><article class='digest-item'><span class='badge'>engineering</span><h2>&#x27;Code-as-World&#x27; Converts Real Videos into Executable Physics Simulations</h2><p>A new agentic loop called Code-as-World rewrites real-world video footage into executable MuJoCo physics programs, effectively creating interactive simulated environments from passive video data. This bridges perception and simulation for training embodied AI agents.</p><p class='why-it-matters'><strong>Why it matters:</strong> While more robotics-focused, this showcases cutting-edge techniques in turning unstructured data into structured, executable representations—a pattern relevant to how you might think about transforming enterprise data into actionable agent workflows.</p><div class='sources'><a href='https://www.marktechpost.com/2026/08/29/mirros-code-as-world-executable-world-representations/'>source 1</a></div></article><article class='digest-item'><span class='badge'>engineering</span><h2>AWS Open Sources &#x27;Kiro Crew&#x27; for Asynchronous Coding Agents</h2><p>AWS has open-sourced Kiro Crew, a framework for orchestrating asynchronous coding agents that can work on software development tasks independently and collaboratively, without requiring constant human supervision.</p><p class='why-it-matters'><strong>Why it matters:</strong> This is highly relevant to your career trajectory toward AI Application Engineering—open-source async coding agent frameworks could directly inform how you build or extend LLM-powered developer tools within ServiceNow or beyond.</p><div class='sources'><a href='https://www.infoq.com/news/2026/08/kiro-crew-coding-agents/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global'>source 1</a></div></article><article class='digest-item'><span class='badge'>immigration</span><h2>Australia&#x27;s Migration Debate Intensifies Amid &#x27;National Emergency&#x27; Claims and Policy Confusion</h2><p>Multiple outlets report escalating debate over Australia&#x27;s immigration policy, with record migration numbers being labeled a &#x27;national emergency&#x27; by critics, alongside accusations of policy confusion and calls (notably from commentator Peta Credlin) to overhaul the entire migration system. Separately, analysis warns that cutting skilled migration could worsen house price pressures amid the housing crisis.</p><p class='why-it-matters'><strong>Why it matters:</strong> As a resident of Adelaide navigating Australia&#x27;s immigration and skilled visa landscape, these policy debates directly affect skilled migration pathways, visa processing, and housing affordability—all factors that could impact your own visa status or long-term settlement plans.</p><div class='sources'><a href='https://news.google.com/rss/articles/CBMia0FVX3lxTE04VWZRd2l4d0V2QzJwTkh2VmllUmdjTEt4Tm5tQl9hOFJuNlVlSmtBWG9fTFlKUlRyeXlBc3M2LVI0ZUdSblVxV1BSUDIwMWdqQWtIeEQ3NUJra1pySE1Ea3NtaFFFWFJxSmpJ?oc=5'>source 1</a><a href='https://news.google.com/rss/articles/CBMipAJBVV95cUxNMFJhMHRkZkRrOWxHVGVDUUl2Slp4b0lVSXhaVEtVWnUtMFpkWmF4THR3aU01WGFlNGlPQWJrYWlkUDZxRWpSTFpKR1NKVGx3MG5SSTEyYmU1bjdfR1RvSC1DYUZ2RUowR1A4MWRleWR1NTc3aGNhSm11TUZUVzJLOXdQZ2lOa1Z2VWM1MElxbVE4NzR3enlvVEVuTTJNYm1rYWN2NGhGVEFfT081RHBVandtTTlkSFZZSVdjN05PeGd4SDctbmlDUzczMXdqem1Zd051SmZSVmhOc1hYLXBWYUNicVFxS1hMNm0ta3piQ0VWODQyQkhRX2tqSExEenBscmw0V2luN3h5bXJTRDZTSjllc2N0dUdTMHRGalZpV3h6dldH?oc=5'>source 2</a><a href='https://news.google.com/rss/articles/CBMifkFVX3lxTE5LekJqVGkydVpwR2lpc0RZYWpnVmJWRUNTeThLX25KRi1JY0VPOHdvSC1lTkJ5LUl0QWMyZzJkN0s0LWY2a0c4ZWFhWkQwZ3VMX1dhQUJ2RVZpZ0JhUkFhSE9HTWFTTWNHY2FSZVE0ODl2am44ZHhhUE1ZMWhNUQ?oc=5'>source 3</a><a href='https://news.google.com/rss/articles/CBMihwJBVV95cUxOWFdVUTA1YlJVdUhkY255R0p6OTBSa3UyRHV4Nkp3NjI1dmFTczV1SjhjSkE4aEJ5dXVDc3N5X3JaSk4ydldqTm1GMW9iQ1MydWxkVldrVTAxdlBRQk5CeWJzdC1Ya1U4bWZmN0EwaDhGRGlJRUE3bTVlbWFFT1Y4amo0aGhGY09WTlZBM3VxbU41SzF3T25lbVRSTWI3VFVzT21OM1VfQlh6V1JmRjUzYld2Y3BDaTYzZVI3YndLWnF0Zk1OSm54UTdiMlA4cjRyUUgxNzdEWjVHS3JjR1FUdzdoeDRFWjZNV3V5VnRKZ2ZZYlRWeHJ4QXUtVmZXUEloQWhqT3R4c9IBjAJBVV95cUxOblNhOVdEb2NkWDZOU3NyWGUxaUJUSUw5QXRkSVVkenIxR1FLQldvWmxZY0lNMVNHS0pOXzgtWS10eE5VbElvbV82Z1F2Vm1rTTBkOUFYY2hwYmVlNlhYRHRUYXJENjlQUlp1MHM2Z2Y5R3RSTTVWNnF6VDhLdm0zMERfcS12WGlGbWF6SG5EaTZfVVRiRzJRV3dMa19Obmp5bDVNQ0JjZ3VQR09YT21KNWpHcXAxVS1lNVIzX2k5TGZMR3hzUzU5clhmU2I5ZmZKb0JuMDgwV2YyN0VUWHN3SGhTb0JmUm85c2NFOVdqNEZjaTJERkdaNkJoSDFmb045R0Z0aGtheTdJVlBI?oc=5'>source 4</a></div></article><article class='digest-item'><span class='badge'>immigration</span><h2>Australia&#x27;s Job Market Outlook 2026: Sector-wise Demand Highlighted</h2><p>A report outlines popular and in-demand job sectors across Australia for 2026, providing a breakdown of industry-wise requirements relevant to skilled migrants and job seekers evaluating career prospects in the country.</p><p class='why-it-matters'><strong>Why it matters:</strong> As a skilled AI professional potentially navigating Australia&#x27;s visa and job market, this gives context on which sectors are prioritized for skilled migration and hiring demand—useful for understanding how tech and engineering roles fit into the broader labor market picture.</p><div class='sources'><a href='https://news.google.com/rss/articles/CBMijAFBVV95cUxQQTZZVXRVTV9NaXhaNUxIeHE0Sk9aSFJEVGZjdnB3ME9TTk53Z2lZU2hBTHVpSmk3T2FzX29IRFFiR3NCcWFTb2kwWGF2Y2NBLVNQS0NNcTQ3NVgxU2xmcWhacDhfNERsb3hSWXhsTFBBSUFUWHBYS2N2NEEtV0dKY0pEeWNIWE9XX05BTQ?oc=5'>source 1</a></div></article></main></body></html>
