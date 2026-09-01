@@ -31,3 +31,9 @@ Each ticket: what broke, why, how it was fixed, and the generalizable lesson. Nu
 | [021](TICKET-021-env-secret-scoping-empty-key.md) | Environment-scoped secret invisible to the job; no validation caught it | CI/config + fail-fast gap |
 | [022](TICKET-022-scheduled-trigger-missed-firing.md) | Scheduled workflow trigger silently missed a daily firing | CI/config |
 | [023](TICKET-023-same-day-overwrite-utc-date-mismatch.md) | Same-day reruns silently overwrote the digest; UTC date caused archive gaps | design flaw + silent data bug |
+| [024](TICKET-024-telemetry-below-normalization-boundary.md) | Telemetry decorator sat below the provider-normalization boundary | design flaw |
+| [025](TICKET-025-pydantic-v1-field-inert-constraint.md) | `pydantic.v1` import made a validation constraint silently inert | silent failure |
+| [026](TICKET-026-half-finished-refactor-name-shadowing.md) | Half-finished adapter refactor plus an `UnboundLocalError` from name shadowing | regression |
+| [027](TICKET-027-mock-drift-fourth-occurrence-shared-fake.md) | Mock drift, 4th occurrence — fixed structurally with a shared fake | mock drift |
+| [028](TICKET-028-threshold-dead-zone-model-never-scores-five.md) | Selection threshold of 5 is silently identical to 6 (model never emits 5) | silent design flaw |
+| [029](TICKET-029-thin-feed-summaries-unjudgeable-input.md) | A third of triage inputs contain too little text to judge | data quality |
