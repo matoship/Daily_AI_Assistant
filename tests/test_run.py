@@ -26,13 +26,16 @@ class DummyStorage:
         return None
 
 
-class DummyAnthropic:
-    def __init__(self, *args, **kwargs):
-        self.messages = SimpleNamespace(create=lambda *a, **k: None)
+class DummyClient:
+    def __init__(self):
+        self.total_input_tokens = 0
+        self.total_output_tokens = 0
+        self.usage_by_model = {}
 
 
 def test_run_passes_tracked_client_to_pipeline(monkeypatch):
     captured = {}
+    fake_client = DummyClient()
 
     def fake_triage(article, profile, client):
         captured["triage_client"] = client
@@ -49,10 +52,9 @@ def test_run_passes_tracked_client_to_pipeline(monkeypatch):
     monkeypatch.setattr(run_module, "triage_article", fake_triage)
     monkeypatch.setattr(run_module, "select_for_synthesis", lambda triaged_articles, threshold=5, top_n_per_category=5: [])
     monkeypatch.setattr(run_module, "synthesize", fake_synthesize)
-    monkeypatch.setattr(run_module, "Anthropic", DummyAnthropic)
-    monkeypatch.setattr(run_module, "get_settings", lambda: SimpleNamespace(anthropic_api_key="test-key"))
+    monkeypatch.setattr(run_module, "build_client", lambda: fake_client)
 
     run_module.run()
 
-    assert captured["triage_client"].__class__.__name__ == "AnthropicLLMClient"
-    assert captured["synthesize_client"].__class__.__name__ == "AnthropicLLMClient"
+    assert captured["triage_client"] is fake_client
+    assert captured["synthesize_client"] is fake_client

@@ -4,11 +4,8 @@ from daily_assistant.models import TriageResult,Fixture
 from daily_assistant.triage import triage_article
 import logging
 from daily_assistant.profile import load_profile
-from anthropic import Anthropic
-from daily_assistant.telemetry import TrackedClient
-from daily_assistant.config import get_settings
 from daily_assistant.telemetry import estimate_cost
-from daily_assistant.adapters import AnthropicLLMClient
+from daily_assistant.factory import build_client
 logger = logging.getLogger(__name__)
 
 def _resolve_path(path: str | Path) -> Path:
@@ -80,9 +77,8 @@ def main(path: str | Path = "src/daily_assistant/eval/sanity_fixtures.yaml") -> 
     logging.getLogger("httpx").setLevel(logging.WARNING) 
     fixtures: list[Fixture] = load_fixtures(path)
     profile = load_profile()
-    tracked_client = TrackedClient(Anthropic(api_key=get_settings().anthropic_api_key))
-    llm = AnthropicLLMClient(tracked_client)
-    results = run_sanity(fixtures, profile, llm)
+    client = build_client()  # Build the TrackedClient with AnthropicLLMClient
+    results = run_sanity(fixtures, profile, client)
     failed = [result for result in results if not result["passed"]]
     summary = summarize_results(results)
     for result in results:
@@ -96,7 +92,7 @@ def main(path: str | Path = "src/daily_assistant/eval/sanity_fixtures.yaml") -> 
         summary["failed"],
         summary["total"],
     )
-    logger.info("Sanity run cost: $%.4f", estimate_cost(tracked_client.usage_by_model))
+    logger.info("Sanity run cost: $%.4f", estimate_cost(client.usage_by_model))
 
     if failed:
         logger.error(f"Sanity check failed: {len(failed)} fixture(s) did not meet their thresholds.")
