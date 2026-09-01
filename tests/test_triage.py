@@ -39,4 +39,3 @@ def test_triage_article(fake_llm_client):
     assert result.relevance == 8
     assert result.category == "Technology"
     assert result.reason == "The article is relevant to the user's interests in technology."
-    assert result.story_hint == "Follow up on the technology trends mentioned."

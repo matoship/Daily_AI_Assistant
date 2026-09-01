@@ -37,3 +37,4 @@ Each ticket: what broke, why, how it was fixed, and the generalizable lesson. Nu
 | [027](TICKET-027-mock-drift-fourth-occurrence-shared-fake.md) | Mock drift, 4th occurrence — fixed structurally with a shared fake | mock drift |
 | [028](TICKET-028-threshold-dead-zone-model-never-scores-five.md) | Selection threshold of 5 is silently identical to 6 (model never emits 5) | silent design flaw |
 | [029](TICKET-029-thin-feed-summaries-unjudgeable-input.md) | A third of triage inputs contain too little text to judge | data quality |
+| [030](TICKET-030-truncated-triage-dropped-articles-silently.md) | Truncated triage responses silently dropped articles for weeks | silent failure |

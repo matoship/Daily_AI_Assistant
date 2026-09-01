@@ -102,7 +102,7 @@ def test_main_returns_nonzero_when_fixture_fails(monkeypatch):
     monkeypatch.setattr(config_module, "get_settings", lambda: type("Settings", (), {"anthropic_api_key": "test-key"})())
 
     def fake_triage_article(article, profile, client):
-        return TriageResult(relevance=7, category="engineering", reason="Low", story_hint="AI")
+        return TriageResult(relevance=7, category="engineering", reason="Low")
 
     monkeypatch.setattr(sanity, "triage_article", fake_triage_article)
 

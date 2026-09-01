@@ -105,6 +105,12 @@ def run():
                 except Exception:
                     logger.exception("Error triaging article '%s'", article.title)
 
+            if len(triaged_articles) < len(new_articles):
+                logger.warning(
+                    "Some articles failed to be triaged. Triaged %d out of %d articles.",
+                    len(triaged_articles),
+                    len(new_articles),
+                )
             logger.info(f"Total articles triaged: {len(triaged_articles)}") 
             # Select articles for synthesis
             selected_articles = select_for_synthesis(triaged_articles, threshold=5, top_n_per_category=5)

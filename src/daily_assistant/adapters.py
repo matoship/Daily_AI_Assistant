@@ -31,6 +31,9 @@ class AnthropicLLMClient(LLMClient):
             request_kwargs["temperature"] = temperature
 
         response= self._client.messages.create(**request_kwargs)
+        if response.stop_reason == "max_tokens":
+            raise ValueError("max_tokens are met before the model could finish its response. Consider increasing max_tokens.")
+
         tool_use_block = None
         for block in response.content:
             if block.type == "tool_use":

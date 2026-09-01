@@ -129,3 +129,26 @@ def test_create_raises_when_response_has_no_tool_use_block():
             tool_schema={"type": "object", "properties": {"query": {"type": "string"}}},
         )
 
+
+def test_create_raises_when_response_is_truncated_by_max_tokens():
+    response = SimpleNamespace(
+        model="claude-3-5-haiku-20241022",
+        stop_reason="max_tokens",
+        usage=SimpleNamespace(input_tokens=8, output_tokens=9),
+        content=[
+            SimpleNamespace(type="text", text="answer was truncated"),
+        ],
+    )
+    client = FakeAnthropicClient(response)
+    adapter = AnthropicLLMClient(client)
+
+    with pytest.raises(ValueError, match="max_tokens are met before the model could finish its response. Consider increasing max_tokens."):
+        adapter.create(
+            model="claude-3-5-haiku-20241022",
+            max_tokens=8,
+            prompt="Find jobs.",
+            tool_name="search",
+            tool_description="Search for jobs.",
+            tool_schema={"type": "object", "properties": {"query": {"type": "string"}}},
+        )
+

@@ -12,7 +12,6 @@ class TriageResult(BaseModel):
     relevance: int = Field(..., ge=0, le=10)
     category: str
     reason: str
-    story_hint: str
     
 class Source(BaseModel):
     url: str
