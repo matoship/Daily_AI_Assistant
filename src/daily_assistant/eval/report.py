@@ -74,7 +74,7 @@ def metrics(conf) -> dict:  # precision/recall/F1 — pure
 def group_by_category(
     rows: list[tuple[GoldLabel, int, str]],
 ) -> dict[str, list[tuple[GoldLabel, int, str]]]:
-    grouped = {}
+    grouped: dict[str, list[tuple[GoldLabel, int, str]]] = {}
     for row in rows:
         category = row[0].gold_category
         if category not in grouped:
@@ -211,10 +211,10 @@ def compare_changes(
         "sufficient": [row for row in live_rows if not row[0].input_insufficient],
     }
     for category in dict.fromkeys(row[0].gold_category for row in live_rows):
-        category_rows = [row for row in live_rows if row[0].gold_category == category]
-        live_subgroups[category] = category_rows
+        live_category_rows = [row for row in live_rows if row[0].gold_category == category]
+        live_subgroups[category] = live_category_rows
         live_subgroups[f"{category}_sufficient"] = [
-            row for row in category_rows if not row[0].input_insufficient
+            row for row in live_category_rows if not row[0].input_insufficient
         ]
 
     for category, subgroup_rows in live_subgroups.items():

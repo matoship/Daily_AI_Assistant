@@ -112,7 +112,7 @@ def build(db_path: Path | None = None, size: int = 50, seed: int = 0) -> Path:
     )
     OUTPUT.write_text(html, encoding="utf-8")
 
-    dist = defaultdict(int)
+    dist: defaultdict[int, int] = defaultdict(int)
     for it in items:
         dist[it["model_relevance"]] += 1
     logger.info("pool=%s sampled=%s", len(rows), len(items))
