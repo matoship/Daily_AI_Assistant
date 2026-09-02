@@ -17,7 +17,7 @@ labels:
       source: "Google News - Skilled Migration (AU)"
       title: "‘We need skilled migrants’: Westpac CEO Anthony Miller defends migration amid Federal push to reduce rate - The West Australian"
       summary: '<a href="https://news.google.com/rss/articles/CBMi6AFBVV95cUxPN2hCR1JqYVZjNFJkSWFiajZXRTVMOGMwMmE1T0VJMXNBOEtPMWJZVDdta04yS2ljZFJ2MzFVbS10emplYVVNdmR6aGtGUWtUUHZOckt2SjJfUWJBYUZLT005dFBNTWNRSWpQWjRicGUtSHMySDJWNktrX2pUZXJWR2xyOFlDSUlCeGUweHRab3pYM1NmUU9LbkFSeDVqb0FxRmNsb3pqbTE0cVRqR1I4bzlGTEpDd3c2b191a185SzFzRVlFVnVFWFVNRUZVWFVfdk1KSHJQVEFMSk1wcHJEc2oxdkN2M2tO?oc=5" target="_blank">‘We need skilled migrants’: Westpac CEO Anthony Miller defends migration amid Federal push to reduce rate</a>&nbsp;&nbsp;<font color="#6f6f6f">The West Australian</font>'
-    gold_relevance: 5
+    gold_relevance: 4
     gold_category: immigration
     input_insufficient: false
     justification: "its about immigration. but hardly a concern to me"
@@ -72,10 +72,10 @@ labels:
       source: "Google News - Skilled Migration (AU)"
       title: "Farley simple maths leaves One Nation in a migration muddle - psnews.com.au"
       summary: '<a href="https://news.google.com/rss/articles/CBMikwFBVV95cUxPQWJPeHdFQWItQUowdk9UN1N4S0drRUEydzBDalJlb0NGcElURFRMWVJwc3puUEhLRDlIYnFLRWdjTFNwRWowQTVleHZnQ0ZYRFR5blFHd25xM2FTV3VCXzZMWXp1Z1NPQlo5NV9iR2lUSWpsN2JJVEhrcDM0UlJZRElFR0NyaE02bHpGY0l4MWxSQm8?oc=5" target="_blank">Farley simple maths leaves One Nation in a migration muddle</a>&nbsp;&nbsp;<font color="#6f6f6f">psnews.com.au</font>'
-    gold_relevance: 7
+    gold_relevance: 3
     gold_category: immigration
     input_insufficient: true
-    justification: "A sharp point of view of immigration from a political party"
+    justification: "A sharp point of view of immigration from a political party which i don't care about"
     model_relevance: 3
     model_category: "immigration"
   - article:
@@ -182,10 +182,10 @@ labels:
       source: "Google News - Skilled Migration (AU)"
       title: "AustraliaMigrate analyzes Direction 119 visa processing priorities - scanx.trade"
       summary: '<a href="https://news.google.com/rss/articles/CBMivAFBVV95cUxOWDY3MTlfTnk1WmpGODJZNldYbllDdER3S1phbVViWTdsMWlkLWhQMFg0SGU0YS0wcjkwQWQwZTU0ODJSZk5wY3VfRm5wZUhLNnQ5Nkc1dXpKc0wwY2MySFN2UTQ2TWduei1Ga1BkUXFJcHpfLXg5VlZENkpMeWpPaHZPdmoyLVhnbW5VVlY1TlpJOFBqSkI2N25YblRKMTdHZWxteU1OcDVPRmVucTQzMDRQZXZXR1ZyOGdkbw?oc=5" target="_blank">AustraliaMigrate analyzes Direction 119 visa processing priorities</a>&nbsp;&nbsp;<font color="#6f6f6f">scanx.trade</font>'
-    gold_relevance: 2
+    gold_relevance: 5
     gold_category: immigration
     input_insufficient: false
-    justification: "Not ICT nor SA related"
+    justification: "immigration related"
     model_relevance: 6
     model_category: "immigration"
   - article:
