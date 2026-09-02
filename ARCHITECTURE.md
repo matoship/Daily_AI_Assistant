@@ -1,58 +1,68 @@
 # Daily AI Assistant — Architecture
 
-A personal, autonomous news agent that monitors **South Australian / Australian skilled
-migration news** and **software engineering news relevant to an AI Application Engineer**,
-filters and synthesizes it against a personal profile, and delivers a daily digest.
+A personal, autonomous news agent that monitors **software engineering and applied-AI news
+relevant to an AI Application Engineer**, filters and synthesizes it against a personal
+profile, and publishes a daily digest to GitHub Pages.
 
 This is deliberately *not* an RSS aggregator with an LLM bolted on. The design goals:
 
 1. **Personal** — every relevance decision is grounded in a structured profile of who I am,
-   what stage I'm at, and what would change my next move (e.g. "190/491 invitation rounds
-   for ICT occupations in SA", not "immigration news").
-2. **Continuous** — the agent remembers what it has already told me and connects new
-   stories to previous ones ("follow-up to Tuesday's processing-delay story") instead of
-   re-summarizing from scratch.
+   what stage I'm at, and what would change my next move ("does this change what I should
+   learn or build next?", not "is this about AI?").
+2. **Measured** — relevance quality is evaluated against a hand-labelled golden set, not
+   asserted. Cost is recorded per run, not assumed.
 3. **Synthesized** — multiple sources covering the same event become one story with an
    explicit *"why this matters to you"* line.
 4. **A learning vehicle** — each phase intentionally exercises a core AI Application
-   Engineer skill (structured outputs, agent orchestration, RAG/memory, evals,
-   observability, autonomous operation).
+   Engineer skill (structured outputs, evals, observability, autonomous operation,
+   RAG/memory, agent orchestration).
+
+> **Scope note (2026-09).** The project originally also tracked South Australian skilled
+> migration news. That half was retired after evaluation showed the feeds carried
+> essentially none of the intended signal — see `tickets/TICKET-031`. The machinery is
+> topic-agnostic; the scope narrowed, the design did not.
 
 ## System overview
 
 ```mermaid
 flowchart TD
     subgraph Scheduled["GitHub Actions (daily cron)"]
-        A[Ingest<br/>RSS / API connectors] --> B[Normalize + Dedup<br/>URL & content hash]
-        B --> C[Triage<br/>Claude Haiku: cheap relevance scoring<br/>vs. profile, structured JSON]
-        C --> D[Synthesize<br/>Claude Sonnet: cluster related articles,<br/>connect to digest history,<br/>write 'why this matters to you']
-        D --> E[Deliver<br/>email digest]
+        A[Ingest<br/>RSS connectors] --> B[Dedup<br/>SQLite article status lifecycle]
+        B --> C[Triage<br/>Claude Haiku: relevance 0-10 vs. profile,<br/>structured tool-use output]
+        C --> D[Select<br/>threshold + per-category top-N<br/>pure, no LLM]
+        D --> E[Synthesize<br/>Claude Sonnet: cluster related articles,<br/>write 'why this matters to you']
+        E --> F[Render + Publish<br/>escaped static HTML -> GitHub Pages]
     end
 
     P[(profile.yaml<br/>who I am / what I track)] --> C
-    P --> D
-    S[(SQLite<br/>seen_articles, digest_history,<br/>run_telemetry)] <--> B
-    S <--> D
-    V[(Vector store — Phase 4<br/>semantic dedup + story continuity)] <--> D
+    P --> E
+    S[(SQLite<br/>articles, runs, triage_logs)] <--> B
+    S <--> C
+    G[(golden_set.yaml<br/>hand-labelled ground truth)] --> EV[Eval harness<br/>precision/recall + flips]
+    EV -.measures.-> C
 ```
 
 ## Components
 
-| Component | Responsibility | Key tech |
+| Module | Responsibility | Key tech |
 |---|---|---|
-| `sources/` | One connector per source; each yields normalized `Article` objects | `feedparser`, `httpx` |
-| `pipeline/ingest` | Fetch all sources, normalize, hash, drop already-seen | — |
-| `pipeline/triage` | Score each new article 0–10 for relevance against the profile; category + one-line reason | Claude Haiku, structured outputs |
-| `pipeline/synthesize` | Cluster related survivors, pull related past digest entries, write the digest with continuity + "why it matters" | Claude Sonnet |
-| `pipeline/deliver` | Render digest (Markdown → HTML) and send email | SMTP or Resend |
-| `storage/` | SQLite schema + repository functions | `sqlite3` stdlib |
-| `profile.yaml` | Structured personal profile (see below) | — |
-| `telemetry/` | Tokens, cost, latency per LLM call; per-run summary logged and stored | structured JSON logging |
-| `evals/` | Golden set of labeled articles; measures triage precision/recall as prompts evolve | `pytest` + custom harness |
+| `source.py` | Fetch and parse feeds into normalized `Article` objects | `feedparser` |
+| `pipeline.py` | `ingest`: fetch all sources, drop already-seen via status lifecycle | — |
+| `triage.py` | Score each new article 0–10 against the profile; category + reason | Claude Haiku, tool-use |
+| `selection.py` | Threshold filter + per-category top-N. Pure function, no LLM | — |
+| `synthesize.py` | Cluster survivors into digest entries with "why it matters" | Claude Sonnet, tool-use |
+| `render.py` | `DigestItem[]` → escaped, styled HTML. Pure function | `html.escape` |
+| `run.py` | Composition root; `main()` does the I/O and writes `docs/` | — |
+| `protocol.py` | `LLMClient` Protocol + `LLMResponse` — the provider seam | `typing.Protocol` |
+| `adapters.py` | `AnthropicLLMClient` — adapts the SDK to `LLMClient` | — |
+| `telemetry.py` | `TrackedClient` decorator; per-model token and cost accounting | — |
+| `factory.py` | `build_client()` — the one place a provider is named | — |
+| `storage.py` | SQLite: article lifecycle, run telemetry, triage log | `sqlite3` stdlib |
+| `eval/` | Golden set, sanity fixtures, labeler, precision/recall report | custom harness |
 
 ### The profile (what makes it personal)
 
-`profile.yaml` is structured state, versioned in git (nothing secret), edited manually in v1:
+`profile.yaml` is structured state, versioned in git (nothing secret), edited manually:
 
 ```yaml
 identity:
@@ -60,91 +70,106 @@ identity:
   role: AI Engineer (ServiceNow / LLM applications)
   career_goal: AI Application Engineer
 
-immigration:
-  pathway: AU skilled migration
-  watching:
-    - SA state nomination (190/491) invitation rounds and criteria changes
-    - ICT occupation list changes
-    - Department of Home Affairs policy / processing-time announcements
-  irrelevant:
-    - other states' nomination news unless it signals national policy shifts
-    - family/partner/humanitarian visa streams
-
-engineering:
-  interests:
-    - LLM application patterns (agents, RAG, structured outputs, evals)
-    - Claude API / model releases across major providers
-    - Python, Go, TypeScript ecosystem news relevant to backend + AI work
-  irrelevant:
-    - consumer gadget news, funding rounds without technical substance
+topics:
+  engineering:
+    interests:
+      - LLM application patterns (agents, RAG, structured outputs, evals)
+      - Claude API / model releases across major providers
+      - Python, Go, TypeScript ecosystem news relevant to backend + AI work
+    irrelevant:
+      - consumer gadget news, funding rounds without technical substance
 ```
 
-The triage and synthesis prompts receive this profile verbatim. Personalization quality
-lives here and in the prompts — which is exactly what the eval harness (Phase 3) measures.
+Topic names are **data, not code** — `category_options()` derives the triage category enum
+from `topics` keys, so adding or removing a topic requires no code change. The triage and
+synthesis prompts receive the profile verbatim. Personalization quality lives here and in
+the prompts, which is exactly what the eval harness measures.
 
-### Sources (initial list, to be validated in Phase 1)
+### Sources
 
-**Immigration (AU/SA):**
-- migration.sa.gov.au — SA state nomination announcements
-- Department of Home Affairs / immi.gov.au news
-- Selected migration-agent blogs and newsletters that report invitation rounds quickly
+Every feed is pre-flight tested before being added — it must parse, return entries, and
+carry real summary text rather than an echoed headline (`TICKET-031`).
 
-**Software engineering / AI:**
-- Hacker News (front page via Algolia API, filtered)
-- Anthropic / OpenAI / Google AI blogs
-- InfoQ, dev.to (AI + backend tags)
+| Source | Role | Measured yield |
+|---|---|---|
+| MarkTechPost | LLM/AI application news | 7/7 wanted in the golden set |
+| InfoQ | Backend, languages, architecture | 6/13 wanted |
+| Hacker News (150+ points) | Community-filtered AI/eng signal | added after pre-flight test |
+| InnovationAus | Australian tech industry | **on trial** — review after two weeks |
 
-Connectors are deliberately pluggable: adding a source is one small module.
+Connectors are deliberately pluggable: adding a source is a `source.yaml` entry.
 
 ## Data model (SQLite)
 
 ```sql
-seen_articles(id, url, url_hash, content_hash, source, title, published_at, first_seen_at)
-digest_items(id, run_id, article_ids, story_key, headline, summary, relevance_score,
-             why_it_matters, category, created_at)
+articles(url PRIMARY KEY, status, updated_at, first_seen_at)
+
 runs(id, started_at, finished_at, articles_fetched, articles_scored, articles_relevant,
-     articles_digested, total_input_tokens, total_output_tokens, est_cost_usd, status, error)
+     articles_digested, total_input_tokens, total_output_tokens, estimated_cost_usd,
+     status, error_message)
+
+triage_logs(id, url, source, title, summary, relevance, category, reason, created_at)
 ```
 
-`story_key` groups digest items that belong to the same evolving story across days —
-the hook that story continuity (and later semantic retrieval) attaches to.
+`articles` is a **state** table — one row per URL, overwritten as it moves through the
+lifecycle. `triage_logs` is an **event log** — append-only, one row per triage decision,
+never rewritten. Keeping those separate is deliberate; conflating them invites the upsert
+bugs recorded in `TICKET-011`.
+
+Digest content is **not** in SQLite. Each day's digest is rendered to a dated HTML file in
+`docs/` and committed, with a JSON sidecar so same-day re-runs accumulate rather than
+overwrite. Git is the archive.
 
 ## LLM strategy
 
 - **Two-tier model use:** Haiku for high-volume/cheap triage of every new article;
-  Sonnet only for the low-volume/high-value synthesis step. This is the standard
-  cost-tiering pattern in production LLM systems and worth learning early.
-- **Structured outputs everywhere:** triage returns strict JSON
-  (`{relevance: int, category: str, reason: str, story_hint: str}`) validated with
-  Pydantic. No free-text parsing.
-- **Prompt caching:** the profile + instructions form a stable prefix cached across the
-  run's triage calls.
-- **Cost envelope:** ~50–100 new articles/day through Haiku triage + one Sonnet
-  synthesis call ≈ **a few cents per day**. Telemetry verifies this rather than assumes it.
+  Sonnet only for the low-volume/high-value synthesis step.
+- **Structured outputs everywhere:** both calls use forced tool-use with a JSON Schema,
+  validated into Pydantic models (`TriageResult`, `DigestItem`). No free-text parsing.
+- **Provider seam:** `triage.py` and `synthesize.py` depend only on the `LLMClient`
+  Protocol. Swapping providers is a change in `factory.py` and one new adapter.
+- **Cost envelope:** measured, not assumed — around a cent or two per daily run in steady
+  state, ~$0.12 for a 50-article evaluation run. Verified against the Anthropic console.
+
+## Evaluation
+
+- `eval/golden_set.yaml` — 50 hand-labelled articles. Labelled **blind**: the model's own
+  score was hidden until after each judgement, so labels don't anchor on it.
+- `eval/sanity_fixtures.yaml` — a mechanical plumbing check. Proves the harness runs; it
+  does **not** prove triage is correct.
+- `eval/report.py` — offline mode scores the frozen snapshot; `--live` re-runs triage and
+  reports **classification flips** plus precision/recall, appending to `history.jsonl`
+  with a profile hash, model id and cost.
+
+Two measurement facts worth remembering (`TICKET-034`): triage is ~98% reproducible run to
+run, but with only 15 gold-positive articles a single flip moves F1 by 0.04. **Read flip
+counts, not metric deltas.**
 
 ## Roadmap — each phase maps to an AI App Engineer skill
 
 | Phase | Deliverable | Skill it builds |
 |---|---|---|
-| **0. Scaffold** | Python 3.12 + `uv`, project layout, config, CI lint/test | Modern Python tooling |
-| **1. Ingestion + memory v0** | Connectors, normalization, SQLite dedup — runs end-to-end with *no LLM* | Data plumbing (where most real AI-app work lives) |
-| **2. Triage + digest + automation** | Claude triage & synthesis, email delivery, GitHub Actions cron, telemetry | Prompt engineering, structured outputs, cost tiering, autonomous operation |
-| **3. Eval harness** | Golden set (~50 labeled articles), precision/recall report, prompt iteration loop | LLM evaluation — the highest-leverage differentiator |
-| **4. Semantic memory** | Embeddings + vector store; semantic dedup (same story, different words); story continuity retrieval | RAG / embeddings, done when the limitation is actually felt |
-| **5. Agentic upgrade** | Hand-rolled tool-use loop: agent decides to fetch full article text / search for corroboration when triage is uncertain | Agent orchestration from scratch (no framework hiding the loop) |
-| **6. Feedback loop** *(later)* | Thumbs up/down capture → profile adaptation | Online personalization |
+| **0. Scaffold** ✅ | Python 3.12 + `uv`, project layout, config, tests | Modern Python tooling |
+| **1. Ingestion + memory v0** ✅ | Connectors, normalization, SQLite dedup, no LLM | Data plumbing |
+| **2. Triage + digest + automation** ✅ | Triage & synthesis, telemetry, static-site delivery, daily cron | Prompt engineering, structured outputs, cost tiering, autonomous operation |
+| **3. Eval harness** ✅ | Golden set, precision/recall + flip report, noise floor measured | LLM evaluation — the highest-leverage differentiator |
+| **4. Local model comparison** | `OpenAIAdapter`; vLLM on an RTX 4090 behind the `LLMClient` seam; benchmark against Haiku on the golden set | Model serving, provider abstraction, evidence-based model choice |
+| **5. Semantic memory** | Embeddings for cross-source near-duplicate merge and story continuity | RAG / embeddings, when the limitation is actually felt |
+| **6. Agentic upgrade** | Hand-rolled tool-use loop — including source discovery: propose a feed, fetch it, triage a sample, keep it if the hit rate clears a bar | Agent orchestration from scratch |
 
 Design rule: **hand-roll the orchestration in v1** (understandable, interviewable),
-consider a LangGraph refactor only after Phase 5, as a comparison exercise.
+consider a LangGraph refactor only after the agent loop exists, as a comparison exercise.
 
 ## Decisions log
 
 | Decision | Choice | Why |
 |---|---|---|
-| Standalone vs. inside TheAppBackend | Standalone | Clean learning arc; separate resume artifact (Python/agents/evals vs. Go/GCP) |
 | Language | Python | AI-ecosystem fit; converts "academic Python" into applied Python |
-| LLM provider | Claude API | Breadth vs. existing Gemini experience; structured outputs + prompt caching fit |
+| LLM provider | Claude API | Structured outputs + prompt caching fit; seam allows swapping |
 | Orchestration | Hand-rolled pipeline → agent loop | Learn the mechanics before adopting a framework |
-| Memory v1 | SQLite only | Dedup + history don't need embeddings; add vectors when semantic gaps appear |
-| Hosting | GitHub Actions cron | Zero infra, free, secrets built in; no always-on server needed for a daily job |
-| Feedback loop | Deferred to Phase 6 | Capture mechanism is real engineering; profile-as-file covers v1 |
+| Memory v1 | SQLite only | Dedup + history don't need embeddings; add vectors when gaps appear |
+| Hosting | GitHub Actions cron | Zero infra, free, secrets built in; no always-on server for a daily job |
+| Delivery | Static site on GitHub Pages | Shareable link beats an inbox for a portfolio artifact; no SMTP credentials |
+| Digest history | Committed HTML snapshots | Git is already a versioned store; no `digest_items` table needed yet |
+| Provider seam | `Protocol` + adapter, telemetry outside | Adapter normalizes provider shape; the decorator then works for any provider (`TICKET-024`) |
+| Migration tracking | Retired 2026-09 | Evaluation showed the corpus carried none of the intended signal (`TICKET-031`) |
