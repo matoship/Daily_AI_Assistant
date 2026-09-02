@@ -38,3 +38,7 @@ Each ticket: what broke, why, how it was fixed, and the generalizable lesson. Nu
 | [028](TICKET-028-threshold-dead-zone-model-never-scores-five.md) | Selection threshold of 5 is silently identical to 6 (model never emits 5) | silent design flaw |
 | [029](TICKET-029-thin-feed-summaries-unjudgeable-input.md) | A third of triage inputs contain too little text to judge | data quality |
 | [030](TICKET-030-truncated-triage-dropped-articles-silently.md) | Truncated triage responses silently dropped articles for weeks | silent failure |
+| [031](TICKET-031-immigration-corpus-contains-no-signal.md) | Half the daily corpus carried none of the signal it was added for | data quality / product scope |
+| [032](TICKET-032-truncated-flag-unreachable-after-its-own-fix.md) | The truncation flag became unreachable in the fix for TICKET-030 | dead code / unused signal |
+| [033](TICKET-033-unserializable-dict-keys-in-untested-writer.md) | An untested writer would have discarded a paid evaluation run | silent failure / test coverage gap |
+| [034](TICKET-034-stale-baseline-and-hypersensitive-metrics.md) | A stale baseline and a hypersensitive metric made eval deltas unreadable | measurement methodology |
