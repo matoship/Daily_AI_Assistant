@@ -1,34 +1,22 @@
 identity:
   location: Adelaide, South Australia
-  role: AI Engineer / ServiceNow Developer
-  career_goal: AI Engineer / Forward Deployed Engineer
-  focus: Applied AI and production software engineering
+  role: AI Engineer (ServiceNow / LLM applications)
+  career_goal: AI Application Engineer
 
 topics:
   immigration:
     watching:
-      - SA state nomination 190/491 invitation rounds and criteria changes
-      - ICT occupation list changes relevant to software and AI engineers
-      - Department of Home Affairs skilled migration policy and processing changes
-      - national migration changes that could affect my pathway to Australian PR
-
+      - SA state nomination (190/491) invitation rounds and criteria changes
+      - ICT occupation list changes
+      - Department of Home Affairs policy / processing-time announcements
     irrelevant:
       - other states' nomination news unless it signals national policy shifts
-      - family, partner, student, visitor, or humanitarian visa streams
-      - generic migration news without practical impact on my pathway
+      - family/partner/humanitarian visa streams
 
   engineering:
     interests:
-      - production LLM applications: agents, RAG, tool use, structured outputs, evals, observability
-      - model and API releases from OpenAI, Anthropic, Google, and major open-weight providers
-      - Python, Go, and TypeScript developments relevant to backend and AI engineering
-      - backend architecture, APIs, databases, distributed systems, and async processing
-      - Docker, Kubernetes, CI/CD, cloud infrastructure, and production AI deployment
-      - practical AI engineering techniques that improve reliability, latency, cost, or maintainability
-
+      - LLM application patterns (agents, RAG, structured outputs, evals)
+      - Claude API / model releases across major providers
+      - Python, Go, TypeScript ecosystem news relevant to backend + AI work
     irrelevant:
-      - consumer gadget news
-      - superficial AI product announcements
-      - funding rounds without technical or hiring significance
-      - AI hype or benchmark news with little practical engineering relevance
-      - prompt-engineering tips aimed at general consumers
+      - consumer gadget news, funding rounds without technical substance
