@@ -61,7 +61,6 @@ def test_synthesize(fake_llm_client):
         model="test-model",
         input_tokens=0,
         output_tokens=0,
-        truncated=False,
     )
     mock_client = fake_llm_client(fake_response)
 

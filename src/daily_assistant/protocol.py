@@ -8,7 +8,7 @@ class LLMResponse:
     model: str
     input_tokens: int
     output_tokens: int
-    truncated: bool
+
 
 
 class LLMClient(Protocol):

@@ -9,7 +9,7 @@ class Settings(BaseSettings):
         "env_file_encoding": "utf-8",
     }
     anthropic_api_key: str = Field(..., min_length=1)
-
+    openai_api_key: str = Field(..., min_length=1)
 
 @lru_cache()
 def get_settings() -> Settings:
