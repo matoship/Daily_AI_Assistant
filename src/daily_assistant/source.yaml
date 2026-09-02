@@ -5,13 +5,22 @@ sources:
   - url: https://www.infoq.com/feed/
     name: InfoQ - Software Development News
     justification: Provides updates on Python, Go, TypeScript ecosystem news relevant to backend and AI work
-  - url: "https://news.google.com/rss/search?q=Australia%20skilled%20migration%20when%3A7d&hl=en-AU&gl=AU&ceid=AU:en"
-    name: Google News - Skilled Migration (AU)
-    justification: Fresh national skilled-migration policy news; replaces dead Home Affairs RSS
-  - url: "https://news.google.com/rss/search?q=Australia%20(%22485%20visa%22%20OR%20%22graduate%20visa%22)%20when%3A30d&hl=en-AU&gl=AU&ceid=AU:en"
-    name: Google News - Graduate/485 Visa
-    justification: Tracks post-study work visa policy changes affecting my visa pathway
-  - url: "https://news.google.com/rss/search?q=%22South%20Australia%22%20(%22skilled%20migration%22%20OR%20%22state%20nomination%22)%20when%3A90d&hl=en-AU&gl=AU&ceid=AU:en"
-    name: Google News - SA State Nomination
-    justification: Low-volume catch-all for SA-specific coverage; primary SA source (migration.sa.gov.au) needs scraping - Phase 4
+  - url: "https://hnrss.org/frontpage?points=150"
+    name: Hacker News - front page (150+ points)
+    justification: Community-filtered AI/engineering signal; the points threshold does quality control before triage ever sees it. Verified live before adding - 10 entries, real summaries, on-beat content.
+  - url: https://www.innovationaus.com/feed/
+    name: InnovationAus - Australian tech industry
+    justification: ON TRIAL. Australian tech policy and industry coverage - the only AU-specific feed that survived pre-flight testing (real ~470-char summaries, not title-only). Hit rate unproven; review against triage_logs in two weeks and drop if it behaves like the retired migration feeds.
 
+# Retired 2026-09-02 (TICKET-031): three Google News skilled-migration queries.
+# They produced 239 of 425 corpus rows (~56% of triage volume) at an 8% human-approval
+# rate, while a keyword search of the whole corpus found essentially zero articles about
+# SA nomination rounds, ICT occupation lists, or any actual visa pathway change. The
+# authoritative source (migration.sa.gov.au) has published nothing since July, so the
+# planned scraper would not have helped either. Removed rather than rewritten - the
+# signal is not in RSS.
+#
+# Feeds rejected during pre-flight testing, for the record: itnews.com.au and
+# crn.com.au (both dead - zero entries), dev.to/career (spam), SmartCompany (off-beat),
+# ITWire (499 entries of vendor press releases), ARN (IT-channel business news), and
+# two Google News career queries (title-only summaries plus SEO listicles).

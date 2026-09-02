@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Golden Set Labeler</title>
+<style>
+:root{color-scheme:light dark;--bg:#f7f7f8;--surface:#fff;--text:#1a1a1a;--muted:#5b5f66;
+--border:#e3e4e7;--accent:#2f5fd8;--callout:#eef2fd;--ok:#1a7f4b;--bad:#b3261e}
+@media(prefers-color-scheme:dark){:root{--bg:#14151a;--surface:#1c1e24;--text:#eceef1;
+--muted:#9aa0aa;--border:#2c2f37;--accent:#7ea1ff;--callout:#1f2740;--ok:#4ade80;--bad:#f87171}}
+*{box-sizing:border-box}
+body{margin:0;padding:1.5rem 1rem;background:var(--bg);color:var(--text);line-height:1.5;
+font-family:-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+main{max-width:46rem;margin:0 auto}
+header{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:1rem;gap:1rem;flex-wrap:wrap}
+h1{font-size:1.1rem;margin:0}
+.progress{color:var(--muted);font-size:.9rem}
+.bar{height:4px;background:var(--border);border-radius:2px;overflow:hidden;margin-bottom:1.25rem}
+.bar>div{height:100%;background:var(--accent);width:0;transition:width .2s}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:1.25rem 1.5rem;margin-bottom:1rem}
+.src{font-size:.78rem;text-transform:uppercase;letter-spacing:.03em;color:var(--accent);font-weight:600}
+h2{font-size:1.15rem;margin:.4rem 0 .6rem}
+.summary{color:var(--muted);font-size:.92rem;white-space:pre-wrap}
+a.url{font-size:.8rem;color:var(--muted)}
+label{display:block;font-weight:600;font-size:.85rem;margin:1rem 0 .4rem}
+.scores{display:flex;gap:.3rem;flex-wrap:wrap}
+.scores button{flex:1;min-width:2.4rem;padding:.55rem 0;font-size:.95rem;cursor:pointer;
+background:var(--surface);color:var(--text);border:1px solid var(--border);border-radius:6px}
+.scores button:hover{border-color:var(--accent)}
+.scores button[aria-pressed="true"]{background:var(--accent);color:#fff;border-color:var(--accent)}
+.cats{display:flex;gap:.5rem;flex-wrap:wrap}
+.cats button{padding:.5rem 1rem;cursor:pointer;background:var(--surface);color:var(--text);
+border:1px solid var(--border);border-radius:999px;font-size:.9rem}
+.cats button[aria-pressed="true"]{background:var(--accent);color:#fff;border-color:var(--accent)}
+textarea{width:100%;min-height:4.5rem;padding:.6rem;border:1px solid var(--border);border-radius:6px;
+background:var(--bg);color:var(--text);font:inherit;font-size:.9rem;resize:vertical}
+.row{display:flex;gap:.6rem;margin-top:1.1rem;flex-wrap:wrap}
+.row button{padding:.6rem 1.2rem;border-radius:6px;border:1px solid var(--border);cursor:pointer;
+background:var(--surface);color:var(--text);font-size:.9rem}
+.row button.primary{background:var(--accent);color:#fff;border-color:var(--accent);font-weight:600}
+.row button:disabled{opacity:.45;cursor:not-allowed}
+.reveal{margin-top:1rem;padding:.9rem 1.1rem;border-radius:8px;background:var(--callout);font-size:.9rem}
+.reveal .verdict{font-weight:700}
+.agree{color:var(--ok)}.disagree{color:var(--bad)}
+.reveal .reason{color:var(--muted);margin-top:.4rem;font-size:.85rem}
+.hint{color:var(--muted);font-size:.78rem;margin-top:.5rem}
+.done{text-align:center;padding:2.5rem 1rem}
+.guidance{margin:.9rem 0 0;padding:.6rem .85rem;border-left:3px solid var(--accent);
+background:var(--callout);border-radius:0 6px 6px 0;font-size:.82rem;color:var(--muted)}
+.guidance b{color:var(--text)}
+.check{display:flex;align-items:flex-start;gap:.55rem;margin-top:.9rem;
+padding:.6rem .85rem;border:1px solid var(--border);border-radius:6px;cursor:pointer;font-size:.87rem}
+.check input{margin-top:.2rem;flex-shrink:0}
+.check.on{border-color:var(--accent);background:var(--callout)}
+.check span small{display:block;color:var(--muted);font-size:.78rem;margin-top:.15rem}
+.stale{margin-top:.9rem;padding:.55rem .85rem;border-radius:6px;font-size:.82rem;
+background:var(--callout);border:1px dashed var(--accent);color:var(--text)}
+</style></head><body><main>
+<header>
+  <h1>Golden Set Labeler</h1>
+  <div class="progress"><span id="pos">0</span> / <span id="total">0</span> &middot; <span id="labelled">0</span> labelled<span id="stalecount"></span></div>
+</header>
+<div class="bar"><div id="barfill"></div></div>
+<div id="app"></div>
+<div class="row">
+  <button id="export" class="primary">Export golden_set.yaml</button>
+  <button id="nextstale">Next to re-check</button>
+  <button id="reset">Clear saved labels</button>
+</div>
+<p class="hint">Keys: <b>0-9</b> / <b>t</b> for 10 = relevance &middot; <b>Enter</b> = submit &middot; <b>&larr; &rarr;</b> = navigate. Autosaves to this browser.</p>
+</main>
+<script>
+const ITEMS = /*__DATA__*/[];
+const CATS  = /*__CATS__*/["engineering","immigration","other"];
+const KEY = "golden_set_labels_v1";
+let labels = {};
+try { labels = JSON.parse(localStorage.getItem(KEY) || "{}"); } catch (e) { labels = {}; }
+let i = 0, draft = null;
+
+const save = () => { try { localStorage.setItem(KEY, JSON.stringify(labels)); } catch (e) {} };
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const strip = h => { const d = document.createElement("div"); d.innerHTML = h ?? ""; return (d.textContent || "").trim(); };
+
+const LABEL_VERSION = 2;   // v2 = labelled under the "summary only" rule
+
+function blank() { return { relevance: null, category: null, justification: "", insufficient: false, revealed: false }; }
+function staleUrls() { return Object.keys(labels).filter(u => (labels[u].v || 1) < LABEL_VERSION); }
+
+function render() {
+  const it = ITEMS[i];
+  if (!it) { document.getElementById("app").innerHTML = '<div class="card done">No articles loaded.</div>'; return; }
+  const saved = labels[it.url];
+  const isStale = !!saved && (saved.v || 1) < LABEL_VERSION;
+  draft = draft || (saved ? { insufficient: false, ...saved, revealed: true } : blank());
+
+  document.getElementById("pos").textContent = i + 1;
+  document.getElementById("total").textContent = ITEMS.length;
+  document.getElementById("labelled").textContent = Object.keys(labels).length;
+  document.getElementById("barfill").style.width = (Object.keys(labels).length / ITEMS.length * 100) + "%";
+  const nStale = staleUrls().length;
+  document.getElementById("stalecount").innerHTML =
+    nStale ? ' &middot; <b>' + nStale + '</b> to re-check' : "";
+
+  const scores = Array.from({ length: 11 }, (_, n) =>
+    '<button data-score="' + n + '" aria-pressed="' + (draft.relevance === n) + '">' + n + '</button>').join("");
+  const cats = CATS.map(c =>
+    '<button data-cat="' + esc(c) + '" aria-pressed="' + (draft.category === c) + '">' + esc(c) + '</button>').join("");
+
+  let reveal = "";
+  if (draft.revealed) {
+    const agree = draft.relevance !== null &&
+      ((draft.relevance >= 5) === (it.model_relevance >= 5)) && draft.category === it.model_category;
+    reveal = '<div class="reveal"><span class="verdict ' + (agree ? "agree" : "disagree") + '">' +
+      (agree ? "agrees with model" : "disagrees with model") + '</span> &mdash; model said <b>' +
+      it.model_relevance + '</b> / <b>' + esc(it.model_category) + '</b>' +
+      '<div class="reason">' + esc(it.model_reason) + '</div></div>';
+  }
+
+  document.getElementById("app").innerHTML =
+    '<div class="card">' +
+      '<div class="src">' + esc(it.source) + '</div>' +
+      '<h2>' + esc(it.title) + '</h2>' +
+      '<div class="summary">' + (esc(strip(it.summary)).slice(0, 700) || "(no summary)") + '</div>' +
+      '<a class="url" href="' + esc(it.url) + '" target="_blank" rel="noopener">open article &rarr;</a>' +
+      '<p class="guidance">Judge from the <b>title and summary above</b> &mdash; that is all triage was given. ' +
+      'It never fetches the page. If that is not enough to decide, say so with the checkbox rather than ' +
+      'opening the article and scoring on what you find there.</p>' +
+      (isStale ? '<div class="stale">Labelled before this rule existed &mdash; worth a quick re-check. ' +
+        'Re-submitting marks it reviewed.</div>' : "") +
+      '<label>Relevance (0-10)</label><div class="scores">' + scores + '</div>' +
+      '<label>Category</label><div class="cats">' + cats + '</div>' +
+      '<label class="check' + (draft.insufficient ? " on" : "") + '">' +
+        '<input type="checkbox" id="insuf"' + (draft.insufficient ? " checked" : "") + '>' +
+        '<span>Could not judge from the summary alone' +
+        '<small>Records that thin input &mdash; not the prompt &mdash; was the limiting factor here.</small>' +
+        '</span></label>' +
+      '<label>Justification</label>' +
+      '<textarea id="just" placeholder="Why this score? What made it borderline?">' + esc(draft.justification) + '</textarea>' +
+      '<div class="row">' +
+        '<button id="prev">&larr; Prev</button>' +
+        '<button id="submit" class="primary"' + (draft.relevance === null || !draft.category ? " disabled" : "") + '>' +
+          (draft.revealed ? "Save &amp; next &rarr;" : "Submit") + '</button>' +
+        '<button id="skip">Skip &rarr;</button>' +
+      '</div>' + reveal +
+    '</div>';
+
+  document.querySelectorAll("[data-score]").forEach(b => b.onclick = () => { draft.relevance = +b.dataset.score; render(); });
+  document.querySelectorAll("[data-cat]").forEach(b => b.onclick = () => { draft.category = b.dataset.cat; render(); });
+  document.getElementById("just").oninput = e => draft.justification = e.target.value;
+  document.getElementById("insuf").onchange = e => { draft.insufficient = e.target.checked; render(); };
+  document.getElementById("prev").onclick = () => move(-1);
+  document.getElementById("skip").onclick = () => move(1);
+  document.getElementById("submit").onclick = submit;
+}
+
+function submit() {
+  const it = ITEMS[i];
+  if (draft.relevance === null || !draft.category) return;
+  if (!draft.revealed) { draft.revealed = true; render(); return; }   // blind: reveal before saving
+  labels[it.url] = {
+    relevance: draft.relevance,
+    category: draft.category,
+    justification: draft.justification,
+    insufficient: !!draft.insufficient,
+    v: LABEL_VERSION,
+  };
+  save();
+  move(1);
+}
+
+function move(d) { const n = i + d; if (n < 0 || n >= ITEMS.length) return; i = n; draft = null; render(); }
+
+document.addEventListener("keydown", e => {
+  if (e.target.tagName === "TEXTAREA") { if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) submit(); return; }
+  if (e.key >= "0" && e.key <= "9") { draft.relevance = +e.key; render(); }
+  else if (e.key === "t") { draft.relevance = 10; render(); }
+  else if (e.key === "Enter") { submit(); }
+  else if (e.key === "ArrowRight") { move(1); }
+  else if (e.key === "ArrowLeft") { move(-1); }
+});
+
+const yamlStr = s => '"' + String(s ?? "").replace(/\\/g, "\\\\").replace(/"/g, '\\"').replace(/\n/g, " ") + '"';
+
+document.getElementById("export").onclick = () => {
+  const lines = [
+    "# Golden set - human-labelled ground truth for triage evaluation.",
+    "# Labelled blind: the model's own score was hidden until after each judgement.",
+    "labels:"];
+  for (const it of ITEMS) {
+    const l = labels[it.url];
+    if (!l) continue;
+    lines.push("- article:",
+      "    url: " + yamlStr(it.url),
+      "    source: " + yamlStr(it.source),
+      "    title: " + yamlStr(it.title),
+      "    summary: " + yamlStr(it.summary),
+      "  gold_relevance: " + l.relevance,
+      "  gold_category: " + l.category,
+      "  input_insufficient: " + (l.insufficient ? "true" : "false"),
+      "  justification: " + yamlStr(l.justification),
+      "  model_relevance: " + it.model_relevance,
+      "  model_category: " + yamlStr(it.model_category));
+  }
+  const blob = new Blob([lines.join("\n") + "\n"], { type: "text/yaml" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "golden_set.yaml";
+  a.click();
+  URL.revokeObjectURL(a.href);
+};
+
+document.getElementById("nextstale").onclick = () => {
+  const stale = new Set(staleUrls());
+  if (!stale.size) { alert("Nothing left to re-check."); return; }
+  for (let n = 1; n <= ITEMS.length; n++) {
+    const j = (i + n) % ITEMS.length;
+    if (stale.has(ITEMS[j].url)) { i = j; draft = null; render(); return; }
+  }
+};
+
+document.getElementById("reset").onclick = () => {
+  if (confirm("Delete all saved labels in this browser?")) { labels = {}; save(); draft = null; render(); }
+};
+
+render();
+</script></body></html>

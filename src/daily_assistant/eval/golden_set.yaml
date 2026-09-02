@@ -1,0 +1,553 @@
+# Golden set - human-labelled ground truth for triage evaluation.
+# Labelled blind: the model's own score was hidden until after each judgement.
+labels:
+  - article:
+      url: "https://news.google.com/rss/articles/CBMixgFBVV95cUxPUWVzZzhhYXp0aUVNWmRCTGlZX0VkZWpaMFA5LXZLd255R0llRldKQnZsTWVCS2NyT1hPN2ptRjZzWGJpTXl3ZTFpS0xOWVQ4bFpqNEdmZzRCaVU5T2JTS05ocEx4ZzFWc0dsTTRRQl9CazAycWt5bTRlc1lwaVluUFhYR1Rpc3p3YnlFNDI2MDFselpQNnBuMXI5a2tiaXJKNGZiYnFqN3pFVmdIRHhKS0pZM29jRlQtNzc0Tmt5eWhRVUtjZ0E?oc=5"
+      source: "Google News - Skilled Migration (AU)"
+      title: "Minister calls for explanation on alleged Brethren election disruption - ABC News & Headlines – Australian Broadcasting Corporation"
+      summary: '<a href="https://news.google.com/rss/articles/CBMixgFBVV95cUxPUWVzZzhhYXp0aUVNWmRCTGlZX0VkZWpaMFA5LXZLd255R0llRldKQnZsTWVCS2NyT1hPN2ptRjZzWGJpTXl3ZTFpS0xOWVQ4bFpqNEdmZzRCaVU5T2JTS05ocEx4ZzFWc0dsTTRRQl9CazAycWt5bTRlc1lwaVluUFhYR1Rpc3p3YnlFNDI2MDFselpQNnBuMXI5a2tiaXJKNGZiYnFqN3pFVmdIRHhKS0pZM29jRlQtNzc0Tmt5eWhRVUtjZ0E?oc=5" target="_blank">Minister calls for explanation on alleged Brethren election disruption</a>&nbsp;&nbsp;<font color="#6f6f6f">ABC News & Headlines – Australian Broadcasting Corporation</font>'
+    gold_relevance: 0
+    gold_category: other
+    input_insufficient: false
+    justification: "Not relevant to immigration nor engineering. International affair in Israel is hardly my business"
+    model_relevance: 0
+    model_category: "other"
+  - article:
+      url: "https://news.google.com/rss/articles/CBMi6AFBVV95cUxPN2hCR1JqYVZjNFJkSWFiajZXRTVMOGMwMmE1T0VJMXNBOEtPMWJZVDdta04yS2ljZFJ2MzFVbS10emplYVVNdmR6aGtGUWtUUHZOckt2SjJfUWJBYUZLT005dFBNTWNRSWpQWjRicGUtSHMySDJWNktrX2pUZXJWR2xyOFlDSUlCeGUweHRab3pYM1NmUU9LbkFSeDVqb0FxRmNsb3pqbTE0cVRqR1I4bzlGTEpDd3c2b191a185SzFzRVlFVnVFWFVNRUZVWFVfdk1KSHJQVEFMSk1wcHJEc2oxdkN2M2tO?oc=5"
+      source: "Google News - Skilled Migration (AU)"
+      title: "‘We need skilled migrants’: Westpac CEO Anthony Miller defends migration amid Federal push to reduce rate - The West Australian"
+      summary: '<a href="https://news.google.com/rss/articles/CBMi6AFBVV95cUxPN2hCR1JqYVZjNFJkSWFiajZXRTVMOGMwMmE1T0VJMXNBOEtPMWJZVDdta04yS2ljZFJ2MzFVbS10emplYVVNdmR6aGtGUWtUUHZOckt2SjJfUWJBYUZLT005dFBNTWNRSWpQWjRicGUtSHMySDJWNktrX2pUZXJWR2xyOFlDSUlCeGUweHRab3pYM1NmUU9LbkFSeDVqb0FxRmNsb3pqbTE0cVRqR1I4bzlGTEpDd3c2b191a185SzFzRVlFVnVFWFVNRUZVWFVfdk1KSHJQVEFMSk1wcHJEc2oxdkN2M2tO?oc=5" target="_blank">‘We need skilled migrants’: Westpac CEO Anthony Miller defends migration amid Federal push to reduce rate</a>&nbsp;&nbsp;<font color="#6f6f6f">The West Australian</font>'
+    gold_relevance: 4
+    gold_category: immigration
+    input_insufficient: false
+    justification: "its about immigration. but hardly a concern to me"
+    model_relevance: 6
+    model_category: "immigration"
+  - article:
+      url: "https://www.marktechpost.com/2026/08/24/fastino-releases-gliner2-5-a-boundary-prediction-architecture-that-removes-span-enumeration-from-information-extraction/"
+      source: "MarkTechPost - AI & Technology News"
+      title: "Fastino Releases GLiNER2.5: A Boundary-Prediction Architecture That Removes Span Enumeration From Information Extraction"
+      summary: '<p>Fastino released GLiNER2.5, replacing span enumeration with boundary prediction so entity width no longer costs compute. Three Apache 2.0 checkpoints ship at 74M, 194M, and 287M parameters, all CPU-runnable. The release adds joint entity-relation decoding, constrained classification, span attributes, and 4,096-word context. Overall macro F1 reaches 56.17 on 16 zero-shot benchmarks.</p> <p>The post <a href="https://www.marktechpost.com/2026/08/24/fastino-releases-gliner2-5-a-boundary-prediction-architecture-that-removes-span-enumeration-from-information-extraction/">Fastino Releases GLiNER2.5: A Boundary-Prediction Architecture That Removes Span Enumeration From Information Extraction</a> appeared first on <a href="https://www.marktechpost.com">MarkTechPost</a>.</p>'
+    gold_relevance: 6
+    gold_category: engineering
+    input_insufficient: false
+    justification: "Interesting AI tech news, but too techy that i don't really understand it though"
+    model_relevance: 7
+    model_category: "engineering"
+  - article:
+      url: "https://www.infoq.com/news/2026/08/spotify-data-lake-point-queries/?utm_campaign=infoq_content&utm_source=infoq&utm_medium=feed&utm_term=global"
+      source: "InfoQ - Software Development News"
+      title: "Spotify Builds External Index to Enable Low Latency Point Queries on Its Data Lake"
+      summary: '<img src="https://www.infoq.com/styles/static/images/logo/logo_bigger.jpg" /><p>Spotify introduced  external indexing architecture for Apache Parquet data lakes that enables low-latency point queries without replicating datasets into operational databases. The approach maps lookup keys to Parquet files and row locations, allowing targeted reads from cloud object storage while supporting analytics, machine learning, AI applications, and online services from the same datasets.</p> <i>By Leela Kumili</i>'
+    gold_relevance: 6
+    gold_category: engineering
+    input_insufficient: false
+    justification: "Interesting tech news"
+    model_relevance: 6
+    model_category: "engineering"
+  - article:
+      url: "https://news.google.com/rss/articles/CBMigwJBVV95cUxNaGU4QnZYSENyNXB0QmN2U2QyTUxub3Q2NFRUc0xWZ2hFd3RickNnRmdhYnFad1RwWHktTDRtOWdjRTFEakxBZ0dETWxGaGtsRDNfb1cwc2wyNEFEaDlSYlhIWXNiVnI4amJ0cU5tVmExMFpZM1JhaG9EeGNKMkVsbkM3c0pWN1RCdzV5TzdkNERUNWZPUzZIY1k4N084NHhkOGZGNHl5SkJtb3lLSTdfR1Q5QWk4dTgzN0tqRVBaOU1LT3RxQXctbmlTVXBFd2pWQWYzTUZYdGZSNEE4Q0NOdkN6S1lISzg5ekMxVS1lQVh5eFVkek95dEpKcV9PVEllaGlv0gGIAkFVX3lxTE5SeW1SbjFZN1d0eWJiRnhuRTJQRV9OVVJ2VkF1Wi11alpnSjItZmZ5N3lqRHBjUkNzeGRzYW50ZktUUzZ4dWRJV3ZONkdiSTVHYTNRYmMtT05PMHR4Y3ZaQi1xS29HdTNid2puRlVZVHVBNHNPWlpzTnFZRUgyRkJFcnJZM1UxWDdOY2l3UWlYWm50VnJVazQ0bExiMjZuUnpTMHJtTTdEaHVCRU9XQjI1WkpZTzRIM0F1WFktSUs0WU1sQ0duX3g0SVZqS1VWVWlFZzlfZ1FEVWttUHpjampJZXA1a2VZRHZkbFdDbE5Bb1JhcWMxUWhWVE1vdm1vTDZESG0zRF9FSQ?oc=5"
+      source: "Google News - Skilled Migration (AU)"
+      title: "Coalition wedge grows wider over migration - The Australian"
+      summary: '<a href="https://news.google.com/rss/articles/CBMigwJBVV95cUxNaGU4QnZYSENyNXB0QmN2U2QyTUxub3Q2NFRUc0xWZ2hFd3RickNnRmdhYnFad1RwWHktTDRtOWdjRTFEakxBZ0dETWxGaGtsRDNfb1cwc2wyNEFEaDlSYlhIWXNiVnI4amJ0cU5tVmExMFpZM1JhaG9EeGNKMkVsbkM3c0pWN1RCdzV5TzdkNERUNWZPUzZIY1k4N084NHhkOGZGNHl5SkJtb3lLSTdfR1Q5QWk4dTgzN0tqRVBaOU1LT3RxQXctbmlTVXBFd2pWQWYzTUZYdGZSNEE4Q0NOdkN6S1lISzg5ekMxVS1lQVh5eFVkek95dEpKcV9PVEllaGlv0gGIAkFVX3lxTE5SeW1SbjFZN1d0eWJiRnhuRTJQRV9OVVJ2VkF1Wi11alpnSjItZmZ5N3lqRHBjUkNzeGRzYW50ZktUUzZ4dWRJV3ZONkdiSTVHYTNRYmMtT05PMHR4Y3ZaQi1xS29HdTNid2puRlVZVHVBNHNPWlpzTnFZRUgyRkJFcnJZM1UxWDdOY2l3UWlYWm50VnJVazQ0bExiMjZuUnpTMHJtTTdEaHVCRU9XQjI1WkpZTzRIM0F1WFktSUs0WU1sQ0duX3g0SVZqS1VWVWlFZzlfZ1FEVWttUHpjampJZXA1a2VZRHZkbFdDbE5Bb1JhcWMxUWhWVE1vdm1vTDZESG0zRF9FSQ?oc=5" target="_blank">Coalition wedge grows wider over migration</a>&nbsp;&nbsp;<font color="#6f6f6f">The Australian</font>'
+    gold_relevance: 1
+    gold_category: immigration
+    input_insufficient: true
+    justification: "no content, single title didn't tell anything useful"
+    model_relevance: 6
+    model_category: "immigration"
+  - article:
+      url: "https://www.infoq.com/presentations/architecture-patterns-llm/?utm_campaign=infoq_content&utm_source=infoq&utm_medium=feed&utm_term=global"
+      source: "InfoQ - Software Development News"
+      title: "Presentation: From Thousands to One: Building LLM-Powered Selection Systems"
+      summary: '<img src="https://res.infoq.com/presentations/architecture-patterns-llm/en/mediumimage/JendrikJordening-medium-1786535626643.jpeg" /><p>Jendrik Jördening shares practical engineering strategies for integrating LLMs into production pipelines. He discusses overcoming non-determinism, restricting schemas, separating semantic text extraction from deterministic code, and validating choices using discriminator models. Learn how to structure LLMs with an MVC approach to ensure database integrity, observability, and system reliability.</p> <i>By Jendrik Jördening</i>'
+    gold_relevance: 8
+    gold_category: engineering
+    input_insufficient: false
+    justification: "Good article, nice to learn"
+    model_relevance: 9
+    model_category: "engineering"
+  - article:
+      url: "https://news.google.com/rss/articles/CBMikwFBVV95cUxPQWJPeHdFQWItQUowdk9UN1N4S0drRUEydzBDalJlb0NGcElURFRMWVJwc3puUEhLRDlIYnFLRWdjTFNwRWowQTVleHZnQ0ZYRFR5blFHd25xM2FTV3VCXzZMWXp1Z1NPQlo5NV9iR2lUSWpsN2JJVEhrcDM0UlJZRElFR0NyaE02bHpGY0l4MWxSQm8?oc=5"
+      source: "Google News - Skilled Migration (AU)"
+      title: "Farley simple maths leaves One Nation in a migration muddle - psnews.com.au"
+      summary: '<a href="https://news.google.com/rss/articles/CBMikwFBVV95cUxPQWJPeHdFQWItQUowdk9UN1N4S0drRUEydzBDalJlb0NGcElURFRMWVJwc3puUEhLRDlIYnFLRWdjTFNwRWowQTVleHZnQ0ZYRFR5blFHd25xM2FTV3VCXzZMWXp1Z1NPQlo5NV9iR2lUSWpsN2JJVEhrcDM0UlJZRElFR0NyaE02bHpGY0l4MWxSQm8?oc=5" target="_blank">Farley simple maths leaves One Nation in a migration muddle</a>&nbsp;&nbsp;<font color="#6f6f6f">psnews.com.au</font>'
+    gold_relevance: 3
+    gold_category: immigration
+    input_insufficient: true
+    justification: "A sharp point of view of immigration from a political party which i don't care about"
+    model_relevance: 3
+    model_category: "immigration"
+  - article:
+      url: "https://www.marktechpost.com/2026/08/12/allenai-open-instruct-tulu-3-post-training-with-sft-dpo-rlvr-grpo-and-verifier-based-evaluation/"
+      source: "MarkTechPost - AI & Technology News"
+      title: "AllenAI Open Instruct Tulu 3 Post-Training with SFT, DPO, RLVR, GRPO, and Verifier-Based Evaluation"
+      summary: '<p>Build a custom LLM post-training pipeline using AllenAI’s Open Instruct framework. This comprehensive guide walks through Supervised Fine-Tuning (SFT), Direct Preference Optimization (DPO), and Reinforcement Learning with Verifiable Rewards (GRPO), optimized to run efficiently on 16GB hardware without needing heavy distributed computing infrastructure.</p> <p>The post <a href="https://www.marktechpost.com/2026/08/12/allenai-open-instruct-tulu-3-post-training-with-sft-dpo-rlvr-grpo-and-verifier-based-evaluation/">AllenAI Open Instruct Tulu 3 Post-Training with SFT, DPO, RLVR, GRPO, and Verifier-Based Evaluation</a> appeared first on <a href="https://www.marktechpost.com">MarkTechPost</a>.</p>'
+    gold_relevance: 6
+    gold_category: engineering
+    input_insufficient: false
+    justification: "A nice tutorial for fine tuning models using a certainn framework"
+    model_relevance: 9
+    model_category: "engineering"
+  - article:
+      url: "https://news.google.com/rss/articles/CBMilAFBVV95cUxQakVoX1pIRHNxclFSWmJRMFZGaWlwZTNXOTZFWGc2RWNJT2NDSXhOOXJXRlVROU11cVZ2b2p3bXMydklyU3FMczdiNW5vQW91dVhVamxvVnBwOEE5NExxNHh2bEs3cnRuZjhMSVhMZnFmTXlNbnZpb2Y2Nlk3U29BRmsya1owZmluTjRBRTNHR2w3Nmdn?oc=5"
+      source: "Google News - Skilled Migration (AU)"
+      title: "Federal Migration Changes Puts Regional Workforce at Further Risk - The Nationals WA"
+      summary: '<a href="https://news.google.com/rss/articles/CBMilAFBVV95cUxQakVoX1pIRHNxclFSWmJRMFZGaWlwZTNXOTZFWGc2RWNJT2NDSXhOOXJXRlVROU11cVZ2b2p3bXMydklyU3FMczdiNW5vQW91dVhVamxvVnBwOEE5NExxNHh2bEs3cnRuZjhMSVhMZnFmTXlNbnZpb2Y2Nlk3U29BRmsya1owZmluTjRBRTNHR2w3Nmdn?oc=5" target="_blank">Federal Migration Changes Puts Regional Workforce at Further Risk</a>&nbsp;&nbsp;<font color="#6f6f6f">The Nationals WA</font>'
+    gold_relevance: 4
+    gold_category: immigration
+    input_insufficient: true
+    justification: "Not about SA immigration, and not ICT relevant"
+    model_relevance: 4
+    model_category: "immigration"
+  - article:
+      url: "https://www.infoq.com/news/2026/08/freetoken-local-inference/?utm_campaign=infoq_content&utm_source=infoq&utm_medium=feed&utm_term=global"
+      source: "InfoQ - Software Development News"
+      title: "FreeToken Unlocks Frontier MoE Inference on Consumer Hardware via Dynamic Co-Execution"
+      summary: '<img src="https://www.infoq.com/styles/static/images/logo/logo_bigger.jpg" /><p>Researchers from UC Berkeley and MIT have developed FreeToken, an open-source inference engine that enhances the utility of Mixture-of-Experts models on consumer hardware. By implementing a dynamic scheduling policy and optimising weight management, FreeToken improves decoding speeds and execution efficiency in edge AI applications, fostering self-hosted reasoning systems.</p> <i>By Olimpiu Pop</i>'
+    gold_relevance: 9
+    gold_category: engineering
+    input_insufficient: false
+    justification: "good article about LLM and I actually being recommended from my friend to experiment with the tech "
+    model_relevance: 7
+    model_category: "engineering"
+  - article:
+      url: "https://news.google.com/rss/articles/CBMimgFBVV95cUxNVDM0R3czbEk3QVY4bWRaajY3Q0NWeWJldjNMUnQ0c3pzcVl1VHYtOEN5dmtWN2p0Mzd4M2R0eEROMk1xUkRaNUFZVk1IMkYyaWh0Zk1RRU82Z3JFZjhjQWg4LWxKLVk0aEJtZmZtRkFkNDFlVFFBUFZYZTM5NDV3QUc4T0VMYkg2RU1zdFR1eENvZjJrbGJPdXVn?oc=5"
+      source: "Google News - Skilled Migration (AU)"
+      title: "Worker visa changes made without ag sector consultation - Sheep Central"
+      summary: '<a href="https://news.google.com/rss/articles/CBMimgFBVV95cUxNVDM0R3czbEk3QVY4bWRaajY3Q0NWeWJldjNMUnQ0c3pzcVl1VHYtOEN5dmtWN2p0Mzd4M2R0eEROMk1xUkRaNUFZVk1IMkYyaWh0Zk1RRU82Z3JFZjhjQWg4LWxKLVk0aEJtZmZtRkFkNDFlVFFBUFZYZTM5NDV3QUc4T0VMYkg2RU1zdFR1eENvZjJrbGJPdXVn?oc=5" target="_blank">Worker visa changes made without ag sector consultation</a>&nbsp;&nbsp;<font color="#6f6f6f">Sheep Central</font>'
+    gold_relevance: 3
+    gold_category: immigration
+    input_insufficient: true
+    justification: "Not SA related and Not Ict related"
+    model_relevance: 4
+    model_category: "immigration"
+  - article:
+      url: "https://news.google.com/rss/articles/CBMi3AFBVV95cUxNNVQwRDBMRE9lREt6Z3RPWm9SYlMyTEFXSGJ1YkFIWmttOUZrRTJkWUNQLWhCdEM5a2tBZ2F1U1NET0lTbEpPc0xnRVpPWjFNYWZvZ2ZjRVhZbjMxbkV5NFhWWlAtQTF4TmZDOHY3U0x2TnlxeTBPLTRKbVMxa2RkM19jR0hxR0hBSV9RWldpVVZNaXpCaXdYdllMTzQ2UTBYLWx5WGs0d1dFVVUzNmdxcnhEc2JrQWRqSVVMcG1oZlJVVHZNbU8wSzdYNU9haHBBTVd6ZzM1SThXQlNL?oc=5"
+      source: "Google News - Skilled Migration (AU)"
+      title: "Premiers clash with Albanese on migration plan as PM intervenes in refugee cuts - WAtoday"
+      summary: '<a href="https://news.google.com/rss/articles/CBMi3AFBVV95cUxNNVQwRDBMRE9lREt6Z3RPWm9SYlMyTEFXSGJ1YkFIWmttOUZrRTJkWUNQLWhCdEM5a2tBZ2F1U1NET0lTbEpPc0xnRVpPWjFNYWZvZ2ZjRVhZbjMxbkV5NFhWWlAtQTF4TmZDOHY3U0x2TnlxeTBPLTRKbVMxa2RkM19jR0hxR0hBSV9RWldpVVZNaXpCaXdYdllMTzQ2UTBYLWx5WGs0d1dFVVUzNmdxcnhEc2JrQWRqSVVMcG1oZlJVVHZNbU8wSzdYNU9haHBBTVd6ZzM1SThXQlNL?oc=5" target="_blank">Premiers clash with Albanese on migration plan as PM intervenes in refugee cuts</a>&nbsp;&nbsp;<font color="#6f6f6f">WAtoday</font>'
+    gold_relevance: 3
+    gold_category: immigration
+    input_insufficient: true
+    justification: "Not SA nor ICT related"
+    model_relevance: 6
+    model_category: "immigration"
+  - article:
+      url: "https://www.marktechpost.com/2026/08/20/meet-updf-a-lightweight-adobe-alternative-built-for-the-agentic-era/"
+      source: "MarkTechPost - AI & Technology News"
+      title: "Meet UPDF: A Lightweight Adobe Alternative Built for the Agentic Era"
+      summary: '<p>PDFs are easy to read and hard to change. AI can now summarize a 90-page contract in seconds, but it still won''t rewrite the source file cleanly. UPDF is built for that second half: direct editing, 14-format conversion, 38-language OCR, and ten AI agents shipped in version 2.5.</p> <p>The post <a href="https://www.marktechpost.com/2026/08/20/meet-updf-a-lightweight-adobe-alternative-built-for-the-agentic-era/">Meet UPDF: A Lightweight Adobe Alternative Built for the Agentic Era</a> appeared first on <a href="https://www.marktechpost.com">MarkTechPost</a>.</p>'
+    gold_relevance: 8
+    gold_category: engineering
+    input_insufficient: false
+    justification: "Good to know PDF can be easily modified by AI"
+    model_relevance: 6
+    model_category: "engineering"
+  - article:
+      url: "https://news.google.com/rss/articles/CBMiiAFBVV95cUxPRlNxb0xDWThLdFRTY3RkMU9vVXhrcEJ6NnljQ2tyMFZJTDR1UHY3QXdGRXVnbmFzb0o5bGx2MUdFaDRYTE96Q0hONm96NkhmN0JZUUhjeDlYM001WGZQRkF5dm15eG1LTEZLQWE4dkctQVBqYkp4d2NzZ0N3WkpxVVJnRXM3czQ5?oc=5"
+      source: "Google News - Skilled Migration (AU)"
+      title: "Tania Constable on ABC Pilbara Breakfast Show - miragenews.com"
+      summary: '<a href="https://news.google.com/rss/articles/CBMiiAFBVV95cUxPRlNxb0xDWThLdFRTY3RkMU9vVXhrcEJ6NnljQ2tyMFZJTDR1UHY3QXdGRXVnbmFzb0o5bGx2MUdFaDRYTE96Q0hONm96NkhmN0JZUUhjeDlYM001WGZQRkF5dm15eG1LTEZLQWE4dkctQVBqYkp4d2NzZ0N3WkpxVVJnRXM3czQ5?oc=5" target="_blank">Tania Constable on ABC Pilbara Breakfast Show</a>&nbsp;&nbsp;<font color="#6f6f6f">miragenews.com</font>'
+    gold_relevance: 2
+    gold_category: immigration
+    input_insufficient: true
+    justification: "No idea what it is about from the summary, "
+    model_relevance: 2
+    model_category: "immigration"
+  - article:
+      url: "https://news.google.com/rss/articles/CBMimgFBVV95cUxPckg2aHpQaHo0b2tkb3FfeGJ5ZG1CcFNwazc0eE00YmZqNGpNWnhiZjZVNjg5WVAtZ1FXWW9wZUNTNFVIOGhDaVdOT0NQa0wyN2FnVTFTdGdETDY3VUhvanFYeGtwSGhVMDdtQW9hSkJONEw5dnJWMjRDU3pkaWxYNlNSN2tkYmx2OFU3Y0xKSF9SLTZKZHFRRjF3?oc=5"
+      source: "Google News - Graduate/485 Visa"
+      title: "Study, graduate, stay: Best countries for international students in 2026 - Legit.ng"
+      summary: '<a href="https://news.google.com/rss/articles/CBMimgFBVV95cUxPckg2aHpQaHo0b2tkb3FfeGJ5ZG1CcFNwazc0eE00YmZqNGpNWnhiZjZVNjg5WVAtZ1FXWW9wZUNTNFVIOGhDaVdOT0NQa0wyN2FnVTFTdGdETDY3VUhvanFYeGtwSGhVMDdtQW9hSkJONEw5dnJWMjRDU3pkaWxYNlNSN2tkYmx2OFU3Y0xKSF9SLTZKZHFRRjF3?oc=5" target="_blank">Study, graduate, stay: Best countries for international students in 2026</a>&nbsp;&nbsp;<font color="#6f6f6f">Legit.ng</font>'
+    gold_relevance: 2
+    gold_category: immigration
+    input_insufficient: true
+    justification: "Not ICT nor SA related"
+    model_relevance: 2
+    model_category: "immigration"
+  - article:
+      url: "https://www.infoq.com/articles/beyond-offset-lag-kafka-apache-hudi/?utm_campaign=infoq_content&utm_source=infoq&utm_medium=feed&utm_term=global"
+      source: "InfoQ - Software Development News"
+      title: "Article: Beyond Offset Lag: Computing Time in Queue for Apache Hudi Data Lake Pipelines at Petabyte Scale"
+      summary: '<img src="https://res.infoq.com/articles/beyond-offset-lag-kafka-apache-hudi/en/headerimage/beyond-offset-lag-kafka-apache-hudi-header-1787577734265.jpg" /><p>In this article, author Srikanth Mamidala discusses the data lake architecture used for analytics, reporting, and machine learning and shows how to manage the consumer lag metrics when using Kafka and Apache Hudi.</p> <i>By Srikanth Mamidala</i>'
+    gold_relevance: 2
+    gold_category: engineering
+    input_insufficient: true
+    justification: ""
+    model_relevance: 4
+    model_category: "engineering"
+  - article:
+      url: "https://news.google.com/rss/articles/CBMivAFBVV95cUxOWDY3MTlfTnk1WmpGODJZNldYbllDdER3S1phbVViWTdsMWlkLWhQMFg0SGU0YS0wcjkwQWQwZTU0ODJSZk5wY3VfRm5wZUhLNnQ5Nkc1dXpKc0wwY2MySFN2UTQ2TWduei1Ga1BkUXFJcHpfLXg5VlZENkpMeWpPaHZPdmoyLVhnbW5VVlY1TlpJOFBqSkI2N25YblRKMTdHZWxteU1OcDVPRmVucTQzMDRQZXZXR1ZyOGdkbw?oc=5"
+      source: "Google News - Skilled Migration (AU)"
+      title: "AustraliaMigrate analyzes Direction 119 visa processing priorities - scanx.trade"
+      summary: '<a href="https://news.google.com/rss/articles/CBMivAFBVV95cUxOWDY3MTlfTnk1WmpGODJZNldYbllDdER3S1phbVViWTdsMWlkLWhQMFg0SGU0YS0wcjkwQWQwZTU0ODJSZk5wY3VfRm5wZUhLNnQ5Nkc1dXpKc0wwY2MySFN2UTQ2TWduei1Ga1BkUXFJcHpfLXg5VlZENkpMeWpPaHZPdmoyLVhnbW5VVlY1TlpJOFBqSkI2N25YblRKMTdHZWxteU1OcDVPRmVucTQzMDRQZXZXR1ZyOGdkbw?oc=5" target="_blank">AustraliaMigrate analyzes Direction 119 visa processing priorities</a>&nbsp;&nbsp;<font color="#6f6f6f">scanx.trade</font>'
+    gold_relevance: 5
+    gold_category: immigration
+    input_insufficient: false
+    justification: "immigration related"
+    model_relevance: 6
+    model_category: "immigration"
+  - article:
+      url: "https://news.google.com/rss/articles/CBMi5AFBVV95cUxPanhZM1FyQm9wRGgzWDdrNDJkVzRKVjc3d0ZmU0RnR29WTnUtNGIxVWhzd0dmUHlpYVdINFVsbXVRV1MxQnZjekJVNElrOHV4cXR5N1N0c1dtWXp3TzVXa25hLXNWMlRjLTJuYWplaHU2TU1yYUo1aF9VX25RS0FvdzJRM3hqc1FOamhvdTdIQkhoaTE0NkJKLWk4UEtfNEV6cFY1eEZwSS04XzBxR2lRaVRuNnZkcmRFSVhNeHpCcnNtSmluUmNRM0hWYkoycGwyVUwtSzdQWENENFppZmVWamVkV0E?oc=5"
+      source: "Google News - Skilled Migration (AU)"
+      title: "Premiers clash with Albanese on migration plan as PM intervenes in refugee cuts - Brisbane Times"
+      summary: '<a href="https://news.google.com/rss/articles/CBMi5AFBVV95cUxPanhZM1FyQm9wRGgzWDdrNDJkVzRKVjc3d0ZmU0RnR29WTnUtNGIxVWhzd0dmUHlpYVdINFVsbXVRV1MxQnZjekJVNElrOHV4cXR5N1N0c1dtWXp3TzVXa25hLXNWMlRjLTJuYWplaHU2TU1yYUo1aF9VX25RS0FvdzJRM3hqc1FOamhvdTdIQkhoaTE0NkJKLWk4UEtfNEV6cFY1eEZwSS04XzBxR2lRaVRuNnZkcmRFSVhNeHpCcnNtSmluUmNRM0hWYkoycGwyVUwtSzdQWENENFppZmVWamVkV0E?oc=5" target="_blank">Premiers clash with Albanese on migration plan as PM intervenes in refugee cuts</a>&nbsp;&nbsp;<font color="#6f6f6f">Brisbane Times</font>'
+    gold_relevance: 3
+    gold_category: immigration
+    input_insufficient: false
+    justification: "Not ICT nor SA related"
+    model_relevance: 6
+    model_category: "immigration"
+  - article:
+      url: "https://news.google.com/rss/articles/CBMiowFBVV95cUxNQlExamxJU2xaS2diNWptRGw5aW9hTnNiQ0FjTDViTVNhOElRX1l3TVh5em1PdzB0VU1sUFZnTENMUUdXaG1GemxfeF9xMXU1XzlJa3BpWWRZMEE0NUVvclpJbkR5RjE5ZjRjMGxOb19pSUZIclR5a3dDcjZHTS1BS001Q0o2QWFYdHZDX2NmWWtXUHBsY1pLRHc0eDZjM3JYZ1pF?oc=5"
+      source: "Google News - Skilled Migration (AU)"
+      title: "‘David, shut up’: Farley poised to quit One Nation - The Saturday Paper"
+      summary: '<a href="https://news.google.com/rss/articles/CBMiowFBVV95cUxNQlExamxJU2xaS2diNWptRGw5aW9hTnNiQ0FjTDViTVNhOElRX1l3TVh5em1PdzB0VU1sUFZnTENMUUdXaG1GemxfeF9xMXU1XzlJa3BpWWRZMEE0NUVvclpJbkR5RjE5ZjRjMGxOb19pSUZIclR5a3dDcjZHTS1BS001Q0o2QWFYdHZDX2NmWWtXUHBsY1pLRHc0eDZjM3JYZ1pF?oc=5" target="_blank">‘David, shut up’: Farley poised to quit One Nation</a>&nbsp;&nbsp;<font color="#6f6f6f">The Saturday Paper</font>'
+    gold_relevance: 1
+    gold_category: other
+    input_insufficient: true
+    justification: "don't the care about Australia politics"
+    model_relevance: 1
+    model_category: "other"
+  - article:
+      url: "https://www.infoq.com/news/2026/08/incidents-reliability-metrics/?utm_campaign=infoq_content&utm_source=infoq&utm_medium=feed&utm_term=global"
+      source: "InfoQ - Software Development News"
+      title: "More Incidents Don't Necessarily Mean Less Reliability"
+      summary: '<img src="https://res.infoq.com/news/2026/08/incidents-reliability-metrics/en/headerimage/generatedHeaderImage-1785853951990.jpg" /><p>One of the most common assumptions in engineering leadership is that a rising number of reported incidents signals declining system reliability. However, a recent article from Great Circle argues that the opposite is often true: an increase in incident counts may actually indicate that an organization''s incident management culture is improving.</p> <i>By Craig Risi</i>'
+    gold_relevance: 5
+    gold_category: engineering
+    input_insufficient: false
+    justification: "somehow good to know"
+    model_relevance: 4
+    model_category: "engineering"
+  - article:
+      url: "https://news.google.com/rss/articles/CBMivgFBVV95cUxOUFREUGRQMzk0bDhDYy1Za3VnMzVpODZaempWLUFHOC1yMzl4TkFlS0M3TU9BeDNrVFphUktqdnd3OVQycWdUUnEzMTljMlR3WmtKV2QyWVRabnhPVHFHSG1PYmY2dFZvdTB1aUJtd2VqSnZQczhTVWQ5UUNhNVRuSUxnUlE4U3pmRE1HWkZqM2c5NnFodjQ4VHZqYWNLZEtjT2VKNFRNNGJ6RkJDUV9pUFhKaDFkcllfY2FIOXB3?oc=5"
+      source: "Google News - Skilled Migration (AU)"
+      title: "Israel's ambassador doesn't rule out reparations for Frankcom family - ABC News & Headlines – Australian Broadcasting Corporation"
+      summary: '<a href="https://news.google.com/rss/articles/CBMivgFBVV95cUxOUFREUGRQMzk0bDhDYy1Za3VnMzVpODZaempWLUFHOC1yMzl4TkFlS0M3TU9BeDNrVFphUktqdnd3OVQycWdUUnEzMTljMlR3WmtKV2QyWVRabnhPVHFHSG1PYmY2dFZvdTB1aUJtd2VqSnZQczhTVWQ5UUNhNVRuSUxnUlE4U3pmRE1HWkZqM2c5NnFodjQ4VHZqYWNLZEtjT2VKNFRNNGJ6RkJDUV9pUFhKaDFkcllfY2FIOXB3?oc=5" target="_blank">Israel''s ambassador doesn''t rule out reparations for Frankcom family</a>&nbsp;&nbsp;<font color="#6f6f6f">ABC News & Headlines – Australian Broadcasting Corporation</font>'
+    gold_relevance: 0
+    gold_category: other
+    input_insufficient: false
+    justification: "Irrelevant international affair "
+    model_relevance: 0
+    model_category: "other"
+  - article:
+      url: "https://www.marktechpost.com/2026/08/18/cartesia-ships-sonic-3-6-a-streaming-tts-model-that-now-leads-both-artificial-analysis-speech-arenas/"
+      source: "MarkTechPost - AI & Technology News"
+      title: "Cartesia Ships Sonic-3.6: A Streaming TTS Model That Now Leads Both Artificial Analysis Speech Arenas"
+      summary: '<p>Cartesia has released Sonic-3.6, a streaming text-to-speech model built on state space models rather than transformers. It now ranks #1 on both Artificial Analysis speech leaderboards — 1,283 Elo on Provider Voice and 1,123 on Controlled Voice, the board that clones every model onto the same eight reference voices to isolate the synthesis engine. Cartesia states sub-90ms time-to-first-audio. The model is available in beta on Cartesia''s own API</p> <p>The post <a href="https://www.marktechpost.com/2026/08/18/cartesia-ships-sonic-3-6-a-streaming-tts-model-that-now-leads-both-artificial-analysis-speech-arenas/">Cartesia Ships Sonic-3.6: A Streaming TTS Model That Now Leads Both Artificial Analysis Speech Arenas</a> appeared first on <a href="https://www.marktechpost.com">MarkTechPost</a>.</p>'
+    gold_relevance: 5
+    gold_category: engineering
+    input_insufficient: false
+    justification: "new tech good to know"
+    model_relevance: 4
+    model_category: "engineering"
+  - article:
+      url: "https://news.google.com/rss/articles/CBMivAFBVV95cUxPdWNTVjRWa2FtSVczMWJmWk8xdlNtU1pzNDRwWjlCSXROZ3c2SDJCbGZRSlpubFJqV0g0SzhfMkthSF9uQTJ6b0dBWHQtWGdHUVhBT1g3VWlVbTFKZ2loUHJRXzJSLWhicU9CaWF0Y1UxS25FSlVqS0o0S1lIY01TNWJKS1V3VXBuLWJNSHdHaTlaTmFrRVZtS3BTZjg5UE9WTHlQNE4zOVNGc08wazRrOUtaRjAxT3lOV1dHRQ?oc=5"
+      source: "Google News - Skilled Migration (AU)"
+      title: "Russia strikes amid Ukrainian political tension - ABC News & Headlines – Australian Broadcasting Corporation"
+      summary: '<a href="https://news.google.com/rss/articles/CBMivAFBVV95cUxPdWNTVjRWa2FtSVczMWJmWk8xdlNtU1pzNDRwWjlCSXROZ3c2SDJCbGZRSlpubFJqV0g0SzhfMkthSF9uQTJ6b0dBWHQtWGdHUVhBT1g3VWlVbTFKZ2loUHJRXzJSLWhicU9CaWF0Y1UxS25FSlVqS0o0S1lIY01TNWJKS1V3VXBuLWJNSHdHaTlaTmFrRVZtS3BTZjg5UE9WTHlQNE4zOVNGc08wazRrOUtaRjAxT3lOV1dHRQ?oc=5" target="_blank">Russia strikes amid Ukrainian political tension</a>&nbsp;&nbsp;<font color="#6f6f6f">ABC News & Headlines – Australian Broadcasting Corporation</font>'
+    gold_relevance: 0
+    gold_category: other
+    input_insufficient: false
+    justification: "irrelevant "
+    model_relevance: 0
+    model_category: "other"
+  - article:
+      url: "https://news.google.com/rss/articles/CBMijAFBVV95cUxNSEJWVlNZWmlYYjlua04tOVMtdkx2MEdMMDYzTEZaWGd5YlJCeG94TnQtSlF2b05YVjliblVBTUtyX3k3VnczdC1nOEtBNEpUQ090Z19PRVQxNFVCZFFXXy0ybDlZMHM2T0pVVkhmUXVLWmZpQUxJMm4wWUxXRk5EU0J5c1d2YnZrN2dTeA?oc=5"
+      source: "Google News - Graduate/485 Visa"
+      title: "UK mentions 2 things foreigners on graduate visa can't do in Britain - Legit.ng"
+      summary: '<a href="https://news.google.com/rss/articles/CBMijAFBVV95cUxNSEJWVlNZWmlYYjlua04tOVMtdkx2MEdMMDYzTEZaWGd5YlJCeG94TnQtSlF2b05YVjliblVBTUtyX3k3VnczdC1nOEtBNEpUQ090Z19PRVQxNFVCZFFXXy0ybDlZMHM2T0pVVkhmUXVLWmZpQUxJMm4wWUxXRk5EU0J5c1d2YnZrN2dTeA?oc=5" target="_blank">UK mentions 2 things foreigners on graduate visa can''t do in Britain</a>&nbsp;&nbsp;<font color="#6f6f6f">Legit.ng</font>'
+    gold_relevance: 0
+    gold_category: immigration
+    input_insufficient: false
+    justification: "Not even Australia news"
+    model_relevance: 1
+    model_category: "immigration"
+  - article:
+      url: "https://news.google.com/rss/articles/CBMiugFBVV95cUxQdWlxUmUzUllJQ2JNZWdocXlBb0luNUNwM183Z08zVTFxX3owZ2ZZbTZjWjhWcTltMVhPcmpEaXF0QmFiaGQzZXotanB2emZYVEV2MGhFWXdNMFNOb3JheDBoQ3lRRzkxQVpCUERseFpsZGFYYTdoZFNnMjNFSHdPZHRlcnNiWkdkTzRqaWNsMFExODJKYUM2TkhqT1NwSkF1a3JEVndpdHdjcFFBZ3dzWm1oV1Q4cFl1VlE?oc=5"
+      source: "Google News - Skilled Migration (AU)"
+      title: "Shadow of One Nation hangs over Labor’s migration chaos - The Nightly"
+      summary: '<a href="https://news.google.com/rss/articles/CBMiugFBVV95cUxQdWlxUmUzUllJQ2JNZWdocXlBb0luNUNwM183Z08zVTFxX3owZ2ZZbTZjWjhWcTltMVhPcmpEaXF0QmFiaGQzZXotanB2emZYVEV2MGhFWXdNMFNOb3JheDBoQ3lRRzkxQVpCUERseFpsZGFYYTdoZFNnMjNFSHdPZHRlcnNiWkdkTzRqaWNsMFExODJKYUM2TkhqT1NwSkF1a3JEVndpdHdjcFFBZ3dzWm1oV1Q4cFl1VlE?oc=5" target="_blank">Shadow of One Nation hangs over Labor’s migration chaos</a>&nbsp;&nbsp;<font color="#6f6f6f">The Nightly</font>'
+    gold_relevance: 0
+    gold_category: other
+    input_insufficient: true
+    justification: "irrelevant political jibber jabber  "
+    model_relevance: 6
+    model_category: "immigration"
+  - article:
+      url: "https://www.marktechpost.com/2026/08/29/anthropic-opens-a-research-preview-of-the-model-hardware-standard-mhs-a-shared-specification-for-ai-agents-to-safely-operate-physical-devices/"
+      source: "MarkTechPost - AI & Technology News"
+      title: "Anthropic Opens a Research Preview of the Model Hardware Standard (MHS): A Shared Specification for  AI Agents to Safely Operate Physical Devices"
+      summary: '<p>Anthropic has opened a research preview of the Model Hardware Standard (MHS), a shared driver specification that lets AI agents discover and safely operate physical devices. Instrument integration that normally takes weeks or months drops to hours: Carnegie Mellon went from raw equipment to a finished dose-response curve in eight, and QuEra''s laser relock improved from 58% to 99.3% across 700 trials. MHS is model-agnostic, reachable over MCP, and enforces safety limits in the driver rather than the prompt.</p> <p>The post <a href="https://www.marktechpost.com/2026/08/29/anthropic-opens-a-research-preview-of-the-model-hardware-standard-mhs-a-shared-specification-for-ai-agents-to-safely-operate-physical-devices/">Anthropic Opens a Research Preview of the Model Hardware Standard (MHS): A Shared Specification for  AI Agents to Safely Operate Physical Devices</a> appeared first on <a href="https://www.marktechpost.com">MarkTechPost</a>.</p>'
+    gold_relevance: 7
+    gold_category: engineering
+    input_insufficient: false
+    justification: "nice tech news good to know"
+    model_relevance: 9
+    model_category: "engineering"
+  - article:
+      url: "https://news.google.com/rss/articles/CBMiuAFBVV95cUxNVXRPR3NoMjZRT0x4RWMwdUs5R3g0VlNWekdiU3NMVzB1YzlvNWdrRWp6S19ianloMml4WWFfWkxsLVRGdkNSbFc5VmM5Z2x3R24xTHFtR2s3SjFrZExMdDZ1d1g4R0Y4MnZ3dHhPSnhDSGltWXhidDJMaEdPTzRNXzJlbW1xcnZHS19IcExna3RtbTZVSW5KaDJGOXBGeF9DQkVETE14RlktYTRDSFJzNHpBaEhTS0Vv?oc=5"
+      source: "Google News - Skilled Migration (AU)"
+      title: "Bragg Breaks Ranks to Demand 180,000 Migration Cap - streamlinefeed.co.ke"
+      summary: '<a href="https://news.google.com/rss/articles/CBMiuAFBVV95cUxNVXRPR3NoMjZRT0x4RWMwdUs5R3g0VlNWekdiU3NMVzB1YzlvNWdrRWp6S19ianloMml4WWFfWkxsLVRGdkNSbFc5VmM5Z2x3R24xTHFtR2s3SjFrZExMdDZ1d1g4R0Y4MnZ3dHhPSnhDSGltWXhidDJMaEdPTzRNXzJlbW1xcnZHS19IcExna3RtbTZVSW5KaDJGOXBGeF9DQkVETE14RlktYTRDSFJzNHpBaEhTS0Vv?oc=5" target="_blank">Bragg Breaks Ranks to Demand 180,000 Migration Cap</a>&nbsp;&nbsp;<font color="#6f6f6f">streamlinefeed.co.ke</font>'
+    gold_relevance: 4
+    gold_category: immigration
+    input_insufficient: true
+    justification: "Not SA nor ICT"
+    model_relevance: 7
+    model_category: "immigration"
+  - article:
+      url: "https://news.google.com/rss/articles/CBMi7wFBVV95cUxOUVJIT3Jtd3g1RU45V0wyT3R3Y1ZXV0NxNkIxVWpQNTRYM2Vza2NqSjFUelVvNGdXYmZ5bHFHV3NEQTFrX3hkNFN6UTFvVDlrdWxhTEdndzVaVlkycXZfRlYzWmVkRWpmbkVNR3daR19IQ0E0bXVDTTQ0ZUdBaEVZel9haElWTFdfdm8xZGtZVWl1bDVwaTA1YzBpR3lpOUhYS28ybHZIM2tCRmNjTFI3UWNSX2FxbzB5T1RHVmtUYnlNRVd0VEl6MVZOT0RETHk4TGM3dDNDZ05PZEhMU2t2cHRlNF9JVzA4QV81YUR2a9IB9AFBVV95cUxQSlAxZ19HMGNqRTRwcXlpZVhFRVpteVUwTy0wVlBncXUxS05sOG1TNXJzVU5hOHI5RGNTM3kxN2ZWQjBlQkpmYVMxcFc5bXhzRU5NSndrcXpZV2Q1VDF4UFVUNFVGbDZhZy1TWG8zUkxNSUloMkdUdERVRFRNR05SeXRDWlROeEl4NkRvNW90clo1SHM1SG5Vblo3SXRqU2pNZW1DSmRGdG1NcGRMaTlWWmVqdHFqdWRiOGpKR0NJTXRpa1hxcXAtcWJZZERhek82dlMtNzFPZVNMMWl5ajJ3QnRRX3F2U0NFVk5oM21aTHpKdzRR?oc=5"
+      source: "Google News - Skilled Migration (AU)"
+      title: "‘Changed the queue’: Farmers blast visa rule changes - The Weekly Times"
+      summary: '<a href="https://news.google.com/rss/articles/CBMi7wFBVV95cUxOUVJIT3Jtd3g1RU45V0wyT3R3Y1ZXV0NxNkIxVWpQNTRYM2Vza2NqSjFUelVvNGdXYmZ5bHFHV3NEQTFrX3hkNFN6UTFvVDlrdWxhTEdndzVaVlkycXZfRlYzWmVkRWpmbkVNR3daR19IQ0E0bXVDTTQ0ZUdBaEVZel9haElWTFdfdm8xZGtZVWl1bDVwaTA1YzBpR3lpOUhYS28ybHZIM2tCRmNjTFI3UWNSX2FxbzB5T1RHVmtUYnlNRVd0VEl6MVZOT0RETHk4TGM3dDNDZ05PZEhMU2t2cHRlNF9JVzA4QV81YUR2a9IB9AFBVV95cUxQSlAxZ19HMGNqRTRwcXlpZVhFRVpteVUwTy0wVlBncXUxS05sOG1TNXJzVU5hOHI5RGNTM3kxN2ZWQjBlQkpmYVMxcFc5bXhzRU5NSndrcXpZV2Q1VDF4UFVUNFVGbDZhZy1TWG8zUkxNSUloMkdUdERVRFRNR05SeXRDWlROeEl4NkRvNW90clo1SHM1SG5Vblo3SXRqU2pNZW1DSmRGdG1NcGRMaTlWWmVqdHFqdWRiOGpKR0NJTXRpa1hxcXAtcWJZZERhek82dlMtNzFPZVNMMWl5ajJ3QnRRX3F2U0NFVk5oM21aTHpKdzRR?oc=5" target="_blank">‘Changed the queue’: Farmers blast visa rule changes</a>&nbsp;&nbsp;<font color="#6f6f6f">The Weekly Times</font>'
+    gold_relevance: 4
+    gold_category: immigration
+    input_insufficient: true
+    justification: "not ICT nor SA related"
+    model_relevance: 3
+    model_category: "immigration"
+  - article:
+      url: "https://news.google.com/rss/articles/CBMi9AFBVV95cUxNMndmRURiMFBXXzRiVElPdU9xWk1WdmlWLXhmUkxIOWhsOEcwLTVodm13LXdBMlJ4bk0tR2NMRzdlUVRPNnJYNHpUbnBQNWtqckl0UUlrNHZ6d0VUNXBuX3FHOTBWTjNFSUM1QV9kRkNmNUs1cUZyV3h1NFM3QTItVkhfZUo4dE5Od2tmU1d2ZldKaFBmWWpTYm9xSXV2RjQ0R1lWcVdkNy1pempfTnFoQ0w2NGFEemdEVUJTOTR6cEN3aGdULUtCa3FWeHdiR0tzOVl1dXM0blJkZ3E2bUFJU0p1eGlUSFc0WDhKUEl0YVpFZzZP0gH6AUFVX3lxTE5qTHQtbmRMWW9nbl8xNzBnTGdEMXVqNTRaSWhHN3Jja2w1cW1KSTZzcWlXNFJaSmgwdjhUWjZZOGItMVE2dVpnSXhqdVhQb0dIX2N2V3A1WXlQQVl0WEVTdzl6Y3B1djdhOGZFbHY2RDg0Q2hQTm1QaHZBODUxb0Q5cFZyVHVMa0c1YjY1U29qTjJ5dEFsOFJlZWY2MENnZWFHdlp1aUlzYUFSR3FFcmhua3V5c0NKYTFBUkVwVUptU19hS3JuMmp4MUpRblVmVWd1eFB3bW40S1diRkoxSktVOHdHbkZ6NVg2UUpyNmJJam9sQU9TWDQ5eEE?oc=5"
+      source: "Google News - Graduate/485 Visa"
+      title: "‘It’s a Ponzi scheme’: Universities savaged over shocking graduate visa statistics - The Courier Mail"
+      summary: '<a href="https://news.google.com/rss/articles/CBMi9AFBVV95cUxNMndmRURiMFBXXzRiVElPdU9xWk1WdmlWLXhmUkxIOWhsOEcwLTVodm13LXdBMlJ4bk0tR2NMRzdlUVRPNnJYNHpUbnBQNWtqckl0UUlrNHZ6d0VUNXBuX3FHOTBWTjNFSUM1QV9kRkNmNUs1cUZyV3h1NFM3QTItVkhfZUo4dE5Od2tmU1d2ZldKaFBmWWpTYm9xSXV2RjQ0R1lWcVdkNy1pempfTnFoQ0w2NGFEemdEVUJTOTR6cEN3aGdULUtCa3FWeHdiR0tzOVl1dXM0blJkZ3E2bUFJU0p1eGlUSFc0WDhKUEl0YVpFZzZP0gH6AUFVX3lxTE5qTHQtbmRMWW9nbl8xNzBnTGdEMXVqNTRaSWhHN3Jja2w1cW1KSTZzcWlXNFJaSmgwdjhUWjZZOGItMVE2dVpnSXhqdVhQb0dIX2N2V3A1WXlQQVl0WEVTdzl6Y3B1djdhOGZFbHY2RDg0Q2hQTm1QaHZBODUxb0Q5cFZyVHVMa0c1YjY1U29qTjJ5dEFsOFJlZWY2MENnZWFHdlp1aUlzYUFSR3FFcmhua3V5c0NKYTFBUkVwVUptU19hS3JuMmp4MUpRblVmVWd1eFB3bW40S1diRkoxSktVOHdHbkZ6NVg2UUpyNmJJam9sQU9TWDQ5eEE?oc=5" target="_blank">‘It’s a Ponzi scheme’: Universities savaged over shocking graduate visa statistics</a>&nbsp;&nbsp;<font color="#6f6f6f">The Courier Mail</font>'
+    gold_relevance: 4
+    gold_category: immigration
+    input_insufficient: true
+    justification: "Not SA nor ICT related"
+    model_relevance: 6
+    model_category: "immigration"
+  - article:
+      url: "https://news.google.com/rss/articles/CBMiqgFBVV95cUxOWEJZUkxIcTFhZVNpM0dxX1JKX1FVT1BNdWk3X21PMG02TUlrTnJBWXdWNkpaSkRhb19iM3BiOTg2YzVaclctd1FjR3dLOWx2RU80R0tvMFgtRXNYSTlTemVXSGE4dElhV3MwNzN4Q0dRNUU1RC1zMEVyUHZneHNYX29POGItNV9GZE1yOXktbTBROXhCUVV6SHhGV3R2Y2hDOFVJSlZIUk90Zw?oc=5"
+      source: "Google News - Skilled Migration (AU)"
+      title: "Not quite a ten pound airfare but the concept is similar - Australian Conveyancer"
+      summary: '<a href="https://news.google.com/rss/articles/CBMiqgFBVV95cUxOWEJZUkxIcTFhZVNpM0dxX1JKX1FVT1BNdWk3X21PMG02TUlrTnJBWXdWNkpaSkRhb19iM3BiOTg2YzVaclctd1FjR3dLOWx2RU80R0tvMFgtRXNYSTlTemVXSGE4dElhV3MwNzN4Q0dRNUU1RC1zMEVyUHZneHNYX29POGItNV9GZE1yOXktbTBROXhCUVV6SHhGV3R2Y2hDOFVJSlZIUk90Zw?oc=5" target="_blank">Not quite a ten pound airfare but the concept is similar</a>&nbsp;&nbsp;<font color="#6f6f6f">Australian Conveyancer</font>'
+    gold_relevance: 0
+    gold_category: other
+    input_insufficient: true
+    justification: "Irrelevant"
+    model_relevance: 2
+    model_category: "immigration"
+  - article:
+      url: "https://www.infoq.com/news/2026/08/bmc-vulnerabilities/?utm_campaign=infoq_content&utm_source=infoq&utm_medium=feed&utm_term=global"
+      source: "InfoQ - Software Development News"
+      title: "BMC Vulnerabilities Put Thousands of Servers at Risk of Hardware-Level Compromise"
+      summary: '<img src="https://res.infoq.com/news/2026/08/bmc-vulnerabilities/en/headerimage/generatedHeaderImage-1787152274946.jpg" /><p>Security researchers are warning that thousands of enterprise servers could be exposed to compromise through vulnerabilities in their Baseboard Management Controllers (BMCs) - specialized processors embedded in server motherboards that provide administrators with remote, out-of-band control.</p> <i>By Craig Risi</i>'
+    gold_relevance: 4
+    gold_category: engineering
+    input_insufficient: false
+    justification: "Not my interested field"
+    model_relevance: 3
+    model_category: "other"
+  - article:
+      url: "https://news.google.com/rss/articles/CBMipAFBVV95cUxOb3JEcTRPcms1dXNDTXRCZnRiZWZsRXRNVklIam9QTWhsZWdCQmhJazRCeEczc2NtN3BDbnRpNHl1YmZLZUtxSkIzc1p3SUFaUV9CdVdyNjcxd3dTZGNrWDN3c3NRSlk1T3paTS1QWHZDVzc1STFnSHdmWXdQUm1xbi1Vb29BUUl1R2tWMncwMlQxdXFWUE5NSWU1UmVBRFJTRklBRw?oc=5"
+      source: "Google News - Skilled Migration (AU)"
+      title: "Business and mining leaders resist push to slash migration intake - ABC News & Headlines – Australian Broadcasting Corporation"
+      summary: '<a href="https://news.google.com/rss/articles/CBMipAFBVV95cUxOb3JEcTRPcms1dXNDTXRCZnRiZWZsRXRNVklIam9QTWhsZWdCQmhJazRCeEczc2NtN3BDbnRpNHl1YmZLZUtxSkIzc1p3SUFaUV9CdVdyNjcxd3dTZGNrWDN3c3NRSlk1T3paTS1QWHZDVzc1STFnSHdmWXdQUm1xbi1Vb29BUUl1R2tWMncwMlQxdXFWUE5NSWU1UmVBRFJTRklBRw?oc=5" target="_blank">Business and mining leaders resist push to slash migration intake</a>&nbsp;&nbsp;<font color="#6f6f6f">ABC News & Headlines – Australian Broadcasting Corporation</font>'
+    gold_relevance: 3
+    gold_category: immigration
+    input_insufficient: false
+    justification: "Not ICT nor SA related"
+    model_relevance: 6
+    model_category: "immigration"
+  - article:
+      url: "https://www.marktechpost.com/2026/08/11/nvidia-ai-releases-nemotron-3-5-lightning-and-nemo-switchyard/"
+      source: "MarkTechPost - AI & Technology News"
+      title: "NVIDIA AI Releases Nemotron 3.5 Lightning: A 30B Open MoE with 3B Active Parameters, and NeMo Switchyard Model Router"
+      summary: '<p>NVIDIA''s open 30B MoE targets the agent execution layer, with Switchyard routing each step to the cheapest capable model.</p> <p>The post <a href="https://www.marktechpost.com/2026/08/11/nvidia-ai-releases-nemotron-3-5-lightning-and-nemo-switchyard/">NVIDIA AI Releases Nemotron 3.5 Lightning: A 30B Open MoE with 3B Active Parameters, and NeMo Switchyard Model Router</a> appeared first on <a href="https://www.marktechpost.com">MarkTechPost</a>.</p>'
+    gold_relevance: 6
+    gold_category: engineering
+    input_insufficient: false
+    justification: "Tech news that good to know"
+    model_relevance: 8
+    model_category: "engineering"
+  - article:
+      url: "https://news.google.com/rss/articles/CBMioAFBVV95cUxQdzVoR0pMQzFjOTdYUkNrZlRoN1dQMHdJRjhTa3d2UGhRNUZMbWMyX2piOFdja1hwcy1LZktRU0dqbHhjZ050Z2NwR042dTBwLVdDSGtTSW5IM3VEc3poLVhuNVNxUXp4NFlTbUc0dWNtWmNLbFFYS01aRkVjZVlLZ2t0NE5YZktBNGwwcG5aRmVVRm5rVE1ENjNlU1JRd1Bs?oc=5"
+      source: "Google News - Skilled Migration (AU)"
+      title: "Who is the ‘right’ immigrant? US and other countries are rewriting the rules - inkl"
+      summary: '<a href="https://news.google.com/rss/articles/CBMioAFBVV95cUxQdzVoR0pMQzFjOTdYUkNrZlRoN1dQMHdJRjhTa3d2UGhRNUZMbWMyX2piOFdja1hwcy1LZktRU0dqbHhjZ050Z2NwR042dTBwLVdDSGtTSW5IM3VEc3poLVhuNVNxUXp4NFlTbUc0dWNtWmNLbFFYS01aRkVjZVlLZ2t0NE5YZktBNGwwcG5aRmVVRm5rVE1ENjNlU1JRd1Bs?oc=5" target="_blank">Who is the ‘right’ immigrant? US and other countries are rewriting the rules</a>&nbsp;&nbsp;<font color="#6f6f6f">inkl</font>'
+    gold_relevance: 0
+    gold_category: immigration
+    input_insufficient: false
+    justification: "Not ICT nor SA related"
+    model_relevance: 4
+    model_category: "immigration"
+  - article:
+      url: "https://news.google.com/rss/articles/CBMilAFBVV95cUxNaHFZY2YyNkRfM0NLWmFubTZBSkMyd0xEQXVaeUpWdFhJVWE1RWFaUkRiZTRNaVBHNTM2UnNGRnhSXzcwOEhCWmJGWWg5bEpzdDI5bFBwQ2IxYlNDRGZKUVZwME83SHUyQXZrTkdMeW9oc3FlRWwzTF9zWWYtbTRLRlZ6SzBzbk02d2t5TENBbmJBUmVp?oc=5"
+      source: "Google News - Skilled Migration (AU)"
+      title: "Everything is communist now - Crikey"
+      summary: '<a href="https://news.google.com/rss/articles/CBMilAFBVV95cUxNaHFZY2YyNkRfM0NLWmFubTZBSkMyd0xEQXVaeUpWdFhJVWE1RWFaUkRiZTRNaVBHNTM2UnNGRnhSXzcwOEhCWmJGWWg5bEpzdDI5bFBwQ2IxYlNDRGZKUVZwME83SHUyQXZrTkdMeW9oc3FlRWwzTF9zWWYtbTRLRlZ6SzBzbk02d2t5TENBbmJBUmVp?oc=5" target="_blank">Everything is communist now</a>&nbsp;&nbsp;<font color="#6f6f6f">Crikey</font>'
+    gold_relevance: 0
+    gold_category: other
+    input_insufficient: true
+    justification: "irrelevant "
+    model_relevance: 1
+    model_category: "other"
+  - article:
+      url: "https://news.google.com/rss/articles/CBMi3gFBVV95cUxQcTI3V3Vmd1pUbjU0bmY1S0paZm0tWW5QZWpybndwMDI5YlFSOVo4UHlXSGhOSWMtSTZQNC1WZzZuUldBN1E2RTVfdmZTbS1PaVp0NXZndlhzZFJJOFUzLS1RQlU0MV96WVdlWDhLa1B1VjdlNUdGT0ZQbmVsSWtQV0FtLWhnb3JMdVY0QzNZNW9zMnRJQm4wYmtNSlVTYllXVWpNRk1FZUxFbHk4bm9sRUpPdmJ5Nzk1ZTJ3MGhULUxETFVkTW16ODBaNG0zNEVicVEzYlotcU0zcjd4ckE?oc=5"
+      source: "Google News - Skilled Migration (AU)"
+      title: "WA Government, Commonwealth ‘aligned’ on skilled migration, Resources Minister Madeleine King says - The West Australian"
+      summary: '<a href="https://news.google.com/rss/articles/CBMi3gFBVV95cUxQcTI3V3Vmd1pUbjU0bmY1S0paZm0tWW5QZWpybndwMDI5YlFSOVo4UHlXSGhOSWMtSTZQNC1WZzZuUldBN1E2RTVfdmZTbS1PaVp0NXZndlhzZFJJOFUzLS1RQlU0MV96WVdlWDhLa1B1VjdlNUdGT0ZQbmVsSWtQV0FtLWhnb3JMdVY0QzNZNW9zMnRJQm4wYmtNSlVTYllXVWpNRk1FZUxFbHk4bm9sRUpPdmJ5Nzk1ZTJ3MGhULUxETFVkTW16ODBaNG0zNEVicVEzYlotcU0zcjd4ckE?oc=5" target="_blank">WA Government, Commonwealth ‘aligned’ on skilled migration, Resources Minister Madeleine King says</a>&nbsp;&nbsp;<font color="#6f6f6f">The West Australian</font>'
+    gold_relevance: 4
+    gold_category: immigration
+    input_insufficient: false
+    justification: "Not ICT nor SA related"
+    model_relevance: 4
+    model_category: "immigration"
+  - article:
+      url: "https://www.infoq.com/presentations/cd-reliability-innovation/?utm_campaign=infoq_content&utm_source=infoq&utm_medium=feed&utm_term=global"
+      source: "InfoQ - Software Development News"
+      title: "Presentation: Continuous Delivery for Foundational Platforms"
+      summary: '<img src="https://res.infoq.com/presentations/cd-reliability-innovation/en/mediumimage/ian-nowland-medium-1787217621961.jpg" /><p>Ian Nowland discusses why conventional CI/CD practices break down for stateful, core infrastructure. Drawing from his leadership at AWS and Datadog, he shares actionable techniques for safe progressive deployments, synthetic testing in production, and mitigating blast radius in complex software platforms.</p> <i>By Ian Nowland</i>'
+    gold_relevance: 4
+    gold_category: engineering
+    input_insufficient: false
+    justification: "tech news but not my interested field"
+    model_relevance: 4
+    model_category: "engineering"
+  - article:
+      url: "https://www.infoq.com/news/2026/08/github-stacked-pull-requests/?utm_campaign=infoq_content&utm_source=infoq&utm_medium=feed&utm_term=global"
+      source: "InfoQ - Software Development News"
+      title: "GitHub Brings Stacked Pull Requests to Public Preview"
+      summary: '<img src="https://res.infoq.com/news/2026/08/github-stacked-pull-requests/en/headerimage/generatedHeaderImage-1786355296218.jpg" /><p>GitHub has announced that Stacked Pull Requests are now available in public preview, introducing native support for breaking large software changes into smaller, dependent pull requests that can be reviewed and merged independently.</p> <i>By Craig Risi</i>'
+    gold_relevance: 4
+    gold_category: engineering
+    input_insufficient: false
+    justification: "tech news but not my interested field"
+    model_relevance: 4
+    model_category: "engineering"
+  - article:
+      url: "https://www.infoq.com/news/2026/08/pinterest-secures-aws-infra/?utm_campaign=infoq_content&utm_source=infoq&utm_medium=feed&utm_term=global"
+      source: "InfoQ - Software Development News"
+      title: "How Pinterest Secures AWS Infrastructure at Scale with a Centralized Terraform Pipeline"
+      summary: '<img src="https://res.infoq.com/news/2026/08/pinterest-secures-aws-infra/en/headerimage/generatedHeaderImage-1786109760765.jpg" /><p>Pinterest has revealed the Resource Provisioner Pipeline (RPP), its own Terraform execution engine. It ensures least-privilege access and needs dual-control reviews. This is important for the company’s AWS infrastructure, as it adds strict guardrails to the GitHub Actions workflows.</p> <i>By Claudio Masolo</i>'
+    gold_relevance: 3
+    gold_category: engineering
+    input_insufficient: false
+    justification: "not my interested field"
+    model_relevance: 3
+    model_category: "engineering"
+  - article:
+      url: "https://news.google.com/rss/articles/CBMi6gFBVV95cUxQakt3T1Iwd1ZITG96bThUZEVTeHNQSm96eHNYVHVuUF95YWFjamdybWJPZnRjVkhWZ1ZGZW9tTUJrS0IzbDVMLUZDdXZ1OTdVN1RlTUNkNTJ6TUhvMzhiLTBKeXpnczBUWkRvZjBBWlFwcWtNcmExRzFiVnFvRHUxNDIxVUF0ZVI0UnZhMzZMclJxYXFVanEzUTFVbm1GZXdBMUU1U1g0R3k4bjhqcGcwODdxeS1HSTNMY0NFWWpqN251RDlRZF9GM1dHUzEzVkJlNmRvZzRWRHNjbFlJbFctQWdWU3hsbWRBeEHSAeoBQVVfeXFMUGpLd09SMHdWSExvem04VGRFU3hzUEpvenhzWFR1blBfeWFhY2pncm1iT2Z0Y1ZIVmdWRmVvbU1Ca0tCM2w1TC1GQ3V2dTk3VTdUZU1DZDUyek1IbzM4Yi0wSnl6Z3MwVFpEb2YwQVpRcHFrTXJhMUcxYlZxb0R1MTQyMVVBdGVSNFJ2YTM2THJScWFxVWpxM1ExVW5tRmV3QTFFNVNYNEd5OG44anBnMDg3cXktR0kzTGNDRVlqajdudUQ5UWRfRjNXR1MxM1ZCZTZkb2c0VkRzY2xZSWxXLUFnVlN4bG1kQXhB?oc=5"
+      source: "Google News - Skilled Migration (AU)"
+      title: "One Nation immigration confusion deepens following freshly unearthed claims - news24.com.au"
+      summary: '<a href="https://news.google.com/rss/articles/CBMi6gFBVV95cUxQakt3T1Iwd1ZITG96bThUZEVTeHNQSm96eHNYVHVuUF95YWFjamdybWJPZnRjVkhWZ1ZGZW9tTUJrS0IzbDVMLUZDdXZ1OTdVN1RlTUNkNTJ6TUhvMzhiLTBKeXpnczBUWkRvZjBBWlFwcWtNcmExRzFiVnFvRHUxNDIxVUF0ZVI0UnZhMzZMclJxYXFVanEzUTFVbm1GZXdBMUU1U1g0R3k4bjhqcGcwODdxeS1HSTNMY0NFWWpqN251RDlRZF9GM1dHUzEzVkJlNmRvZzRWRHNjbFlJbFctQWdWU3hsbWRBeEHSAeoBQVVfeXFMUGpLd09SMHdWSExvem04VGRFU3hzUEpvenhzWFR1blBfeWFhY2pncm1iT2Z0Y1ZIVmdWRmVvbU1Ca0tCM2w1TC1GQ3V2dTk3VTdUZU1DZDUyek1IbzM4Yi0wSnl6Z3MwVFpEb2YwQVpRcHFrTXJhMUcxYlZxb0R1MTQyMVVBdGVSNFJ2YTM2THJScWFxVWpxM1ExVW5tRmV3QTFFNVNYNEd5OG44anBnMDg3cXktR0kzTGNDRVlqajdudUQ5UWRfRjNXR1MxM1ZCZTZkb2c0VkRzY2xZSWxXLUFnVlN4bG1kQXhB?oc=5" target="_blank">One Nation immigration confusion deepens following freshly unearthed claims</a>&nbsp;&nbsp;<font color="#6f6f6f">news24.com.au</font>'
+    gold_relevance: 1
+    gold_category: other
+    input_insufficient: true
+    justification: "irrelevant"
+    model_relevance: 2
+    model_category: "immigration"
+  - article:
+      url: "https://news.google.com/rss/articles/CBMirwFBVV95cUxOQ21Ka09mTkZGeE9tc2ZpN2d1ZFUyRzhBS00ySl9UOEd2UGNEeGQ3bHdRN1dmOUM4R1Bsc2ZuYWJ1R0N0cTRRUmVONlVpYzdDZnBGQ01IZ3hjX3BaeEREelZpQjhvekJLVEo5enkzeGR0ZkU4ZFdEa2YtZ1B3S0VYaDZFMmZiS1R2SkljN2RhWkpHSnFQRFRNTFZzR2pGam0wUC04NEVOX1dvenM3ZjVz?oc=5"
+      source: "Google News - Skilled Migration (AU)"
+      title: "Coalition housing plan targets both migration and cost of building - Australian Property Update"
+      summary: '<a href="https://news.google.com/rss/articles/CBMirwFBVV95cUxOQ21Ka09mTkZGeE9tc2ZpN2d1ZFUyRzhBS00ySl9UOEd2UGNEeGQ3bHdRN1dmOUM4R1Bsc2ZuYWJ1R0N0cTRRUmVONlVpYzdDZnBGQ01IZ3hjX3BaeEREelZpQjhvekJLVEo5enkzeGR0ZkU4ZFdEa2YtZ1B3S0VYaDZFMmZiS1R2SkljN2RhWkpHSnFQRFRNTFZzR2pGam0wUC04NEVOX1dvenM3ZjVz?oc=5" target="_blank">Coalition housing plan targets both migration and cost of building</a>&nbsp;&nbsp;<font color="#6f6f6f">Australian Property Update</font>'
+    gold_relevance: 2
+    gold_category: immigration
+    input_insufficient: true
+    justification: "Not ICT nor SA related"
+    model_relevance: 4
+    model_category: "immigration"
+  - article:
+      url: "https://www.infoq.com/news/2026/08/jetbrains-ai-spend/?utm_campaign=infoq_content&utm_source=infoq&utm_medium=feed&utm_term=global"
+      source: "InfoQ - Software Development News"
+      title: "JetBrains Details Its First Steps to Bring Rapidly Growing AI Spend Under Control"
+      summary: '<img src="https://res.infoq.com/news/2026/08/jetbrains-ai-spend/en/headerimage/generatedHeaderImage-1786384052458.jpg" /><p>JetBrains has described how it began centralising AI usage after development-related spending increased roughly tenfold in six months. Rather than restricting engineers to a small set of approved tools, the company built a shared access and accounting layer intended to preserve tool choice while giving teams greater visibility and control over consumption.</p> <i>By Matt Foster</i>'
+    gold_relevance: 6
+    gold_category: engineering
+    input_insufficient: false
+    justification: "AI related"
+    model_relevance: 6
+    model_category: "engineering"
+  - article:
+      url: "https://news.google.com/rss/articles/CBMi6gFBVV95cUxQUEZsU09VcjJObllndmRxX3BNZWg2RDZXazZ1SkFvNkd1X3JUOHZVQXY2MHhObFRoU3hHeHlobEhCalBVMzhJMzV5ellTcTkwNFJiaDJGQlJvUmhIY1pjcGg0dGNrTUhQYjFuYVQxbFFZODdxY3ZIS0lvdkhJYTJzdktYMkR0WW5kSkFHNFNEanVtMUpNYmxOWXNIb3prOENkYUFtNnQtUWU0Z2dJaVROTVVaSzdGSUhTYTlTRzMxT3NWXzgzakVERzBDdXVicWtaVmcwdncxdHZ5LVBUYUVEd0E5dWFxVWFpSWfSAe8BQVVfeXFMTkdOMkx3X2RNbTFPdTYzbkhFTzNaREZrQlhMR0s1VHNsWUFfdGEtc25YTHhGOFFyd0cyaThYUUFVR0kxUUkzTkh0aUFNekJpRnpYcE1PUVo3TW5STjFfbk9oVHFaSzdlc3FzWUh2dTJmWmJ0T0M2dzY2TENtV0QzUk5zZTZHZDUzZHFsZkpiN2dIZjlTcThRVjFKdXM4UlI3TmRXWWtUaWIzSXF2RzlkVUxad3pHUXhWQWY5RzlubkxsLVZvS1pJSFY3M05haVo0ckh2RG5mWXFJd2haQ29PbmZxRGN3QjFZaVVUQUtUNEE?oc=5"
+      source: "Google News - Graduate/485 Visa"
+      title: "Radio host gives a scathing review of Ben Carroll’s meandering WFH laws - The Courier Mail"
+      summary: '<a href="https://news.google.com/rss/articles/CBMi6gFBVV95cUxQUEZsU09VcjJObllndmRxX3BNZWg2RDZXazZ1SkFvNkd1X3JUOHZVQXY2MHhObFRoU3hHeHlobEhCalBVMzhJMzV5ellTcTkwNFJiaDJGQlJvUmhIY1pjcGg0dGNrTUhQYjFuYVQxbFFZODdxY3ZIS0lvdkhJYTJzdktYMkR0WW5kSkFHNFNEanVtMUpNYmxOWXNIb3prOENkYUFtNnQtUWU0Z2dJaVROTVVaSzdGSUhTYTlTRzMxT3NWXzgzakVERzBDdXVicWtaVmcwdncxdHZ5LVBUYUVEd0E5dWFxVWFpSWfSAe8BQVVfeXFMTkdOMkx3X2RNbTFPdTYzbkhFTzNaREZrQlhMR0s1VHNsWUFfdGEtc25YTHhGOFFyd0cyaThYUUFVR0kxUUkzTkh0aUFNekJpRnpYcE1PUVo3TW5STjFfbk9oVHFaSzdlc3FzWUh2dTJmWmJ0T0M2dzY2TENtV0QzUk5zZTZHZDUzZHFsZkpiN2dIZjlTcThRVjFKdXM4UlI3TmRXWWtUaWIzSXF2RzlkVUxad3pHUXhWQWY5RzlubkxsLVZvS1pJSFY3M05haVo0ckh2RG5mWXFJd2haQ29PbmZxRGN3QjFZaVVUQUtUNEE?oc=5" target="_blank">Radio host gives a scathing review of Ben Carroll’s meandering WFH laws</a>&nbsp;&nbsp;<font color="#6f6f6f">The Courier Mail</font>'
+    gold_relevance: 1
+    gold_category: other
+    input_insufficient: false
+    justification: "irrelevant"
+    model_relevance: 1
+    model_category: "other"
+  - article:
+      url: "https://news.google.com/rss/articles/CBMikwFBVV95cUxOb0lHOGt2MUwtVDdNSDJCbGRWVVE4LUtHLURXTnJQYWVjenc3Wi1tQ0w1UlVsTk93UFRnZ0VaQUlJaFp5ZXVCYm8waVVKVktkWldhcjhuanJUZ2VpLWlDelk5RFo1cjlMa29tYnpndldrYXV6dXJEUjdtRzBGd2swTTBQSGdod2R3M3QycS1zUUpfLWc?oc=5"
+      source: "Google News - Graduate/485 Visa"
+      title: "Interview with Pro Wrestling Australia Debutant Standout, Neal Mercer - Last Word On Sports"
+      summary: '<a href="https://news.google.com/rss/articles/CBMikwFBVV95cUxOb0lHOGt2MUwtVDdNSDJCbGRWVVE4LUtHLURXTnJQYWVjenc3Wi1tQ0w1UlVsTk93UFRnZ0VaQUlJaFp5ZXVCYm8waVVKVktkWldhcjhuanJUZ2VpLWlDelk5RFo1cjlMa29tYnpndldrYXV6dXJEUjdtRzBGd2swTTBQSGdod2R3M3QycS1zUUpfLWc?oc=5" target="_blank">Interview with Pro Wrestling Australia Debutant Standout, Neal Mercer</a>&nbsp;&nbsp;<font color="#6f6f6f">Last Word On Sports</font>'
+    gold_relevance: 0
+    gold_category: other
+    input_insufficient: false
+    justification: "irrelevant"
+    model_relevance: 0
+    model_category: "other"
+  - article:
+      url: "https://www.marktechpost.com/2026/08/18/meet-sam-sovereign-agent-mesh-a-zero-config-zero-trust-p2p-network-for-ai-agents/"
+      source: "MarkTechPost - AI & Technology News"
+      title: "Meet SAM (Sovereign Agent Mesh): A Zero-Config, Zero-Trust P2P Network for AI Agents"
+      summary: '<p>Google has open-sourced SAM (Sovereign Agent Mesh) under Apache-2.0 — and it has nothing to do with Segment Anything. SAM is a zero-config, zero-trust P2P overlay that lets autonomous agents discover and call each other''s MCP tools across cloud, on-prem, laptop and edge environments, without exposing a single internal endpoint to the public internet. Identity flows from OIDC into Biscuit capability tokens, so nodes authorize every request offline under a strict default-deny model.</p> <p>The post <a href="https://www.marktechpost.com/2026/08/18/meet-sam-sovereign-agent-mesh-a-zero-config-zero-trust-p2p-network-for-ai-agents/">Meet SAM (Sovereign Agent Mesh): A Zero-Config, Zero-Trust P2P Network for AI Agents</a> appeared first on <a href="https://www.marktechpost.com">MarkTechPost</a>.</p>'
+    gold_relevance: 7
+    gold_category: engineering
+    input_insufficient: false
+    justification: "Ai related"
+    model_relevance: 8
+    model_category: "engineering"
+  - article:
+      url: "https://news.google.com/rss/articles/CBMihAFBVV95cUxNdnZGQWwxeHZSR1lEWjAxUGFJYnJfRDI2MzhWdVZWdzBRS3dKN1FGb20yZzFBNHJxSVo5UDZER1BxYzlHU0J5ZVV4UlVBQzRnbWd5Y1pLSkhrY0UxMno5NlYwSjFtZ0NIWTdmY01aempjUG4wcmhCZjhxY2hvX0w2MjVxT20?oc=5"
+      source: "Google News - Skilled Migration (AU)"
+      title: "More immigration is a must, not an option - Pearls and Irritations"
+      summary: '<a href="https://news.google.com/rss/articles/CBMihAFBVV95cUxNdnZGQWwxeHZSR1lEWjAxUGFJYnJfRDI2MzhWdVZWdzBRS3dKN1FGb20yZzFBNHJxSVo5UDZER1BxYzlHU0J5ZVV4UlVBQzRnbWd5Y1pLSkhrY0UxMno5NlYwSjFtZ0NIWTdmY01aempjUG4wcmhCZjhxY2hvX0w2MjVxT20?oc=5" target="_blank">More immigration is a must, not an option</a>&nbsp;&nbsp;<font color="#6f6f6f">Pearls and Irritations</font>'
+    gold_relevance: 3
+    gold_category: immigration
+    input_insufficient: true
+    justification: ""
+    model_relevance: 4
+    model_category: "immigration"
+  - article:
+      url: "https://www.infoq.com/podcasts/cloud-devops-trends-2026/?utm_campaign=infoq_content&utm_source=infoq&utm_medium=feed&utm_term=global"
+      source: "InfoQ - Software Development News"
+      title: "Podcast: Cloud and DevOps InfoQ Trends Report 2026: AI, Resilience, Platforms, FinOps, and Sovereignty"
+      summary: '<img src="https://res.infoq.com/podcasts/cloud-devops-trends-2026/en/headerimage/cloud-devops-trends-report-2026-graph-header-1786096703677.jpg" /><p>In this episode of the podcast, members of the InfoQ editorial staff and friends of InfoQ will discuss current trends in the cloud and DevOps domains as part of our annual trends report. These reports provide InfoQ readers with a high-level overview of key topics to watch. This podcast offers a chance to hear our raw conversation and the stories shared by our expert practitioners.</p> <i>By Daniel Bryant, Matt Saunders, Shweta Vohra, Steef-Jan Wiggers, Mark Silvester</i>'
+    gold_relevance: 4
+    gold_category: engineering
+    input_insufficient: false
+    justification: "Not my interested field"
+    model_relevance: 6
+    model_category: "engineering"
+  - article:
+      url: "https://www.infoq.com/news/2026/08/diagrid-catalyst-ai-agents/?utm_campaign=infoq_content&utm_source=infoq&utm_medium=feed&utm_term=global"
+      source: "InfoQ - Software Development News"
+      title: "Diagrid Catalyst 2.0 Adds Durable and Verifiable Execution for AI Agents"
+      summary: '<img src="https://res.infoq.com/news/2026/08/diagrid-catalyst-ai-agents/en/headerimage/header-1787430272425.jpeg" /><p>Diagrid Catalyst 2.0 applies Dapr-based recovery, signed workflow history and execution attestation across several agent frameworks. Architects should compare it with framework-native durability and established workflow engines, while evaluating benchmark evidence and operational trade-offs.</p> <i>By Mark Silvester</i>'
+    gold_relevance: 6
+    gold_category: engineering
+    input_insufficient: false
+    justification: "AI related"
+    model_relevance: 8
+    model_category: "engineering"
+  - article:
+      url: "https://news.google.com/rss/articles/CBMijgFBVV95cUxPdDVZYk5LZDRib0ZwV3R3U1hMOTR3SUxNMmxuYjVHdWk4Y2s4SzhGVFRsdkRwZFRtTURfS2V1VV9GcXFKdHNCLU1RRmd1Q3huUnc0blFxTW1XTFJqb3g2bHM5Z1BDa0lPNE1WUmJWZTU0cFZOZ0lEMl9yeklFX1BIRWpvTUlpZmRrcDBVLThB?oc=5"
+      source: "Google News - Skilled Migration (AU)"
+      title: "MCA Skilled Visa Changes Driving Australia’s Mining Workforce Shortage - Discovery Alert"
+      summary: '<a href="https://news.google.com/rss/articles/CBMijgFBVV95cUxPdDVZYk5LZDRib0ZwV3R3U1hMOTR3SUxNMmxuYjVHdWk4Y2s4SzhGVFRsdkRwZFRtTURfS2V1VV9GcXFKdHNCLU1RRmd1Q3huUnc0blFxTW1XTFJqb3g2bHM5Z1BDa0lPNE1WUmJWZTU0cFZOZ0lEMl9yeklFX1BIRWpvTUlpZmRrcDBVLThB?oc=5" target="_blank">MCA Skilled Visa Changes Driving Australia’s Mining Workforce Shortage</a>&nbsp;&nbsp;<font color="#6f6f6f">Discovery Alert</font>'
+    gold_relevance: 3
+    gold_category: immigration
+    input_insufficient: false
+    justification: "Not ICT nor SA related"
+    model_relevance: 4
+    model_category: "immigration"
+  - article:
+      url: "https://www.infoq.com/articles/pqc-in-spring-boot/?utm_campaign=infoq_content&utm_source=infoq&utm_medium=feed&utm_term=global"
+      source: "InfoQ - Software Development News"
+      title: "Article: Post-Quantum Cryptography in Spring Boot: Four Patterns You Can Ship This Sprint"
+      summary: '<img src="https://res.infoq.com/articles/pqc-in-spring-boot/en/headerimage/pqc-in-spring-boot-header-1787646727709.jpg" /><p>There are four patterns that bring PQC into a Spring Boot fleet: encrypting payloads between services, locking down database fields, signing documents that need to hold up for decades, and moving service tokens off RS256. Along the way, we discuss why Harvest Now, Decrypt Later is already happening, and why none of this is production-safe until KMS or Vault is in place.</p> <i>By Pankaj Sharma</i>'
+    gold_relevance: 3
+    gold_category: engineering
+    input_insufficient: false
+    justification: "Not my interested field"
+    model_relevance: 4
+    model_category: "engineering"

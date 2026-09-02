@@ -1,4 +1,4 @@
-from daily_assistant.models import Article, Source
+from daily_assistant.models import Article
 from daily_assistant.pipeline import ingest
 from daily_assistant.storage import Storage
 
@@ -17,7 +17,7 @@ def test_ingest(monkeypatch):
             "name": "Example Source 2",
             "justification": "Test source for unit testing",
         }
-    ]   
+    ]
 
     fake_articles = [
         Article(
@@ -42,5 +42,5 @@ def test_ingest(monkeypatch):
         assert second[0].url == fake_articles[0].url
         assert storage.get_status(fake_articles[0].url) == "fetched"
         storage.mark_scored(fake_articles[0].url)
-        third = ingest(sources, storage) 
+        third = ingest(sources, storage)
         assert len(third) == 0

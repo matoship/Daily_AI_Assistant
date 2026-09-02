@@ -39,7 +39,6 @@ class Storage:
             """
         )
         cursor.execute(
-            
             """
                 CREATE TABLE IF NOT EXISTS triage_logs (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -54,17 +53,35 @@ class Storage:
             )
             """
         )
-       
+
         self.conn.commit()
 
-    def store_triage_log(self, url: str, source: str, title: str, summary: str, relevance: int, category: str, reason: str) -> None:
+    def store_triage_log(
+        self,
+        url: str,
+        source: str,
+        title: str,
+        summary: str,
+        relevance: int,
+        category: str,
+        reason: str,
+    ) -> None:
         cursor = self.conn.cursor()
         cursor.execute(
             """
             INSERT INTO triage_logs (url, source, title, summary, relevance, category, reason, created_at)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?)
             """,
-            (url, source, title, summary, relevance, category, reason, datetime.now(timezone.utc).isoformat()),
+            (
+                url,
+                source,
+                title,
+                summary,
+                relevance,
+                category,
+                reason,
+                datetime.now(timezone.utc).isoformat(),
+            ),
         )
         self.conn.commit()
 
@@ -90,7 +107,7 @@ class Storage:
                 "created_at": row[7],
             }
             for row in rows
-        ]    
+        ]
 
     def start_run(self) -> int:
         cursor = self.conn.cursor()
@@ -147,7 +164,12 @@ class Storage:
                 status = excluded.status,
                 updated_at = excluded.updated_at
             """,
-            (url, status, datetime.now(timezone.utc).isoformat(),datetime.now(timezone.utc).isoformat()),
+            (
+                url,
+                status,
+                datetime.now(timezone.utc).isoformat(),
+                datetime.now(timezone.utc).isoformat(),
+            ),
         )
         self.conn.commit()
 
@@ -171,7 +193,7 @@ class Storage:
             SET status = 'outdated', updated_at = :now
             WHERE first_seen_at < :cutoff AND status = 'fetched'
             """,
-            {"now":datetime.now(timezone.utc).isoformat(), "cutoff": cutoff_iso},
+            {"now": datetime.now(timezone.utc).isoformat(), "cutoff": cutoff_iso},
         )
         self.conn.commit()
         return cursor.rowcount
@@ -187,7 +209,6 @@ class Storage:
 
     def mark_fetched(self, url: str) -> None:
         self.upsert_status(url, "fetched")
-
 
     def close(self) -> None:
         self.conn.close()
