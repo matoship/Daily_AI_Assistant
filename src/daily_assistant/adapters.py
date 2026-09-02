@@ -2,23 +2,31 @@ from daily_assistant.protocol import LLMResponse, LLMClient
 from anthropic import Anthropic
 from typing import Any
 
+
 class AnthropicLLMClient(LLMClient):
-    def __init__(self, client:Anthropic):
+    def __init__(self, client: Anthropic):
         self._client = client
 
-    def create(self,*,model:str, 
-               max_tokens:int,
-               prompt:str, 
-               tool_name:str,
-               tool_description:str,
-               tool_schema:dict[str, Any], 
-               temperature: float | None = None) -> LLMResponse:
-        tools = [{"name":tool_name, 
+    def create(
+        self,
+        *,
+        model: str,
+        max_tokens: int,
+        prompt: str,
+        tool_name: str,
+        tool_description: str,
+        tool_schema: dict[str, Any],
+        temperature: float | None = None,
+    ) -> LLMResponse:
+        tools = [
+            {
+                "name": tool_name,
                 "description": tool_description,
-                "input_schema":tool_schema
-                }]
-        tool_choice = {"type":"tool","name":tool_name}
-        messages=[{"role":"user","content":prompt}]
+                "input_schema": tool_schema,
+            }
+        ]
+        tool_choice = {"type": "tool", "name": tool_name}
+        messages = [{"role": "user", "content": prompt}]
 
         request_kwargs = {
             "model": model,
@@ -30,9 +38,11 @@ class AnthropicLLMClient(LLMClient):
         if temperature is not None:
             request_kwargs["temperature"] = temperature
 
-        response= self._client.messages.create(**request_kwargs)
+        response = self._client.messages.create(**request_kwargs)
         if response.stop_reason == "max_tokens":
-            raise ValueError("max_tokens are met before the model could finish its response. Consider increasing max_tokens.")
+            raise ValueError(
+                "max_tokens are met before the model could finish its response. Consider increasing max_tokens."
+            )
 
         tool_use_block = None
         for block in response.content:
