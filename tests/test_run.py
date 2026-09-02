@@ -48,9 +48,25 @@ def test_run_passes_tracked_client_to_pipeline(monkeypatch):
     monkeypatch.setattr(run_module, "load_profile", lambda: {})
     monkeypatch.setattr(run_module, "load_sources", lambda: [])
     monkeypatch.setattr(run_module, "Storage", lambda: DummyStorage())
-    monkeypatch.setattr(run_module, "ingest", lambda sources, storage: [SimpleNamespace(title="demo", url="https://example.com", source="test", published_at=None, summary="demo")])
+    monkeypatch.setattr(
+        run_module,
+        "ingest",
+        lambda sources, storage: [
+            SimpleNamespace(
+                title="demo",
+                url="https://example.com",
+                source="test",
+                published_at=None,
+                summary="demo",
+            )
+        ],
+    )
     monkeypatch.setattr(run_module, "triage_article", fake_triage)
-    monkeypatch.setattr(run_module, "select_for_synthesis", lambda triaged_articles, threshold=5, top_n_per_category=5: [])
+    monkeypatch.setattr(
+        run_module,
+        "select_for_synthesis",
+        lambda triaged_articles, threshold=5, top_n_per_category=5: [],
+    )
     monkeypatch.setattr(run_module, "synthesize", fake_synthesize)
     monkeypatch.setattr(run_module, "build_client", lambda: fake_client)
 

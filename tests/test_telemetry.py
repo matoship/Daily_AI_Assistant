@@ -2,9 +2,20 @@ from types import SimpleNamespace
 
 from daily_assistant.telemetry import TrackedClient, estimate_cost
 
+
 def test_tracked_client():
     class MockUnderlyingClient:
-        def create(self, *, model, max_tokens, prompt, tool_name, tool_description, tool_schema, temperature=None):
+        def create(
+            self,
+            *,
+            model,
+            max_tokens,
+            prompt,
+            tool_name,
+            tool_description,
+            tool_schema,
+            temperature=None,
+        ):
             return SimpleNamespace(
                 model=model,
                 input_tokens=1000,
@@ -23,8 +34,14 @@ def test_tracked_client():
         tool_schema={"type": "object", "properties": {}},
     )
 
-    assert tracked_client.usage_by_model["claude-haiku-4-5-20251001"]["input_tokens"] == 1000
-    assert tracked_client.usage_by_model["claude-haiku-4-5-20251001"]["output_tokens"] == 2000
+    assert (
+        tracked_client.usage_by_model["claude-haiku-4-5-20251001"]["input_tokens"]
+        == 1000
+    )
+    assert (
+        tracked_client.usage_by_model["claude-haiku-4-5-20251001"]["output_tokens"]
+        == 2000
+    )
 
     estimated_cost = estimate_cost(tracked_client.usage_by_model)
     expected_cost = 0.001 + 0.01
@@ -33,7 +50,17 @@ def test_tracked_client():
 
 def test_token_counting_with_different_models():
     class MockUnderlyingClient:
-        def create(self, *, model, max_tokens, prompt, tool_name, tool_description, tool_schema, temperature=None):
+        def create(
+            self,
+            *,
+            model,
+            max_tokens,
+            prompt,
+            tool_name,
+            tool_description,
+            tool_schema,
+            temperature=None,
+        ):
             if model == "claude-haiku-4-5-20251001":
                 return SimpleNamespace(
                     model=model,
@@ -72,10 +99,22 @@ def test_token_counting_with_different_models():
         tool_schema={"type": "object", "properties": {}},
     )
 
-    assert tracked_client.usage_by_model["claude-haiku-4-5-20251001"]["input_tokens"] == 500
-    assert tracked_client.usage_by_model["claude-haiku-4-5-20251001"]["output_tokens"] == 1000
+    assert (
+        tracked_client.usage_by_model["claude-haiku-4-5-20251001"]["input_tokens"]
+        == 500
+    )
+    assert (
+        tracked_client.usage_by_model["claude-haiku-4-5-20251001"]["output_tokens"]
+        == 1000
+    )
     assert tracked_client.usage_by_model["claude-sonnet-5"]["input_tokens"] == 2000
     assert tracked_client.usage_by_model["claude-sonnet-5"]["output_tokens"] == 4000
 
     estimated_cost = round(estimate_cost(tracked_client.usage_by_model), 4)
-    assert estimated_cost == 500 / 1000000 * 1.00 + 1000 / 1000000 * 5.00 + 2000 / 1000000 * 2.00 + 4000 / 1000000 * 10.00
+    assert (
+        estimated_cost
+        == 500 / 1000000 * 1.00
+        + 1000 / 1000000 * 5.00
+        + 2000 / 1000000 * 2.00
+        + 4000 / 1000000 * 10.00
+    )

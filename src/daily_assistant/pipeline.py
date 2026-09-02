@@ -2,12 +2,14 @@ from daily_assistant.models import Source
 from daily_assistant.source import fetch_articles
 from daily_assistant.storage import Storage
 import logging
+
 logger = logging.getLogger(__name__)
+
 
 def ingest(sources: list[dict], storage: Storage):
     """
     Ingest articles from a list of sources and store them in the provided storage.
-    
+
     Args:
         sources (list[dict]): A list of source dictionaries, each containing 'url', 'name', and 'justification'.
         storage (Storage): An instance of the Storage class to store the ingested articles.
@@ -29,4 +31,4 @@ def ingest(sources: list[dict], storage: Storage):
                 new_articles.append(article)
                 seen_urls.add(article.url)
 
-    return new_articles 
+    return new_articles

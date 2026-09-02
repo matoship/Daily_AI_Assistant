@@ -39,6 +39,7 @@ def test_mark_outdated_before_returns_updated_rows():
         assert storage.get_status("https://two.example") == "scored"
         assert storage.get_status("https://three.example") == "fetched"
 
+
 def test_save_and_retrieve_triage_log():
     with Storage(":memory:") as storage:
         test_article = Article(
@@ -55,7 +56,7 @@ def test_save_and_retrieve_triage_log():
             summary=test_article.summary,
             relevance=5,
             category="test_category",
-            reason="Test reason"
+            reason="Test reason",
         )
 
         cursor = storage.conn.cursor()

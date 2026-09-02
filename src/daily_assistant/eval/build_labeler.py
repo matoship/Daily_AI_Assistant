@@ -84,7 +84,9 @@ def build(db_path: Path | None = None, size: int = 50, seed: int = 0) -> Path:
     db_path = db_path or REPO_ROOT / "seen.db"
     rows = load_rows(db_path)
     if not rows:
-        raise SystemExit(f"No rows in triage_logs in {db_path} - run the pipeline first.")
+        raise SystemExit(
+            f"No rows in triage_logs in {db_path} - run the pipeline first."
+        )
 
     sample = stratified_sample(rows, size, seed)
     items = [
@@ -114,7 +116,9 @@ def build(db_path: Path | None = None, size: int = 50, seed: int = 0) -> Path:
     for it in items:
         dist[it["model_relevance"]] += 1
     logger.info("pool=%s sampled=%s", len(rows), len(items))
-    logger.info("sample distribution by model relevance: %s", dict(sorted(dist.items())))
+    logger.info(
+        "sample distribution by model relevance: %s", dict(sorted(dist.items()))
+    )
     return OUTPUT
 
 

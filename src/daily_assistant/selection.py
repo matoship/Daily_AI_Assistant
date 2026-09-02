@@ -1,8 +1,10 @@
-
 from daily_assistant.models import Article, TriageResult
 from collections import defaultdict
 
-def select_for_synthesis(triaged: list[tuple[Article,TriageResult]],threshold:int,top_n_per_category:int) -> list[tuple[Article,TriageResult]]:
+
+def select_for_synthesis(
+    triaged: list[tuple[Article, TriageResult]], threshold: int, top_n_per_category: int
+) -> list[tuple[Article, TriageResult]]:
     """
     Select articles for synthesis based on their triage results.
 
@@ -15,20 +17,21 @@ def select_for_synthesis(triaged: list[tuple[Article,TriageResult]],threshold:in
         list[tuple[Article, TriageResult]]: A list of selected articles and their corresponding triage results, filtered and ranked based on relevance and category.
 
     """
-  
 
     # Filter articles based on the relevance threshold
-    filtered = [(article, result) for article, result in triaged if result.relevance >= threshold]
-    
+    filtered = [
+        (article, result)
+        for article, result in triaged
+        if result.relevance >= threshold
+    ]
+
     by_category = defaultdict(list)
     for article, result in filtered:
         by_category[result.category].append((article, result))
 
     selected = []
     for articles in by_category.values():
-        ranked = sorted(articles,
-                        key=lambda x: x[1].relevance, 
-                        reverse=True)
+        ranked = sorted(articles, key=lambda x: x[1].relevance, reverse=True)
         selected.extend(ranked[:top_n_per_category])
 
     return selected

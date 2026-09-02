@@ -57,19 +57,23 @@ def test_create_builds_tool_request_and_maps_response():
     request = client.messages.calls[0]
     assert request["model"] == "claude-3-5-haiku-20241022"
     assert request["max_tokens"] == 256
-    assert request["messages"] == [{"role": "user", "content": "Find local jobs in Adelaide."}]
-    assert request["tools"] == [{
-        "name": "search_jobs",
-        "description": "Search for jobs matching a location and limit.",
-        "input_schema": {
-            "type": "object",
-            "properties": {
-                "city": {"type": "string"},
-                "limit": {"type": "integer"},
+    assert request["messages"] == [
+        {"role": "user", "content": "Find local jobs in Adelaide."}
+    ]
+    assert request["tools"] == [
+        {
+            "name": "search_jobs",
+            "description": "Search for jobs matching a location and limit.",
+            "input_schema": {
+                "type": "object",
+                "properties": {
+                    "city": {"type": "string"},
+                    "limit": {"type": "integer"},
+                },
+                "required": ["city"],
             },
-            "required": ["city"],
-        },
-    }]
+        }
+    ]
     assert request["tool_choice"] == {"type": "tool", "name": "search_jobs"}
     assert request["temperature"] == 0.2
 
@@ -87,9 +91,7 @@ def test_create_omits_temperature_when_not_provided():
         model="claude-3-5-haiku-20241022",
         stop_reason="tool_use",
         usage=SimpleNamespace(input_tokens=1, output_tokens=2),
-        content=[
-            SimpleNamespace(type="tool_use", input={"query": "AI engineer"})
-        ],
+        content=[SimpleNamespace(type="tool_use", input={"query": "AI engineer"})],
     )
     client = FakeAnthropicClient(response)
     adapter = AnthropicLLMClient(client)
@@ -142,7 +144,10 @@ def test_create_raises_when_response_is_truncated_by_max_tokens():
     client = FakeAnthropicClient(response)
     adapter = AnthropicLLMClient(client)
 
-    with pytest.raises(ValueError, match="max_tokens are met before the model could finish its response. Consider increasing max_tokens."):
+    with pytest.raises(
+        ValueError,
+        match="max_tokens are met before the model could finish its response. Consider increasing max_tokens.",
+    ):
         adapter.create(
             model="claude-3-5-haiku-20241022",
             max_tokens=8,
@@ -151,4 +156,3 @@ def test_create_raises_when_response_is_truncated_by_max_tokens():
             tool_description="Search for jobs.",
             tool_schema={"type": "object", "properties": {"query": {"type": "string"}}},
         )
-

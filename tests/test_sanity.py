@@ -7,7 +7,6 @@ def test_load_fixtures_returns_fixture_list():
     assert isinstance(fixtures[0], Fixture)
 
 
-
 def test_check_fixture_thresholds():
     fixture = Fixture(
         id="example",
@@ -23,15 +22,21 @@ def test_check_fixture_thresholds():
 
     assert sanity.check_fixture(
         fixture,
-        TriageResult(relevance=7, category="engineering", reason="On topic", story_hint="AI"),
+        TriageResult(
+            relevance=7, category="engineering", reason="On topic", story_hint="AI"
+        ),
     )
     assert not sanity.check_fixture(
         fixture,
-        TriageResult(relevance=4, category="engineering", reason="Too low", story_hint="AI"),
+        TriageResult(
+            relevance=4, category="engineering", reason="Too low", story_hint="AI"
+        ),
     )
     assert not sanity.check_fixture(
         fixture,
-        TriageResult(relevance=9, category="engineering", reason="Too high", story_hint="AI"),
+        TriageResult(
+            relevance=9, category="engineering", reason="Too high", story_hint="AI"
+        ),
     )
 
 
@@ -52,7 +57,9 @@ def test_run_sanity_uses_fixture_thresholds(monkeypatch):
     )
 
     def fake_triage_article(article, profile, client):
-        return TriageResult(relevance=7, category="engineering", reason="On topic", story_hint="AI")
+        return TriageResult(
+            relevance=7, category="engineering", reason="On topic", story_hint="AI"
+        )
 
     monkeypatch.setattr(sanity, "triage_article", fake_triage_article)
 
@@ -79,27 +86,38 @@ def test_summarize_results_counts_pass_and_fail():
 
 
 def test_main_returns_nonzero_when_fixture_fails(monkeypatch):
-    fixtures = [Fixture(
-        id="demo",
-        article=Article(
-            url="https://example.com/article",
-            source="Example Source",
-            title="Example Article",
-            summary="Example summary",
-        ),
-        expected=ExpectedThreshold(min_relevance=10, max_relevance=10),
-    )]
+    fixtures = [
+        Fixture(
+            id="demo",
+            article=Article(
+                url="https://example.com/article",
+                source="Example Source",
+                title="Example Article",
+                summary="Example summary",
+            ),
+            expected=ExpectedThreshold(min_relevance=10, max_relevance=10),
+        )
+    ]
 
     monkeypatch.setattr(sanity, "load_fixtures", lambda path="": fixtures)
 
     import daily_assistant.profile as profile_module
+
     monkeypatch.setattr(profile_module, "load_profile", lambda: {"identity": {}})
 
     import daily_assistant.telemetry as telemetry_module
-    monkeypatch.setattr(telemetry_module, "TrackedClient", lambda *args, **kwargs: object())
+
+    monkeypatch.setattr(
+        telemetry_module, "TrackedClient", lambda *args, **kwargs: object()
+    )
 
     import daily_assistant.config as config_module
-    monkeypatch.setattr(config_module, "get_settings", lambda: type("Settings", (), {"anthropic_api_key": "test-key"})())
+
+    monkeypatch.setattr(
+        config_module,
+        "get_settings",
+        lambda: type("Settings", (), {"anthropic_api_key": "test-key"})(),
+    )
 
     def fake_triage_article(article, profile, client):
         return TriageResult(relevance=7, category="engineering", reason="Low")
