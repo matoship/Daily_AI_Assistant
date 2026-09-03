@@ -130,10 +130,22 @@ Only `fetched` is swept by the 48h `mark_outdated_before` — it is the only lim
 | `tickets/` | 34 postmortems: symptom → root cause → fix → lesson. Claude maintains these. |
 | `TODO.md` | Open work, phased. |
 | `ARCHITECTURE.md` | Deeper design notes. |
+| `DECISIONS.md` | 20 decisions with rejected alternatives; ⚖️ marks contested ones. |
 | `notes/` | Kaifeng's own learning notes. **Gitignored** — local only. |
 
 Add a ticket whenever a real incident is closed. Keep it factual: what broke, why, how
 it was fixed, and the generalizable lesson.
+
+Add an entry to `DECISIONS.md` whenever a design choice is settled and a real alternative
+was rejected — a milestone, a seam, a schema, a methodology. Record the rejected option and
+why it lost, not just the winner; a decision log that only lists winners is a changelog.
+Mark it **⚖️ Contested** when Kaifeng and Claude disagreed, capture both arguments, and say
+plainly which turned out wrong — four of the first six contested entries resolved against
+Claude, and preserving that is the point.
+
+**Tickets and decisions are different.** A ticket is something that *broke*; a decision is a
+choice between options that *existed*. Some incidents produce both (`TICKET-024` →
+decision 6) — cross-reference, don't duplicate.
 
 ## State
 
