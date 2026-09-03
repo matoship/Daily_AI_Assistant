@@ -139,9 +139,10 @@ it was fixed, and the generalizable lesson.
 Add an entry to `DECISIONS.md` whenever a design choice is settled and a real alternative
 was rejected — a milestone, a seam, a schema, a methodology. Record the rejected option and
 why it lost, not just the winner; a decision log that only lists winners is a changelog.
-Mark it **⚖️ Contested** when Kaifeng and Claude disagreed, capture both arguments, and say
-plainly which turned out wrong — four of the first six contested entries resolved against
-Claude, and preserving that is the point.
+
+Keep it **impersonal and public-facing**: "Alternative considered: X. Rejected because Y."
+Never narrate who proposed or opposed what — the repo is public, and the engineering
+reasoning is the durable part. A personal record of disagreements belongs in `notes/`.
 
 **Tickets and decisions are different.** A ticket is something that *broke*; a decision is a
 choice between options that *existed*. Some incidents produce both (`TICKET-024` →
