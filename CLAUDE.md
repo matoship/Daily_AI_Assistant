@@ -130,7 +130,7 @@ Only `fetched` is swept by the 48h `mark_outdated_before` — it is the only lim
 | `tickets/` | 34 postmortems: symptom → root cause → fix → lesson. Claude maintains these. |
 | `TODO.md` | Open work, phased. |
 | `ARCHITECTURE.md` | Deeper design notes. |
-| `DECISIONS.md` | 20 decisions with rejected alternatives; ⚖️ marks contested ones. |
+| `DECISIONS.md` | 25 decisions with rejected alternatives; ⚖️ marks contested ones. |
 | `notes/` | Kaifeng's own learning notes. **Gitignored** — local only. |
 
 Add a ticket whenever a real incident is closed. Keep it factual: what broke, why, how

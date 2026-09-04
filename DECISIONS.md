@@ -291,3 +291,147 @@ goal of the project — not because the workload demands it.
 **Rationale for recording this.** A choice made for learning value rather than technical
 necessity is worth stating as such, so it is not later mistaken for a performance
 requirement that was never there.
+
+---
+
+## 19. Delivery: a published static site, not email
+
+**Context.** The original design specified an email digest via SMTP or Resend.
+
+**Alternative considered:** email. Not rejected on capability — it is genuinely better at
+*reaching* a reader, since it arrives without being asked for, whereas a page must be
+remembered and visited. Rejected on operational and audience grounds: it needs SMTP or a
+third-party credential, deliverability is a standing concern, and the output is invisible
+to anyone not on the recipient list.
+
+**Decision.** Render to escaped static HTML and publish to GitHub Pages from the same
+workflow that runs the pipeline.
+
+**Rationale.** No new credential, no delivery infrastructure, and the artifact is a URL
+that can be shared. For a project that doubles as a portfolio piece, a link someone can
+open beats an inbox they cannot see.
+
+**Trade accepted.** Pull instead of push: nothing prompts the reader. If daily prompting
+turns out to matter, a notification channel can be added *alongside* the page rather than
+replacing it.
+
+---
+
+## 20. Digest history: committed HTML snapshots, not a `digest_items` table
+
+**Context.** Showing an archive of past digests requires past digests to persist somewhere.
+
+**Alternative considered:** the `digest_items` table sketched in the original data model,
+storing each `DigestItem` as structured rows. Rejected as premature: nothing yet needed to
+*query* digest history, only to display it, and the table would have required serialising
+`article_urls` into JSON inside SQLite for no present benefit.
+
+**Decision.** Each day's digest renders to a dated HTML file under `docs/`, committed by
+the workflow. Git is the archive.
+
+**Consequence — same-day reruns.** Because the filename is date-derived, a second run on
+the same calendar day overwrote the first, silently replacing a rich digest with a thinner
+one (`TICKET-023`). Timestamped filenames were considered and rejected: they would produce
+several confusing same-day entries in the archive. Instead a per-day JSON sidecar
+accumulates the day's items and the page is re-rendered from the full set, preserving
+one-entry-per-day while making reruns additive.
+
+**Revisit when.** Story continuity needs to *retrieve* past digest content, not display it.
+That is the point at which structured storage earns its cost.
+
+---
+
+## 21. No containers or orchestration for the scheduled job
+
+**Context.** Docker and Kubernetes are widely expected on an AI-engineering CV, which is a
+reason to learn them but not automatically a reason to use them here.
+
+**Alternative considered:** running the pipeline as a Kubernetes `CronJob`. Rejected on
+fit: Kubernetes orchestrates long-running services that need scaling, service discovery and
+self-healing. This workload is one script that runs once daily and exits. A managed cluster
+would add real monthly cost against a pipeline costing cents; a local cluster would only
+fire while a particular machine is switched on, discarding the unattended operation the
+project already has.
+
+**Decision.** Keep GitHub Actions cron as the production host. Containerisation is worth
+doing as a learning exercise on personal hardware, decoupled from production.
+
+**Rationale.** Adopting infrastructure for CV keywords rather than workload characteristics
+is the kind of choice an interviewer probes, and "it runs once a day and exits, so
+orchestration buys nothing" is a stronger answer than a cluster nobody needed.
+
+---
+
+## 22. Provider differences reconciled in code, not by an LLM
+
+**Alternative considered:** using a small model to normalise each provider's response into
+a common shape, avoiding hand-written adapters. Rejected on several grounds: both response
+formats are documented, deterministic structures rather than prose, so this applies a
+probabilistic tool to a problem with an exact answer; it would double the LLM calls per
+article on a pipeline whose premise is cheap per-article triage; and it reintroduces
+precisely the fragility that structured outputs exist to remove — a mis-transcribed
+relevance score still validates as a well-formed `TriageResult`, failing silently, whereas
+an unexpected shape in an adapter raises immediately.
+
+**Decision.** Hand-written adapters, roughly fifteen lines per provider.
+
+**Boundary that generalises.** Unstructured input to structured output is what an LLM is
+uniquely good at — the deferred HTML-extraction scraper is that shape. Structured to
+structured is what code does better: cheaper, deterministic, and loud on failure.
+
+---
+
+## 23. Batch API not adopted
+
+**Alternative considered:** the Batch API's 50% discount. Rejected because the saving
+applies to a base cost of a few cents per day, while the change is architectural: batch
+submission is asynchronous, with completion times ranging from minutes to hours, so a
+scheduled job that currently runs and exits would need job tracking, polling, partial
+failure handling, and probably a split into submit and collect workflows.
+
+**Decision.** Synchronous calls. Batch is the right tool for high-volume, non-urgent work,
+which this is not — the cost problem, if one ever appears, is per-call price, and that is
+already addressed by model tiering.
+
+---
+
+## 24. Protocol conformance verified by a type checker, not by structure alone
+
+**Context.** Adapters can satisfy `LLMClient` structurally, without inheriting from it.
+
+**Alternative considered:** structural conformance only, with no type checker. Rejected
+because, absent static checking, nothing verifies an adapter actually matches the seam —
+and a mismatch surfaces only when a real call is made, potentially against a paid endpoint.
+
+**Also considered:** inheriting from the Protocol *without* a type checker. Rejected as the
+worst of both: a Protocol's `...` method bodies are valid implementations returning `None`,
+so a missing method instantiates cleanly and fails silently downstream, whereas the purely
+structural version at least raises `AttributeError` at the call site.
+
+**Decision.** Adapters inherit from `LLMClient` *and* mypy is part of the toolchain, so
+conformance is checked before anything runs. On its first run mypy immediately found a
+declared-versus-actual type mismatch at the client seam.
+
+---
+
+## 25. Eval reporting leads with classification flips, not metric deltas
+
+**Context.** Two runs of an identical profile differed by 0.04 F1 and 0.07 recall, which
+looks like a meaningful change and is not.
+
+**Alternative considered:** reporting precision/recall/F1 deltas as the primary signal —
+the conventional presentation. Rejected at this sample size: with 15 gold-positive articles
+in the set, a single article changing verdict moves F1 by 0.04, so aggregate movement is
+dominated by noise while *looking* authoritative.
+
+**Decision.** The live report leads with per-article classification flips (`FP->TN`,
+`TP->FN`, and so on), with metrics as supporting context.
+
+**Rationale.** Measurement showed triage is ~98% reproducible run to run: an identical
+profile moved one article of fifty, while a profile change moved twenty-five. The model is
+stable and the metric is volatile, so the article-level view is the trustworthy one. A
+change moving fewer than about three articles is indistinguishable from noise regardless of
+what F1 reports (`TICKET-034`).
+
+**Prerequisite worth naming.** This is only knowable because the noise floor was measured
+deliberately, by running the same profile twice. Without that, every delta stays ambiguous.
