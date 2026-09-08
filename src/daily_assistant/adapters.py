@@ -4,8 +4,12 @@ from typing import Any
 from anthropic import Anthropic, Omit as AnthropicOmit
 from anthropic.types import MessageParam, ToolChoiceToolParam, ToolParam
 from daily_assistant.protocol import LLMResponse, LLMClient
-from openai import OpenAI, Omit as OpenAIOmit
-from openai.types.responses import FunctionToolParam, ToolChoiceFunctionParam
+from openai import OpenAI, Omit as OpenAIOmit, _exceptions
+from openai.types.chat import (
+    ChatCompletionNamedToolChoiceParam,
+    ChatCompletionToolParam,
+)
+
 
 class AnthropicLLMClient(LLMClient):
     def __init__(self, client: Anthropic):
@@ -38,9 +42,7 @@ class AnthropicLLMClient(LLMClient):
             tools=tools,
             tool_choice=tool_choice,
             messages=messages,
-            temperature=(
-                temperature if temperature is not None else AnthropicOmit()
-            ),
+            temperature=(temperature if temperature is not None else AnthropicOmit()),
         )
         if response.stop_reason == "max_tokens":
             raise ValueError(
@@ -62,6 +64,7 @@ class AnthropicLLMClient(LLMClient):
             output_tokens=response.usage.output_tokens,
         )
 
+
 class OpenAIAdapter(LLMClient):
     def __init__(self, client: OpenAI):
         self._client = client
@@ -78,49 +81,59 @@ class OpenAIAdapter(LLMClient):
         temperature: float | None = None,
     ) -> LLMResponse:
 
-        tools: list[FunctionToolParam] = [
+        tools: list[ChatCompletionToolParam] = [
             {
                 "type": "function",
-                "name": tool_name,
-                "description": tool_description,
-                "parameters": tool_schema,
-                "strict": True,
+                "function": {
+                    "name": tool_name,
+                    "description": tool_description,
+                    "parameters": tool_schema,
+                    "strict": True,
+                },
             }
         ]
-        tool_choice: ToolChoiceFunctionParam = {
+        tool_choice: ChatCompletionNamedToolChoiceParam = {
             "type": "function",
-            "name": tool_name,
+            "function": {"name": tool_name},
         }
-
-        response = self._client.responses.create(
+        response = self._client.chat.completions.create(
             model=model,
-            input=prompt,
-            max_output_tokens=max_tokens,
+            messages=[{"role": "user", "content": prompt}],
+            max_completion_tokens=max_tokens,
             tools=tools,
             tool_choice=tool_choice,
             temperature=temperature if temperature is not None else OpenAIOmit(),
         )
+        if response is None:
+            raise ValueError("OpenAI did not return a response")
+
+        tool_calls = response.choices[0].message.tool_calls
+
+        if tool_calls is None:
+            raise ValueError("OpenAI did not return a tool_calls item")
 
         tool_call = next(
-            (item for item in response.output if item.type == "function_call"),
+            (item for item in tool_calls if item.type == "function"),
             None,
         )
+
+        choice = response.choices[0]
         if tool_call is None:
             raise ValueError("OpenAI did not return a function_call item")
-        if response.status == "error":
-            raise ValueError(f"OpenAI API error: {response.error_message}")
-        if response.status == "incomplete":
+        if choice.finish_reason == "length":
             raise ValueError(
                 "OpenAI API response was incomplete. Consider increasing max_tokens."
             )
-        tool_input = json.loads(tool_call.arguments)
+        function = tool_call.function
+        if function is None:
+            raise ValueError("OpenAI function call had no function payload")
+        tool_input = json.loads(function.arguments)
         if response.usage is None:
             raise ValueError("OpenAI response did not include usage")
 
         return LLMResponse(
             tool_input=tool_input,
             model=response.model,
-            input_tokens=response.usage.input_tokens,
-            output_tokens=response.usage.output_tokens,
+            input_tokens=response.usage.prompt_tokens,
+            output_tokens=response.usage.completion_tokens,
         )
-        

@@ -10,7 +10,6 @@ class LLMResponse:
     output_tokens: int
 
 
-
 class LLMClient(Protocol):
     def create(
         self,

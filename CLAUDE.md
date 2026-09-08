@@ -95,6 +95,12 @@ Only `fetched` is swept by the 48h `mark_outdated_before` — it is the only lim
   type-checks, not as an error (`Field(..., min_length=1)`).
 - **Mocks must match the real dependency's shape**, not the code's assumption about it.
   Shared fakes live in `tests/conftest.py` and conform to the Protocol.
+- **Failure-path fixtures must be internally consistent, not merely well-formed.** Ask
+  whether the field values could co-occur in a real response: a truncated one carries
+  *both* a truncation signal and malformed output, because they share a cause. Build from a
+  shared complete-response helper and override only the fields that express the failure —
+  the override is the test's thesis. (Not N independent hand-built fakes: that is how the
+  two `create()` stubs drifted apart in `TICKET-027`.)
 - **Test by blast radius, not complexity.** The untested function is the one that breaks —
   three times now. Twenty trivial lines at the end of a paid operation deserve a test more
   than a clever pure function does (`TICKET-033`).
