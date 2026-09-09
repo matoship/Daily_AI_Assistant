@@ -243,7 +243,6 @@ def test_openai_create_builds_tool_request_and_maps_response():
                     },
                     "required": ["city"],
                 },
-                "strict": True,
             },
         }
     ]
