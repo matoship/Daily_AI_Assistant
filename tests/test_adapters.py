@@ -225,23 +225,32 @@ def test_openai_create_builds_tool_request_and_maps_response():
     assert len(client.chat.completions.calls) == 1
     request = client.chat.completions.calls[0]
     assert request["model"] == "gpt-5-mini"
+    assert request["messages"] == [
+        {"role": "user", "content": "Find local jobs in Adelaide."}
+    ]
+    assert request["max_completion_tokens"] == 256
     assert request["tools"] == [
         {
             "type": "function",
-            "name": "search_jobs",
-            "description": "Search for jobs matching a location and limit.",
-            "parameters": {
-                "type": "object",
-                "properties": {
-                    "city": {"type": "string"},
-                    "limit": {"type": "integer"},
+            "function": {
+                "name": "search_jobs",
+                "description": "Search for jobs matching a location and limit.",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "city": {"type": "string"},
+                        "limit": {"type": "integer"},
+                    },
+                    "required": ["city"],
                 },
-                "required": ["city"],
+                "strict": True,
             },
-            "strict": True,
         }
     ]
-    assert request["tool_choice"] == {"type": "function", "name": "search_jobs"}
+    assert request["tool_choice"] == {
+        "type": "function",
+        "function": {"name": "search_jobs"},
+    }
     assert request["temperature"] == 0.2
 
     assert result == LLMResponse(

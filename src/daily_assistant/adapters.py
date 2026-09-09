@@ -4,7 +4,7 @@ from typing import Any
 from anthropic import Anthropic, Omit as AnthropicOmit
 from anthropic.types import MessageParam, ToolChoiceToolParam, ToolParam
 from daily_assistant.protocol import LLMResponse, LLMClient
-from openai import OpenAI, Omit as OpenAIOmit, _exceptions
+from openai import OpenAI, Omit as OpenAIOmit
 from openai.types.chat import (
     ChatCompletionNamedToolChoiceParam,
     ChatCompletionToolParam,
@@ -88,7 +88,7 @@ class OpenAIAdapter(LLMClient):
                     "name": tool_name,
                     "description": tool_description,
                     "parameters": tool_schema,
-                    "strict": True,
+                    
                 },
             }
         ]
