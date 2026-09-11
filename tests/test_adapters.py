@@ -5,7 +5,7 @@ import pytest
 from anthropic import Omit as AnthropicOmit
 from openai import Omit as OpenAIOmit, OpenAI
 
-from daily_assistant.adapters import AnthropicLLMClient, OpenAIAdapter
+from daily_assistant.adapters import AnthropicLLMClient, OpenAICompatibleAdapter
 from daily_assistant.protocol import LLMResponse
 
 
@@ -203,7 +203,7 @@ def test_openai_create_builds_tool_request_and_maps_response():
     )
 
     client = FakeOpenAIClient(response)
-    adapter = OpenAIAdapter(client)
+    adapter = OpenAICompatibleAdapter(client)
 
     result = adapter.create(
         model="gpt-5-mini",
@@ -281,7 +281,7 @@ def test_openai_create_omits_temperature_when_not_provided():
     )
 
     client = FakeOpenAIClient(response)
-    adapter = OpenAIAdapter(client)
+    adapter = OpenAICompatibleAdapter(client)
 
     with pytest.raises(json.JSONDecodeError, match="Unterminated string"):
         adapter.create(
@@ -310,7 +310,7 @@ def test_openai_create_raises_when_response_is_incomplete():
         model="gpt-5-mini",
     )
     client = FakeOpenAIClient(response)
-    adapter = OpenAIAdapter(client)
+    adapter = OpenAICompatibleAdapter(client)
 
     with pytest.raises(
         ValueError,
@@ -331,13 +331,13 @@ def test_openai_create_raises_when_response_has_no_function_call():
         choices=[
             SimpleNamespace(
                 message=SimpleNamespace(tool_calls=[]),
-                finish_reason="strop",
+                finish_reason="stop",
             )
         ],
         model="gpt-5-mini",
     )
     client = FakeOpenAIClient(response)
-    adapter = OpenAIAdapter(client)
+    adapter = OpenAICompatibleAdapter(client)
 
     with pytest.raises(ValueError, match="OpenAI did not return a function_call item"):
         adapter.create(
@@ -402,7 +402,7 @@ def test_openai_adapter():
         http_client=http_client,
     )
 
-    adapter = OpenAIAdapter(client)
+    adapter = OpenAICompatibleAdapter(client)
 
     result = adapter.create(
         model="gpt-5-mini",

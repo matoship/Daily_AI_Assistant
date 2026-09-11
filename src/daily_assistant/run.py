@@ -14,7 +14,7 @@ from zoneinfo import ZoneInfo
 import json
 from pathlib import Path
 import logging
-
+from daily_assistant.protocol import LLMError, LLMConfigurationError
 logger = logging.getLogger(__name__)
 
 
@@ -109,7 +109,9 @@ def run():
                         category=result.category,
                         reason=result.reason,
                     )
-                except Exception:
+                except LLMConfigurationError:
+                    raise
+                except LLMError:
                     logger.exception("Error triaging article '%s'", article.title)
 
             if len(triaged_articles) < len(new_articles):
