@@ -1,0 +1,99 @@
+<!doctype html><html lang='en'><head><meta charset='utf-8'><meta name='viewport' content='width=device-width, initial-scale=1'><title>Daily Digest - 2026-09-12</title><style>
+:root {
+    color-scheme: light dark;
+    --bg: #f7f7f8;
+    --surface: #ffffff;
+    --text: #1a1a1a;
+    --muted: #5b5f66;
+    --border: #e3e4e7;
+    --accent: #2f5fd8;
+    --callout-bg: #eef2fd;
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg: #14151a;
+        --surface: #1c1e24;
+        --text: #eceef1;
+        --muted: #9aa0aa;
+        --border: #2c2f37;
+        --accent: #7ea1ff;
+        --callout-bg: #1f2740;
+    }
+}
+* { box-sizing: border-box; }
+body {
+    margin: 0;
+    padding: 2.5rem 1.25rem;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.55;
+}
+main {
+    max-width: 42rem;
+    margin: 0 auto;
+}
+header { margin-bottom: 2rem; }
+h1 { font-size: 1.5rem; margin: 0 0 0.25rem; }
+.subtitle { color: var(--muted); font-size: 0.9rem; margin: 0; }
+nav.back { margin-bottom: 1.5rem; }
+nav.back a { color: var(--accent); text-decoration: none; font-size: 0.9rem; }
+nav.back a:hover { text-decoration: underline; }
+article.digest-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 1.25rem;
+}
+.badge {
+    display: inline-block;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    color: var(--accent);
+    background: var(--callout-bg);
+    border-radius: 999px;
+    padding: 0.2rem 0.65rem;
+    margin-bottom: 0.6rem;
+}
+article.digest-item h2 { font-size: 1.15rem; margin: 0 0 0.5rem; }
+article.digest-item p { margin: 0 0 0.75rem; color: var(--text); }
+.why-it-matters {
+    background: var(--callout-bg);
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    font-size: 0.92rem;
+}
+.why-it-matters strong { color: var(--accent); }
+.sources {
+    margin-top: 0.75rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--border);
+    font-size: 0.85rem;
+    color: var(--muted);
+}
+.sources a { color: var(--muted); margin-right: 0.75rem; }
+.sources a:hover { color: var(--accent); }
+.empty {
+    color: var(--muted);
+    text-align: center;
+    padding: 3rem 1rem;
+}
+ul.archive { list-style: none; margin: 0; padding: 0; }
+ul.archive li {
+    border: 1px solid var(--border);
+    background: var(--surface);
+    border-radius: 8px;
+    margin-bottom: 0.6rem;
+}
+ul.archive a {
+    display: block;
+    padding: 0.85rem 1.1rem;
+    color: var(--text);
+    text-decoration: none;
+    font-weight: 500;
+}
+ul.archive a:hover { color: var(--accent); }
+</style></head><body><main><nav class='back'><a href='index.html'>&larr; Archive</a></nav><header><h1>Daily Digest</h1><p class='subtitle'>2026-09-12</p></header><article class='digest-item'><span class='badge'>engineering</span><h2>Claude Code Gets Formal Plugin Evaluation Framework with CI Gating</h2><p>Anthropic has introduced a structured evaluation system for Claude Code plugins, featuring six distinct grader types, a no-plugin baseline for comparison, and a CI gate that can block skill regressions before they ship. This brings software-engineering-style testing rigor to the plugin/skill ecosystem surrounding coding agents.</p><p class='why-it-matters'><strong>Why it matters:</strong> As you build LLM applications on ServiceNow, having a repeatable eval + CI pattern for agent skills is directly transferable to your own pipelines. This is a concrete template for how to test and gate AI agent capabilities in production, which is core to the AI Application Engineer path.</p><div class='sources'><a href='https://www.marktechpost.com/2026/09/11/anthropic-adds-plugin-evals-to-claude-code-6-grader-types-a-no-plugin-baseline-and-a-ci-gate-for-skills/'>source 1</a></div></article><article class='digest-item'><span class='badge'>engineering</span><h2>Google&#x27;s ToolGrad Hits 99.8% Pass Rate Generating Tool-Use Training Data</h2><p>Google Research released ToolGrad, an &#x27;answer-first&#x27; framework for synthesizing high-quality tool-use training data for LLMs, achieving a 99.8% pass rate. Instead of generating a query and hoping the model calls tools correctly, the framework works backward from a valid answer/tool-call trace, drastically improving data quality for fine-tuning tool-using agents.</p><p class='why-it-matters'><strong>Why it matters:</strong> For engineers building LLM apps that rely on function/tool calling (e.g., ServiceNow integrations), this offers a practical method to generate reliable training or eval data for improving tool-use accuracy in your own agents.</p><div class='sources'><a href='https://www.marktechpost.com/2026/09/10/google-research-releases-toolgrad-answer-first-framework-hits-99-8-pass-rate-for-tool-use-data-generation/'>source 1</a></div></article><article class='digest-item'><span class='badge'>engineering</span><h2>ByteDance Study: LLMs Struggle to Reliably Improve Their Own Agent Harness</h2><p>ByteDance Seed&#x27;s HarnessDev project tested whether LLMs can self-engineer improvements to their own agent scaffolding/harness. Of 64 proposed changes, only 34 generalized well to new tasks, highlighting the gap between locally-plausible self-modifications and genuinely robust improvements.</p><p class='why-it-matters'><strong>Why it matters:</strong> This is a useful reality check for anyone iterating on agent harnesses or prompt/tooling scaffolds for LLM applications—self-improvement loops need strong generalization testing, not just single-task validation, before trusting automated changes to production agent infrastructure.</p><div class='sources'><a href='https://www.marktechpost.com/2026/09/11/can-llms-engineer-their-own-agent-harness-bytedance-seeds-harnessdev-says-only-34-of-64-changes-generalize/'>source 1</a></div></article><article class='digest-item'><span class='badge'>engineering</span><h2>Sakana AI Debuts Fugu Max and Fugu Ultra v2 for Multi-Agent Orchestration</h2><p>Sakana AI launched two new models, Fugu Max and Fugu Ultra v2, aimed at making multi-agent orchestration cheaper and more capable, targeting workloads that coordinate multiple LLM agents working together on complex tasks.</p><p class='why-it-matters'><strong>Why it matters:</strong> As multi-agent patterns become more common in enterprise LLM deployments, cheaper orchestration models could lower the cost of building sophisticated multi-agent workflows relevant to your ServiceNow/LLM application work.</p><div class='sources'><a href='https://www.marktechpost.com/2026/09/10/sakana-ai-launches-fugu-max-and-fugu-ultra-v2-for-cheaper-stronger-multi-agent-orchestration/'>source 1</a></div></article><article class='digest-item'><span class='badge'>engineering</span><h2>New Observability Practices Use Session Traces and Cost Controls to Debug AI Agent Failures</h2><p>InfoQ reports on emerging observability techniques for AI agents, focusing on session-level tracing and cost-control mechanisms that help engineers diagnose why agents fail or behave unexpectedly in production.</p><p class='why-it-matters'><strong>Why it matters:</strong> Observability is critical for maintaining production LLM applications—session tracing and cost monitoring are practical tools you can apply directly to debug and manage AI agents deployed in ServiceNow environments.</p><div class='sources'><a href='https://www.infoq.com/news/2026/09/observability-ai-agents/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global'>source 1</a></div></article></main></body></html>
