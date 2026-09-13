@@ -32,7 +32,7 @@ def test_triage_article(fake_llm_client):
     mock_client = fake_llm_client(fake_response)
 
     # Call the triage_article function
-    result = triage_article(article, profile, mock_client)
+    result = triage_article(article, profile, mock_client, model="test-model")
 
     # Assertions to check if the result is as expected
     assert result.relevance == 8

@@ -65,7 +65,7 @@ def test_synthesize(fake_llm_client):
     mock_client = fake_llm_client(fake_response)
 
     # Call the synthesize function
-    digest_items = synthesize(triaged, profile, mock_client)
+    digest_items = synthesize(triaged, profile, mock_client, model="test-model")
 
     # Assertions to check if the digest items are as expected
     assert len(digest_items) == 1

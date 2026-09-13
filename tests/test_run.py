@@ -16,6 +16,9 @@ class DummyStorage:
     def mark_scored(self, url):
         return None
 
+    def store_triage_log(self, **kwargs):
+        return None
+
     def mark_digested(self, url):
         return None
 
@@ -37,12 +40,19 @@ def test_run_passes_tracked_client_to_pipeline(monkeypatch):
     captured = {}
     fake_client = DummyClient()
 
-    def fake_triage(article, profile, client):
+    def fake_triage(article, profile, client, model):
         captured["triage_client"] = client
-        return SimpleNamespace(relevance=5, category="tech", title=article.title)
+        captured["triage_model"] = model
+        return SimpleNamespace(
+            relevance=5,
+            category="tech",
+            title=article.title,
+            reason="stubbed triage reason",
+        )
 
-    def fake_synthesize(selected_articles, profile, client):
+    def fake_synthesize(selected_articles, profile, client, model):
         captured["synthesize_client"] = client
+        captured["synthesize_model"] = model
         return []
 
     monkeypatch.setattr(run_module, "load_profile", lambda: {})
@@ -68,7 +78,7 @@ def test_run_passes_tracked_client_to_pipeline(monkeypatch):
         lambda triaged_articles, threshold=5, top_n_per_category=5: [],
     )
     monkeypatch.setattr(run_module, "synthesize", fake_synthesize)
-    monkeypatch.setattr(run_module, "build_client", lambda: fake_client)
+    monkeypatch.setattr(run_module, "build_client", lambda local=False: fake_client)
 
     run_module.run()
 

@@ -3,7 +3,9 @@ from daily_assistant.protocol import LLMResponse, LLMClient
 from daily_assistant.profile import category_options
 
 
-def triage_article(article: Article, profile: dict, client: LLMClient) -> TriageResult:
+def triage_article(
+    article: Article, profile: dict, client: LLMClient, model: str
+) -> TriageResult:
     """
     Triage an article based on the user's profile and return a TriageResult.
     """
@@ -26,7 +28,7 @@ def triage_article(article: Article, profile: dict, client: LLMClient) -> Triage
     categories = category_options(profile) + ["other"]
     # Call the model
     response: LLMResponse = client.create(
-        model="claude-haiku-4-5-20251001",
+        model=model,
         max_tokens=600,
         prompt=prompt,
         tool_name="provide_triage_result",

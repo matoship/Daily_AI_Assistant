@@ -5,16 +5,30 @@ from anthropic import Anthropic, Omit as AnthropicOmit
 import anthropic
 from anthropic.types import MessageParam, ToolChoiceToolParam, ToolParam
 import openai
-from daily_assistant.protocol import LLMConfigurationError, LLMProtocolError, LLMResponse, LLMClient, LLMTransientError
+from daily_assistant.protocol import (
+    LLMConfigurationError,
+    LLMProtocolError,
+    LLMResponse,
+    LLMClient,
+    LLMTransientError,
+)
 from openai import OpenAI, Omit as OpenAIOmit
 from openai.types.chat import (
     ChatCompletionNamedToolChoiceParam,
     ChatCompletionToolParam,
 )
 
-_ANTHORPIC_TRANSIENT = (anthropic.RateLimitError, anthropic.APIConnectionError, anthropic.InternalServerError)
-_ANTHORPIC_CONFIG = (anthropic.AuthenticationError, anthropic.PermissionDeniedError,
-                     anthropic.NotFoundError, anthropic.BadRequestError)
+_ANTHORPIC_TRANSIENT = (
+    anthropic.RateLimitError,
+    anthropic.APIConnectionError,
+    anthropic.InternalServerError,
+)
+_ANTHORPIC_CONFIG = (
+    anthropic.AuthenticationError,
+    anthropic.PermissionDeniedError,
+    anthropic.NotFoundError,
+    anthropic.BadRequestError,
+)
 
 
 class AnthropicLLMClient(LLMClient):
@@ -48,7 +62,9 @@ class AnthropicLLMClient(LLMClient):
                 tools=tools,
                 tool_choice=tool_choice,
                 messages=messages,
-                temperature=(temperature if temperature is not None else AnthropicOmit()),
+                temperature=(
+                    temperature if temperature is not None else AnthropicOmit()
+                ),
             )
         except _ANTHORPIC_TRANSIENT as e:
             raise LLMTransientError(
@@ -86,14 +102,13 @@ class AnthropicLLMClient(LLMClient):
                 "Claude did not return a tool_use block",
                 provider="anthropic",
                 model=model,
-    )
+            )
         return LLMResponse(
             tool_input=tool_use_block.input,
             model=response.model,
             input_tokens=response.usage.input_tokens,
             output_tokens=response.usage.output_tokens,
         )
-
 
 
 _OPENAI_TRANSIENT = (
@@ -108,6 +123,7 @@ _OPENAI_CONFIG = (
     openai.NotFoundError,
     openai.BadRequestError,
 )
+
 
 class OpenAICompatibleAdapter(LLMClient):
     def __init__(self, client: OpenAI):
@@ -132,7 +148,6 @@ class OpenAICompatibleAdapter(LLMClient):
                     "name": tool_name,
                     "description": tool_description,
                     "parameters": tool_schema,
-                    
                 },
             }
         ]
@@ -161,7 +176,7 @@ class OpenAICompatibleAdapter(LLMClient):
                 provider="openai",
                 model=model,
             ) from e
-        except openai.error.APIError as e:
+        except openai.APIError as e:
             raise LLMProtocolError(
                 f"Protocol error from OpenAI: {str(e)}",
                 provider="openai",
@@ -189,13 +204,21 @@ class OpenAICompatibleAdapter(LLMClient):
                 provider="openai",
                 model=model,
             )
-            
+
         if tool_call is None:
-            raise LLMProtocolError("OpenAI did not return a function_call item",provider="openai",model=model)
+            raise LLMProtocolError(
+                "OpenAI did not return a function_call item",
+                provider="openai",
+                model=model,
+            )
 
         function = tool_call.function
         if function is None:
-            raise LLMProtocolError("OpenAI function call had no function payload",provider="openai",model=model)
+            raise LLMProtocolError(
+                "OpenAI function call had no function payload",
+                provider="openai",
+                model=model,
+            )
         tool_input = json.loads(function.arguments)
         if response.usage is None:
             raise ValueError("OpenAI response did not include usage")

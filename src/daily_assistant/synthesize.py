@@ -6,6 +6,7 @@ def synthesize(
     selected_articles: list[tuple[Article, TriageResult]],
     profile: dict,
     client: LLMClient,
+    model: str,
 ) -> list[DigestItem]:
     """
     Synthesize selected articles into digest items using the Anthropic API wrapped in LLMclient.
@@ -41,7 +42,7 @@ def synthesize(
     """
 
     response: LLMResponse = client.create(
-        model="claude-sonnet-5",
+        model=model,
         max_tokens=800 * len(selected_articles),
         prompt=prompt,
         tool_name="synthesize_article",

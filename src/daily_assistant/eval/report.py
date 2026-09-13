@@ -4,7 +4,7 @@ from pathlib import Path
 import argparse
 from daily_assistant.telemetry import estimate_cost
 from yaml import safe_load
-from daily_assistant.factory import build_client
+from daily_assistant.factory import build_client, MODELS
 from daily_assistant.models import GoldLabel
 from daily_assistant.triage import triage_article
 from daily_assistant.profile import load_profile
@@ -105,7 +105,9 @@ def evaluate_live(
 ) -> list[tuple[GoldLabel, int, str]]:  # re-runs triage
     rows = []
     for goldlabel in gold:
-        triaged = triage_article(goldlabel.article, profile, client)
+        triaged = triage_article(
+            goldlabel.article, profile, client, MODELS["anthropic"]["triage"]
+        )
         rows.append((goldlabel, triaged.relevance, triaged.category))
     return rows
 
@@ -211,7 +213,9 @@ def compare_changes(
         "sufficient": [row for row in live_rows if not row[0].input_insufficient],
     }
     for category in dict.fromkeys(row[0].gold_category for row in live_rows):
-        live_category_rows = [row for row in live_rows if row[0].gold_category == category]
+        live_category_rows = [
+            row for row in live_rows if row[0].gold_category == category
+        ]
         live_subgroups[category] = live_category_rows
         live_subgroups[f"{category}_sufficient"] = [
             row for row in live_category_rows if not row[0].input_insufficient

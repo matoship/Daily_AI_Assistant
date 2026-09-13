@@ -6,7 +6,7 @@ from anthropic import Omit as AnthropicOmit
 from openai import Omit as OpenAIOmit, OpenAI
 
 from daily_assistant.adapters import AnthropicLLMClient, OpenAICompatibleAdapter
-from daily_assistant.protocol import LLMResponse
+from daily_assistant.protocol import LLMProtocolError, LLMResponse
 
 
 class FakeMessages:
@@ -143,7 +143,9 @@ def test_create_raises_when_response_has_no_tool_use_block():
     client = FakeAnthropicClient(response)
     adapter = AnthropicLLMClient(client)
 
-    with pytest.raises(ValueError, match="Claude did not return a tool_use block"):
+    with pytest.raises(
+        LLMProtocolError, match="Claude did not return a tool_use block"
+    ):
         adapter.create(
             model="claude-3-5-haiku-20241022",
             max_tokens=32,
@@ -167,7 +169,7 @@ def test_create_raises_when_response_is_truncated_by_max_tokens():
     adapter = AnthropicLLMClient(client)
 
     with pytest.raises(
-        ValueError,
+        LLMProtocolError,
         match="max_tokens are met before the model could finish its response. Consider increasing max_tokens.",
     ):
         adapter.create(
@@ -313,7 +315,7 @@ def test_openai_create_raises_when_response_is_incomplete():
     adapter = OpenAICompatibleAdapter(client)
 
     with pytest.raises(
-        ValueError,
+        LLMProtocolError,
         match="OpenAI API response was incomplete. Consider increasing max_tokens.",
     ):
         adapter.create(
@@ -339,7 +341,9 @@ def test_openai_create_raises_when_response_has_no_function_call():
     client = FakeOpenAIClient(response)
     adapter = OpenAICompatibleAdapter(client)
 
-    with pytest.raises(ValueError, match="OpenAI did not return a function_call item"):
+    with pytest.raises(
+        LLMProtocolError, match="OpenAI did not return a function_call item"
+    ):
         adapter.create(
             model="gpt-5-mini",
             max_tokens=32,

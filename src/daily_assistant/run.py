@@ -8,18 +8,23 @@ from daily_assistant.profile import load_profile, load_sources
 from daily_assistant.storage import Storage
 from datetime import timedelta, datetime, timezone
 from daily_assistant.render import render_digest_page, render_index
-from daily_assistant.factory import build_client
+from daily_assistant.factory import build_client, MODELS
 import webbrowser
 from zoneinfo import ZoneInfo
 import json
 from pathlib import Path
 import logging
 from daily_assistant.protocol import LLMError, LLMConfigurationError
+import argparse
+
 logger = logging.getLogger(__name__)
 
 
-def main() -> None:
-    digest = run()
+def main(argv=None) -> None:
+    parser = argparse.ArgumentParser(description="A script with a --vllm flag.")
+    parser.add_argument("-v", "--vllm", action="store_true", help="Enable local VllM")
+    args = parser.parse_args(argv)
+    digest = run(args)
     today = datetime.now(ZoneInfo("Australia/Adelaide")).strftime("%Y-%m-%d")
 
     output_dir = Path(__file__).resolve().parents[2] / "docs"
@@ -48,7 +53,7 @@ def main() -> None:
         webbrowser.open_new_tab(index_path.as_uri())
 
 
-def run():
+def run(args=False):
     """
     Run the daily assistant pipeline:
     1. Load user profile and sources.
@@ -68,7 +73,13 @@ def run():
     sources = load_sources()
 
     # Initialize client
-    client = build_client()  # Build the TrackedClient with AnthropicLLMClient
+    client = build_client(
+        args
+    )  # Build the TrackedClient with AnthropicLLMClient or VLLM
+    if args:
+        models = MODELS["anthropic"]
+    else:
+        models = MODELS["local"]
     # Initialize storage (assuming a Storage class is defined elsewhere)
     with Storage() as storage:
         run_id = storage.start_run()
@@ -89,7 +100,7 @@ def run():
             article_count = len(new_articles)
             for count, article in enumerate(new_articles, 1):
                 try:
-                    result = triage_article(article, profile, client)
+                    result = triage_article(article, profile, client, models["triage"])
                     logger.info(
                         "Triage article %s/%s: relevance=%s, category=%s, title=%s",
                         count,
@@ -130,7 +141,7 @@ def run():
             )
 
             # Synthesize a digest from selected articles
-            digest = synthesize(selected_articles, profile, client)
+            digest = synthesize(selected_articles, profile, client, models["synthesis"])
             logger.info(f"Total articles in digest: {len(digest)}")
             # Mark digested articles as digested in storage
             for digesteditem in digest:
