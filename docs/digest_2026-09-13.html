@@ -1,0 +1,99 @@
+<!doctype html><html lang='en'><head><meta charset='utf-8'><meta name='viewport' content='width=device-width, initial-scale=1'><title>Daily Digest - 2026-09-13</title><style>
+:root {
+    color-scheme: light dark;
+    --bg: #f7f7f8;
+    --surface: #ffffff;
+    --text: #1a1a1a;
+    --muted: #5b5f66;
+    --border: #e3e4e7;
+    --accent: #2f5fd8;
+    --callout-bg: #eef2fd;
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg: #14151a;
+        --surface: #1c1e24;
+        --text: #eceef1;
+        --muted: #9aa0aa;
+        --border: #2c2f37;
+        --accent: #7ea1ff;
+        --callout-bg: #1f2740;
+    }
+}
+* { box-sizing: border-box; }
+body {
+    margin: 0;
+    padding: 2.5rem 1.25rem;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.55;
+}
+main {
+    max-width: 42rem;
+    margin: 0 auto;
+}
+header { margin-bottom: 2rem; }
+h1 { font-size: 1.5rem; margin: 0 0 0.25rem; }
+.subtitle { color: var(--muted); font-size: 0.9rem; margin: 0; }
+nav.back { margin-bottom: 1.5rem; }
+nav.back a { color: var(--accent); text-decoration: none; font-size: 0.9rem; }
+nav.back a:hover { text-decoration: underline; }
+article.digest-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 1.25rem;
+}
+.badge {
+    display: inline-block;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    color: var(--accent);
+    background: var(--callout-bg);
+    border-radius: 999px;
+    padding: 0.2rem 0.65rem;
+    margin-bottom: 0.6rem;
+}
+article.digest-item h2 { font-size: 1.15rem; margin: 0 0 0.5rem; }
+article.digest-item p { margin: 0 0 0.75rem; color: var(--text); }
+.why-it-matters {
+    background: var(--callout-bg);
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    font-size: 0.92rem;
+}
+.why-it-matters strong { color: var(--accent); }
+.sources {
+    margin-top: 0.75rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--border);
+    font-size: 0.85rem;
+    color: var(--muted);
+}
+.sources a { color: var(--muted); margin-right: 0.75rem; }
+.sources a:hover { color: var(--accent); }
+.empty {
+    color: var(--muted);
+    text-align: center;
+    padding: 3rem 1rem;
+}
+ul.archive { list-style: none; margin: 0; padding: 0; }
+ul.archive li {
+    border: 1px solid var(--border);
+    background: var(--surface);
+    border-radius: 8px;
+    margin-bottom: 0.6rem;
+}
+ul.archive a {
+    display: block;
+    padding: 0.85rem 1.1rem;
+    color: var(--text);
+    text-decoration: none;
+    font-weight: 500;
+}
+ul.archive a:hover { color: var(--accent); }
+</style></head><body><main><nav class='back'><a href='index.html'>&larr; Archive</a></nav><header><h1>Daily Digest</h1><p class='subtitle'>2026-09-13</p></header><article class='digest-item'><span class='badge'>engineering</span><h2>Agentic AI Systems Get Production-Ready: Knowledge Graphs Meet Reasoning</h2><p>An InfoQ presentation explores how to move agentic AI systems beyond simple retrieval into structured reasoning by integrating knowledge graphs, outlining architectural patterns for building production-grade systems that combine retrieval-augmented generation with graph-based context.</p><p class='why-it-matters'><strong>Why it matters:</strong> As an AI Engineer building LLM applications on ServiceNow, this directly informs how you might architect more robust, reasoning-capable agentic systems—moving past basic RAG patterns toward knowledge-graph-enhanced approaches that could improve accuracy and context-awareness in enterprise AI tools, aligning with your goal of becoming an AI Application Engineer.</p><div class='sources'><a href='https://www.infoq.com/presentations/knowledge-graphs-agentic-systems-patterns/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global'>source 1</a></div></article><article class='digest-item'><span class='badge'>engineering</span><h2>Cognition&#x27;s SWE-2 Coding Model Matches Rivals at 64% Lower Cost</h2><p>Cognition has released SWE-2, a coding model post-trained on Kimi K3, which matches the performance of Fable 5.1 on the FrontierCode benchmark while cutting inference costs by 64%. This signals continued rapid iteration in cost-efficient, specialized coding models.</p><p class='why-it-matters'><strong>Why it matters:</strong> Efficient, high-performing coding models are increasingly relevant to your work building LLM applications—lower-cost models like SWE-2 could be practical options for integrating AI-assisted coding capabilities into enterprise tooling without the overhead of premium frontier models.</p><div class='sources'><a href='https://www.marktechpost.com/2026/09/12/cognition-releases-swe-2-a-kimi-k3-post-trained-coding-model-that-matches-fable-5-1-on-frontiercode-at-64-lower-cost/'>source 1</a></div></article><article class='digest-item'><span class='badge'>engineering</span><h2>Anthropic&#x27;s Dario Amodei Urges Measured Pace in AI Frontier Development</h2><p>In a new post, Anthropic CEO Dario Amodei argues that AI labs need to carefully pace the development of frontier models, balancing rapid capability gains against safety and societal readiness, rather than racing unchecked toward more powerful systems.</p><p class='why-it-matters'><strong>Why it matters:</strong> As someone working hands-on with LLM applications, this offers valuable industry perspective on the tension between innovation speed and responsible deployment—useful context as you shape your own approach to building and scaling AI systems in an enterprise setting.</p><div class='sources'><a href='https://darioamodei.com/post/we-must-pace-the-frontier'>source 1</a></div></article><article class='digest-item'><span class='badge'>engineering</span><h2>Exploring the Design Space of Async/Await Patterns</h2><p>A technical deep-dive from Brown University researchers examines the various design choices and trade-offs involved in implementing async/await concurrency patterns across programming languages.</p><p class='why-it-matters'><strong>Why it matters:</strong> While more foundational than AI-specific, understanding async/await design trade-offs is valuable for building performant, scalable LLM application backends—especially relevant when handling concurrent API calls to language models in production systems.</p><div class='sources'><a href='https://cel.cs.brown.edu/blog/design-space-async-await/'>source 1</a></div></article></main></body></html>
