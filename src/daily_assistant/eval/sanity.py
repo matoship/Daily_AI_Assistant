@@ -5,8 +5,7 @@ from daily_assistant.triage import triage_article
 import logging
 from daily_assistant.profile import load_profile
 from daily_assistant.telemetry import estimate_cost
-from daily_assistant.factory import build_client
-
+from daily_assistant.factory import build_client, MODELS
 logger = logging.getLogger(__name__)
 
 
@@ -46,7 +45,9 @@ def check_fixture(fixture: Fixture, result: TriageResult) -> bool:
     return True
 
 
-def run_sanity(fixtures: list[Fixture], profile: dict, client) -> list[dict]:
+def run_sanity(
+    fixtures: list[Fixture], profile: dict, client, model: str
+) -> list[dict]:
     """For each fixture: build an Article, call the real triage_article(), judge it,
     return a list of per-fixture results (id, passed, actual relevance, article title)
     for reporting."""
@@ -55,7 +56,7 @@ def run_sanity(fixtures: list[Fixture], profile: dict, client) -> list[dict]:
     for fixture in fixtures:
         logger.info(f"Running sanity check for fixture ID: {fixture.id}")
         article = fixture.article
-        triage_result = triage_article(article, profile, client)
+        triage_result = triage_article(article, profile, client, model)
         passed = check_fixture(fixture, triage_result)
         results.append(
             {
@@ -85,8 +86,8 @@ def main(path: str | Path = "src/daily_assistant/eval/sanity_fixtures.yaml") -> 
     logging.getLogger("httpx").setLevel(logging.WARNING)
     fixtures: list[Fixture] = load_fixtures(path)
     profile = load_profile()
-    client = build_client()  # Build the TrackedClient with AnthropicLLMClient
-    results = run_sanity(fixtures, profile, client)
+    client, models = build_client()
+    results = run_sanity(fixtures, profile, client, models["triage"])
     failed = [result for result in results if not result["passed"]]
     summary = summarize_results(results)
     for result in results:

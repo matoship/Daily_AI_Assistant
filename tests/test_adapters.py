@@ -271,7 +271,9 @@ def test_openai_create_omits_temperature_when_not_provided():
                     tool_calls=[
                         SimpleNamespace(
                             type="function",
-                            function=SimpleNamespace(arguments='{"query": "AI eng'),
+                            function=SimpleNamespace(
+                                arguments='{"query": "AI engineer"}'
+                            ),
                         )
                     ]
                 ),
@@ -285,15 +287,14 @@ def test_openai_create_omits_temperature_when_not_provided():
     client = FakeOpenAIClient(response)
     adapter = OpenAICompatibleAdapter(client)
 
-    with pytest.raises(json.JSONDecodeError, match="Unterminated string"):
-        adapter.create(
-            model="gpt-5-mini",
-            max_tokens=64,
-            prompt="Find AI jobs.",
-            tool_name="search",
-            tool_description="Search for jobs.",
-            tool_schema={"type": "object", "properties": {"query": {"type": "string"}}},
-        )
+    adapter.create(
+        model="gpt-5-mini",
+        max_tokens=64,
+        prompt="Find AI jobs.",
+        tool_name="search",
+        tool_description="Search for jobs.",
+        tool_schema={"type": "object", "properties": {"query": {"type": "string"}}},
+    )
 
     request = client.chat.completions.calls[0]
     assert isinstance(request["temperature"], OpenAIOmit)

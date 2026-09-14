@@ -20,10 +20,10 @@ import argparse
 logger = logging.getLogger(__name__)
 
 
-def main(argv=None) -> None:
+def main(local:bool=False) -> None:
     parser = argparse.ArgumentParser(description="A script with a --vllm flag.")
     parser.add_argument("-v", "--vllm", action="store_true", help="Enable local VllM")
-    args = parser.parse_args(argv)
+    args = parser.parse_args(local)
     digest = run(args)
     today = datetime.now(ZoneInfo("Australia/Adelaide")).strftime("%Y-%m-%d")
 
@@ -53,7 +53,7 @@ def main(argv=None) -> None:
         webbrowser.open_new_tab(index_path.as_uri())
 
 
-def run(args=False):
+def run(args:bool):
     """
     Run the daily assistant pipeline:
     1. Load user profile and sources.
@@ -73,13 +73,10 @@ def run(args=False):
     sources = load_sources()
 
     # Initialize client
-    client = build_client(
+    client,models = build_client(
         args
     )  # Build the TrackedClient with AnthropicLLMClient or VLLM
-    if args:
-        models = MODELS["anthropic"]
-    else:
-        models = MODELS["local"]
+
     # Initialize storage (assuming a Storage class is defined elsewhere)
     with Storage() as storage:
         run_id = storage.start_run()

@@ -101,12 +101,17 @@ def evaluate_offline(
 
 
 def evaluate_live(
-    gold, profile, client
+    gold, profile, client,vllm
 ) -> list[tuple[GoldLabel, int, str]]:  # re-runs triage
     rows = []
+    if vllm:
+        models = MODELS["local"]["triage"]
+    else:
+        models = MODELS["anthropic"]["triage"]
+        
     for goldlabel in gold:
         triaged = triage_article(
-            goldlabel.article, profile, client, MODELS["anthropic"]["triage"]
+            goldlabel.article, profile, client, models
         )
         rows.append((goldlabel, triaged.relevance, triaged.category))
     return rows
@@ -281,12 +286,16 @@ def write_report_to_file(
 
 
 def main(argv=None):
-    parser = argparse.ArgumentParser(description="A script with a --live flag.")
+    parser = argparse.ArgumentParser(description="A script with a --live or --vllm flag.")
     parser.add_argument(
         "-l", "--live", action="store_true", help="Enable live evaluation mode"
     )
+    parser.add_argument(
+            "-v", "--vllm", action="store_true", help="Enable VLLM evaluation mode"
+        )
     args = parser.parse_args(argv)
-
+    live = args.live
+    vllm = args.vllm
     logging.basicConfig(
         level=logging.INFO,
         format="%(asctime)s %(levelname)-8s %(name)s: %(message)s",
@@ -317,14 +326,14 @@ def main(argv=None):
             metrics_result[f"{category}_sufficient"],
         ) = calculate_confusion_and_metrics(cat_rows)
 
-    if args.live:
+    if live:
         # Evaluate live triage results
         logger.info(
             "Running live evaluation mode. This will re-run triage for each article in the golden set."
         )
         profile = load_profile()
         client = build_client()
-        live_rows = evaluate_live(golden_set, profile, client)
+        live_rows = evaluate_live(golden_set, profile, client, vllm)
         sufficient_rows_live = [r for r in live_rows if not r[0].input_insufficient]
         confusion["overall_live"], metrics_result["overall_live"] = (
             calculate_confusion_and_metrics(live_rows)

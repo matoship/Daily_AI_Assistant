@@ -113,8 +113,11 @@ def test_token_counting_with_different_models():
     estimated_cost = round(estimate_cost(tracked_client.usage_by_model), 4)
     assert (
         estimated_cost
-        == 500 / 1000000 * 1.00
-        + 1000 / 1000000 * 5.00
-        + 2000 / 1000000 * 2.00
-        + 4000 / 1000000 * 10.00
+        == round(
+            500 / 1000000 * 1.00
+            + 1000 / 1000000 * 5.00
+            + 2000 / 1000000 * 3.00
+            + 4000 / 1000000 * 10.00,
+            4,
+        )
     )

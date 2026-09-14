@@ -18,12 +18,12 @@ from openai.types.chat import (
     ChatCompletionToolParam,
 )
 
-_ANTHORPIC_TRANSIENT = (
+_ANTHROPIC_TRANSIENT = (
     anthropic.RateLimitError,
     anthropic.APIConnectionError,
     anthropic.InternalServerError,
 )
-_ANTHORPIC_CONFIG = (
+_ANTHROPIC_CONFIG = (
     anthropic.AuthenticationError,
     anthropic.PermissionDeniedError,
     anthropic.NotFoundError,
@@ -66,13 +66,13 @@ class AnthropicLLMClient(LLMClient):
                     temperature if temperature is not None else AnthropicOmit()
                 ),
             )
-        except _ANTHORPIC_TRANSIENT as e:
+        except _ANTHROPIC_TRANSIENT as e:
             raise LLMTransientError(
                 f"Transient error from Anthropic: {str(e)}",
                 provider="anthropic",
                 model=model,
             ) from e
-        except _ANTHORPIC_CONFIG as e:
+        except _ANTHROPIC_CONFIG as e:
             raise LLMConfigurationError(
                 f"Configuration error from Anthropic: {str(e)}",
                 provider="anthropic",
@@ -219,9 +219,16 @@ class OpenAICompatibleAdapter(LLMClient):
                 provider="openai",
                 model=model,
             )
-        tool_input = json.loads(function.arguments)
+        try:
+            tool_input = json.loads(function.arguments)
+        except json.JSONDecodeError as exc:
+            raise ValueError(f"Invalid JSON in function arguments: {exc}")
+
         if response.usage is None:
-            raise ValueError("OpenAI response did not include usage")
+            raise LLMProtocolError (
+                "OpenAI response did not include usage",               
+                provider="openai",
+                model=model,)
 
         return LLMResponse(
             tool_input=tool_input,

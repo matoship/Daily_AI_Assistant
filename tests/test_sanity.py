@@ -56,14 +56,16 @@ def test_run_sanity_uses_fixture_thresholds(monkeypatch):
         )
     )
 
-    def fake_triage_article(article, profile, client):
+    def fake_triage_article(article, profile, client, model):
         return TriageResult(
             relevance=7, category="engineering", reason="On topic", story_hint="AI"
         )
 
     monkeypatch.setattr(sanity, "triage_article", fake_triage_article)
 
-    results = sanity.run_sanity(fixtures, {"identity": {}}, object())
+    results = sanity.run_sanity(
+        fixtures, {"identity": {}}, object(), "triage-model"
+    )
 
     assert results == [
         {
@@ -119,7 +121,7 @@ def test_main_returns_nonzero_when_fixture_fails(monkeypatch):
         lambda: type("Settings", (), {"anthropic_api_key": "test-key"})(),
     )
 
-    def fake_triage_article(article, profile, client):
+    def fake_triage_article(article, profile, client, model):
         return TriageResult(relevance=7, category="engineering", reason="Low")
 
     monkeypatch.setattr(sanity, "triage_article", fake_triage_article)
