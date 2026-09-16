@@ -1,0 +1,99 @@
+<!doctype html><html lang='en'><head><meta charset='utf-8'><meta name='viewport' content='width=device-width, initial-scale=1'><title>Daily Digest - 2026-09-16</title><style>
+:root {
+    color-scheme: light dark;
+    --bg: #f7f7f8;
+    --surface: #ffffff;
+    --text: #1a1a1a;
+    --muted: #5b5f66;
+    --border: #e3e4e7;
+    --accent: #2f5fd8;
+    --callout-bg: #eef2fd;
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg: #14151a;
+        --surface: #1c1e24;
+        --text: #eceef1;
+        --muted: #9aa0aa;
+        --border: #2c2f37;
+        --accent: #7ea1ff;
+        --callout-bg: #1f2740;
+    }
+}
+* { box-sizing: border-box; }
+body {
+    margin: 0;
+    padding: 2.5rem 1.25rem;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.55;
+}
+main {
+    max-width: 42rem;
+    margin: 0 auto;
+}
+header { margin-bottom: 2rem; }
+h1 { font-size: 1.5rem; margin: 0 0 0.25rem; }
+.subtitle { color: var(--muted); font-size: 0.9rem; margin: 0; }
+nav.back { margin-bottom: 1.5rem; }
+nav.back a { color: var(--accent); text-decoration: none; font-size: 0.9rem; }
+nav.back a:hover { text-decoration: underline; }
+article.digest-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 1.25rem;
+}
+.badge {
+    display: inline-block;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    color: var(--accent);
+    background: var(--callout-bg);
+    border-radius: 999px;
+    padding: 0.2rem 0.65rem;
+    margin-bottom: 0.6rem;
+}
+article.digest-item h2 { font-size: 1.15rem; margin: 0 0 0.5rem; }
+article.digest-item p { margin: 0 0 0.75rem; color: var(--text); }
+.why-it-matters {
+    background: var(--callout-bg);
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    font-size: 0.92rem;
+}
+.why-it-matters strong { color: var(--accent); }
+.sources {
+    margin-top: 0.75rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--border);
+    font-size: 0.85rem;
+    color: var(--muted);
+}
+.sources a { color: var(--muted); margin-right: 0.75rem; }
+.sources a:hover { color: var(--accent); }
+.empty {
+    color: var(--muted);
+    text-align: center;
+    padding: 3rem 1rem;
+}
+ul.archive { list-style: none; margin: 0; padding: 0; }
+ul.archive li {
+    border: 1px solid var(--border);
+    background: var(--surface);
+    border-radius: 8px;
+    margin-bottom: 0.6rem;
+}
+ul.archive a {
+    display: block;
+    padding: 0.85rem 1.1rem;
+    color: var(--text);
+    text-decoration: none;
+    font-weight: 500;
+}
+ul.archive a:hover { color: var(--accent); }
+</style></head><body><main><nav class='back'><a href='index.html'>&larr; Archive</a></nav><header><h1>Daily Digest</h1><p class='subtitle'>2026-09-16</p></header><article class='digest-item'><span class='badge'>engineering</span><h2>Google Ships Gemini 3.8 Live and Live Extended Thinking for Production Voice Agents</h2><p>Google has released Gemini 3.8 Live and Gemini 3.8 Live Extended Thinking, a pair of models aimed at powering production-grade, real-time voice agents. The Extended Thinking variant adds deeper reasoning capability before responding, while the base Live model focuses on low-latency conversational performance. Google&#x27;s own blog and MarkTechPost both cover the launch, framing it as a step toward enterprise-ready conversational AI that can handle complex, multi-turn voice interactions reliably.</p><p class='why-it-matters'><strong>Why it matters:</strong> As you build LLM-based applications on ServiceNow, voice-capable agent models with a &#x27;thinking&#x27; mode are directly relevant to designing production AI agents (e.g., voice-driven ITSM workflows). Understanding the tradeoffs between the fast Live model and the reasoning-heavy Extended Thinking variant will help you architect agent systems that balance latency and accuracy — a core skill for moving toward an AI Application Engineer role.</p><div class='sources'><a href='https://www.marktechpost.com/2026/09/15/google-releases-gemini-3-8-live-and-3-8-live-extended-thinking-for-production-grade-voice-agents/'>source 1</a><a href='https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-3-8-live-gemini-3-8-live-extended-thinking/'>source 2</a></div></article><article class='digest-item'><span class='badge'>engineering</span><h2>Agent-net Open Sources &#x27;Webagent&#x27;: A Go-Based Guarded Browsing Harness for AI Agents</h2><p>Agent-net has open-sourced Webagent, a harness written in Go that lets AI agents interact with any website through a &#x27;guarded&#x27; interface, adding safety constraints and structure to otherwise unconstrained web browsing by autonomous agents. The project aims to make web automation safer and more predictable for agentic use cases.</p><p class='why-it-matters'><strong>Why it matters:</strong> Guardrails for agent-driven web interaction are a practical concern when building enterprise LLM applications that need to safely automate tasks across web-based systems, similar to workflows you might design in ServiceNow. This kind of harness pattern is useful reference architecture for constraining agent actions in production.</p><div class='sources'><a href='https://www.marktechpost.com/2026/09/14/agent-net-open-sources-webagent-a-go-harness-that-turns-any-website-into-a-guarded-ai-agent/'>source 1</a></div></article><article class='digest-item'><span class='badge'>engineering</span><h2>Grab Launches LLM-Kit to Speed Up AI Agent Deployment</h2><p>Ride-hailing and delivery company Grab has introduced an internal agent framework called LLM-Kit, designed to accelerate the production deployment of AI agents across its platform. The framework standardizes tooling and patterns for building and shipping agents at scale within Grab&#x27;s engineering organization.</p><p class='why-it-matters'><strong>Why it matters:</strong> Seeing how a large tech company standardizes agent development and deployment offers useful patterns for your own work building LLM applications on ServiceNow — particularly around frameworks that reduce time-to-production for agentic features.</p><div class='sources'><a href='https://www.infoq.com/news/2026/09/grab-agent-platform/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global'>source 1</a></div></article><article class='digest-item'><span class='badge'>engineering</span><h2>Typesafe.ai Introduces System One Models and Jev</h2><p>Typesafe.ai announced &#x27;System One Models&#x27; alongside a new tool called &#x27;Jev&#x27;, though details are light — the post introduces a new modeling approach and accompanying tooling from the typesafe.ai team, positioned within the broader wave of new AI model and developer tooling releases.</p><p class='why-it-matters'><strong>Why it matters:</strong> New model architectures and developer tooling are worth tracking as potential building blocks for LLM application engineering, especially if they offer differentiated reasoning or type-safety guarantees relevant to production AI systems.</p><div class='sources'><a href='https://typesafe.ai/blog/introducing-system-one-models-and-jev'>source 1</a></div></article></main></body></html>
