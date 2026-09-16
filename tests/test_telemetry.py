@@ -1,6 +1,35 @@
 from types import SimpleNamespace
 
+import pytest
+
+from daily_assistant.protocol import LLMResponse
 from daily_assistant.telemetry import TrackedClient, estimate_cost
+
+
+@pytest.mark.parametrize("provider", ["anthropic", "openai"])
+def test_tracked_client_preserves_response_provider(fake_llm_client, provider):
+    response = LLMResponse(
+        tool_input={"answer": "hello"},
+        model="test-model",
+        input_tokens=10,
+        output_tokens=20,
+        provider=provider,
+    )
+    client = TrackedClient(fake_llm_client(response))
+
+    result = client.create(
+        model="test-model",
+        max_tokens=100,
+        prompt="hello",
+        tool_name="demo_tool",
+        tool_description="demo",
+        tool_schema={"type": "object", "properties": {}},
+    )
+
+    assert result is response
+    assert result.provider == provider
+    assert client.total_input_tokens == 10
+    assert client.total_output_tokens == 20
 
 
 def test_tracked_client():
@@ -111,13 +140,10 @@ def test_token_counting_with_different_models():
     assert tracked_client.usage_by_model["claude-sonnet-5"]["output_tokens"] == 4000
 
     estimated_cost = round(estimate_cost(tracked_client.usage_by_model), 4)
-    assert (
-        estimated_cost
-        == round(
-            500 / 1000000 * 1.00
-            + 1000 / 1000000 * 5.00
-            + 2000 / 1000000 * 3.00
-            + 4000 / 1000000 * 10.00,
-            4,
-        )
+    assert estimated_cost == round(
+        500 / 1000000 * 1.00
+        + 1000 / 1000000 * 5.00
+        + 2000 / 1000000 * 3.00
+        + 4000 / 1000000 * 15.00,
+        4,
     )

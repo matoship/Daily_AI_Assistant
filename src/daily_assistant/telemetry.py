@@ -8,8 +8,8 @@ PRICING = {
     "claude-haiku-4-5-20251001": {"input": 1.00, "output": 5.00},
     "claude-sonnet-5": {
         "input": 3.00,
-        "output": 10.00,
-    },  # introductory rate, expires 2026-09-01
+        "output": 15.00,
+    },
 }
 
 
