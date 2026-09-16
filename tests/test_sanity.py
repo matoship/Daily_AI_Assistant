@@ -63,9 +63,7 @@ def test_run_sanity_uses_fixture_thresholds(monkeypatch):
 
     monkeypatch.setattr(sanity, "triage_article", fake_triage_article)
 
-    results = sanity.run_sanity(
-        fixtures, {"identity": {}}, object(), "triage-model"
-    )
+    results = sanity.run_sanity(fixtures, {"identity": {}}, object(), "triage-model")
 
     assert results == [
         {

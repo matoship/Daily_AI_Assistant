@@ -108,6 +108,7 @@ class AnthropicLLMClient(LLMClient):
             model=response.model,
             input_tokens=response.usage.input_tokens,
             output_tokens=response.usage.output_tokens,
+            provider="anthropic",
         )
 
 
@@ -221,18 +222,22 @@ class OpenAICompatibleAdapter(LLMClient):
             )
         try:
             tool_input = json.loads(function.arguments)
-        except json.JSONDecodeError as exc:
-            raise ValueError(f"Invalid JSON in function arguments: {exc}")
+        except json.JSONDecodeError:
+            raise LLMProtocolError(
+                "OpenAI response returns invalid JSON ", provider="openai", model=model
+            )
 
         if response.usage is None:
-            raise LLMProtocolError (
-                "OpenAI response did not include usage",               
+            raise LLMProtocolError(
+                "OpenAI response did not include usage",
                 provider="openai",
-                model=model,)
+                model=model,
+            )
 
         return LLMResponse(
             tool_input=tool_input,
             model=response.model,
             input_tokens=response.usage.prompt_tokens,
             output_tokens=response.usage.completion_tokens,
+            provider="openai",
         )

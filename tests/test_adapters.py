@@ -105,6 +105,7 @@ def test_create_builds_tool_request_and_maps_response():
         model="claude-3-5-haiku-20241022",
         input_tokens=12,
         output_tokens=34,
+        provider="anthropic",
     )
 
 
@@ -259,6 +260,7 @@ def test_openai_create_builds_tool_request_and_maps_response():
         model="gpt-5-mini",
         input_tokens=12,
         output_tokens=34,
+        provider="openai",
     )
 
 

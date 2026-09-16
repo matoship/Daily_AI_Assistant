@@ -1,5 +1,7 @@
 from daily_assistant.models import Article, TriageResult, DigestItem
-from daily_assistant.protocol import LLMResponse, LLMClient
+from daily_assistant.protocol import LLMResponse, LLMClient,LLMProtocolError
+from pydantic import ValidationError
+
 
 
 def synthesize(
@@ -78,8 +80,14 @@ def synthesize(
         },
     )
 
-    digest_items = []
-    for item in response.tool_input["digest_items"]:
-        digest_items.append(DigestItem(**item))
-
-    return digest_items
+    try:
+        digest_items = []
+        for item in response.tool_input["digest_items"]:
+            digest_items.append(DigestItem(**item))
+        return digest_items
+    except ValidationError as exc:
+        raise LLMProtocolError(
+            f"Invalid synthesis result: {exc}",
+            provider=response.provider,
+            model=response.model,
+        ) from exc

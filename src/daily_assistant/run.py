@@ -8,7 +8,8 @@ from daily_assistant.profile import load_profile, load_sources
 from daily_assistant.storage import Storage
 from datetime import timedelta, datetime, timezone
 from daily_assistant.render import render_digest_page, render_index
-from daily_assistant.factory import build_client, MODELS
+from daily_assistant.factory import build_client
+from daily_assistant.models import Article, TriageResult
 import webbrowser
 from zoneinfo import ZoneInfo
 import json
@@ -17,14 +18,15 @@ import logging
 from daily_assistant.protocol import LLMError, LLMConfigurationError
 import argparse
 
+
 logger = logging.getLogger(__name__)
 
 
-def main(local:bool=False) -> None:
+def main(argv: list[str] | None = None) -> None:
     parser = argparse.ArgumentParser(description="A script with a --vllm flag.")
     parser.add_argument("-v", "--vllm", action="store_true", help="Enable local VllM")
-    args = parser.parse_args(local)
-    digest = run(args)
+    args = parser.parse_args(argv)
+    digest = run(args.vllm)
     today = datetime.now(ZoneInfo("Australia/Adelaide")).strftime("%Y-%m-%d")
 
     output_dir = Path(__file__).resolve().parents[2] / "docs"
@@ -53,7 +55,7 @@ def main(local:bool=False) -> None:
         webbrowser.open_new_tab(index_path.as_uri())
 
 
-def run(args:bool):
+def run(local: bool):
     """
     Run the daily assistant pipeline:
     1. Load user profile and sources.
@@ -73,15 +75,15 @@ def run(args:bool):
     sources = load_sources()
 
     # Initialize client
-    client,models = build_client(
-        args
+    client, models = build_client(
+        local
     )  # Build the TrackedClient with AnthropicLLMClient or VLLM
 
     # Initialize storage (assuming a Storage class is defined elsewhere)
     with Storage() as storage:
         run_id = storage.start_run()
         new_articles = []
-        triaged_articles = []
+        triaged_articles: list[tuple[Article, TriageResult]] = []
         selected_articles = []
         digested_count = 0
         try:
@@ -93,7 +95,6 @@ def run(args:bool):
             new_articles = ingest(sources, storage)
             logger.info(f"Total new articles ingested: {len(new_articles)}")
 
-            triaged_articles = []
             article_count = len(new_articles)
             for count, article in enumerate(new_articles, 1):
                 try:
@@ -117,6 +118,7 @@ def run(args:bool):
                         category=result.category,
                         reason=result.reason,
                     )
+
                 except LLMConfigurationError:
                     raise
                 except LLMError:

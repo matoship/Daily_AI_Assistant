@@ -5,7 +5,8 @@ from daily_assistant.triage import triage_article
 import logging
 from daily_assistant.profile import load_profile
 from daily_assistant.telemetry import estimate_cost
-from daily_assistant.factory import build_client, MODELS
+from daily_assistant.factory import build_client
+
 logger = logging.getLogger(__name__)
 
 

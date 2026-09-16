@@ -1,6 +1,8 @@
 from daily_assistant.models import Article, TriageResult
-from daily_assistant.protocol import LLMResponse, LLMClient
+from daily_assistant.protocol import LLMResponse, LLMClient,LLMProtocolError
 from daily_assistant.profile import category_options
+from pydantic import ValidationError
+
 
 
 def triage_article(
@@ -59,4 +61,11 @@ def triage_article(
         temperature=0,
     )
 
-    return TriageResult(**response.tool_input)
+    try:
+        return TriageResult(**response.tool_input)
+    except ValidationError as exc:
+        raise LLMProtocolError(
+            f"Invalid triage result: {exc}",
+            provider=response.provider,
+            model=response.model,
+        ) from exc

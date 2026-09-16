@@ -4,7 +4,8 @@ from pathlib import Path
 import argparse
 from daily_assistant.telemetry import estimate_cost
 from yaml import safe_load
-from daily_assistant.factory import build_client, MODELS
+from daily_assistant.factory import build_client
+from daily_assistant.protocol import LLMClient
 from daily_assistant.models import GoldLabel
 from daily_assistant.triage import triage_article
 from daily_assistant.profile import load_profile
@@ -92,7 +93,7 @@ def calculate_confusion_and_metrics(
 
 
 def evaluate_offline(
-    gold,
+    gold: list[GoldLabel],
 ) -> list[tuple[GoldLabel, int, str]]:  # uses frozen scores, free
     rows = []
     for goldlabel in gold:
@@ -101,18 +102,11 @@ def evaluate_offline(
 
 
 def evaluate_live(
-    gold, profile, client,vllm
+    gold: list[GoldLabel], profile: dict, client: LLMClient, model: str
 ) -> list[tuple[GoldLabel, int, str]]:  # re-runs triage
     rows = []
-    if vllm:
-        models = MODELS["local"]["triage"]
-    else:
-        models = MODELS["anthropic"]["triage"]
-        
     for goldlabel in gold:
-        triaged = triage_article(
-            goldlabel.article, profile, client, models
-        )
+        triaged = triage_article(goldlabel.article, profile, client, model)
         rows.append((goldlabel, triaged.relevance, triaged.category))
     return rows
 
@@ -285,14 +279,16 @@ def write_report_to_file(
         file.write(json.dumps(record, ensure_ascii=False) + "\n")
 
 
-def main(argv=None):
-    parser = argparse.ArgumentParser(description="A script with a --live or --vllm flag.")
+def main(argv: list[str] | None = None):
+    parser = argparse.ArgumentParser(
+        description="A script with a --live or --vllm flag."
+    )
     parser.add_argument(
         "-l", "--live", action="store_true", help="Enable live evaluation mode"
     )
     parser.add_argument(
-            "-v", "--vllm", action="store_true", help="Enable VLLM evaluation mode"
-        )
+        "-v", "--vllm", action="store_true", help="Enable VLLM evaluation mode"
+    )
     args = parser.parse_args(argv)
     live = args.live
     vllm = args.vllm
@@ -332,8 +328,8 @@ def main(argv=None):
             "Running live evaluation mode. This will re-run triage for each article in the golden set."
         )
         profile = load_profile()
-        client = build_client()
-        live_rows = evaluate_live(golden_set, profile, client, vllm)
+        client, models = build_client(vllm)
+        live_rows = evaluate_live(golden_set, profile, client, models["triage"])
         sufficient_rows_live = [r for r in live_rows if not r[0].input_insufficient]
         confusion["overall_live"], metrics_result["overall_live"] = (
             calculate_confusion_and_metrics(live_rows)

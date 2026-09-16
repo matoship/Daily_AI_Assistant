@@ -86,6 +86,7 @@ def test_run_passes_tracked_client_to_pipeline(monkeypatch):
         lambda triaged_articles, threshold=5, top_n_per_category=5: [],
     )
     monkeypatch.setattr(run_module, "synthesize", fake_synthesize)
+
     def fake_build_client(args):
         captured["build_args"] = args
         return fake_client, models
@@ -145,9 +146,7 @@ def test_run_continues_when_one_article_fails_triage(monkeypatch):
         lambda triaged_articles, threshold=5, top_n_per_category=5: [],
     )
     monkeypatch.setattr(run_module, "synthesize", lambda *args: [])
-    monkeypatch.setattr(
-        run_module, "build_client", lambda args: (fake_client, models)
-    )
+    monkeypatch.setattr(run_module, "build_client", lambda args: (fake_client, models))
 
     assert run_module.run(True) == []
 
