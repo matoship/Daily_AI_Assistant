@@ -42,3 +42,7 @@ Each ticket: what broke, why, how it was fixed, and the generalizable lesson. Nu
 | [032](TICKET-032-truncated-flag-unreachable-after-its-own-fix.md) | The truncation flag became unreachable in the fix for TICKET-030 | dead code / unused signal |
 | [033](TICKET-033-unserializable-dict-keys-in-untested-writer.md) | An untested writer would have discarded a paid evaluation run | silent failure / test coverage gap |
 | [034](TICKET-034-stale-baseline-and-hypersensitive-metrics.md) | A stale baseline and a hypersensitive metric made eval deltas unreadable | measurement methodology |
+| [035](TICKET-035-provider-and-model-selected-in-two-places.md) | Provider and model id chosen in two places, and they disagreed | design flaw / silent failure |
+| [036](TICKET-036-console-entry-points-broke-three-times.md) | Console entry points broke three times on signature changes | CI/config + test coverage gap |
+| [037](TICKET-037-narrowed-except-before-conversion-finished.md) | Narrowing an `except` before finishing the conversion turned skips into aborts | regression / incomplete refactor |
+| [038](TICKET-038-half-applied-price-fix-locked-in-by-its-test.md) | A half-applied price fix was locked in by updating its test to match | silent data bug / test methodology |

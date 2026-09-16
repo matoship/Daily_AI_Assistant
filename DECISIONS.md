@@ -435,3 +435,49 @@ what F1 reports (`TICKET-034`).
 
 **Prerequisite worth naming.** This is only knowable because the noise floor was measured
 deliberately, by running the same profile twice. Without that, every delta stays ambiguous.
+
+---
+
+## 26. LLM failures cross the seam as an exception hierarchy, with policy left to the caller
+
+**Context.** The `LLMClient` Protocol normalized the shape of a *successful* response but
+said nothing about failures, so `anthropic.*`, `openai.*`, `json.JSONDecodeError` and
+`pydantic.ValidationError` all crossed the seam unchanged. Any caller wanting to react to a
+failure had to import both SDKs, which defeats the seam.
+
+**Alternative considered:** a single `LLMError` carrying a `kind` field — or handler methods
+on the exception itself — with callers dispatching via `if/elif`. Rejected on mechanics:
+Python's `except` dispatches on *type* and nothing else, so a flat class forces every call
+site to re-implement dispatch by hand, with no check that the cases are covered, and makes
+the narrow case require catch-then-re-raise. Python tried this design itself — `OSError` with
+an `errno` field — and replaced it with a subclass hierarchy in PEP 3151 for these reasons.
+
+**Alternative considered:** one class with a `retryable: bool`. Rejected: it works for two
+behaviours and there are three (skip the article, abort the run, unusable output), and a
+subclass expresses the same flag without capping the count at two.
+
+**Alternative considered:** letting the exception decide what to do. Rejected because the
+correct response is caller-dependent, and the codebase already contains the counterexample:
+in `run.py` a failure should cost one article, while in `eval/report.py` it must abort, since
+partial metrics would be appended to `history.jsonl` and compared later. Same error, opposite
+correct handling — so the policy cannot live on the exception.
+
+**Decision.** Three subclasses — `LLMTransientError`, `LLMConfigurationError`,
+`LLMProtocolError` — partitioned by what a caller would do differently, translated inside the
+adapters only, and chained with `raise ... from exc`. `run.py` re-raises configuration errors
+and skips the article on the other two; `eval/report.py` deliberately catches nothing.
+
+**Schema violations are converted at the parse boundary**, in `triage_article` and
+`synthesize`, rather than caught in `run.py`. Alternative considered: catching
+`pydantic.ValidationError` at each call site. Rejected — `triage_article` has three callers,
+each would need to import pydantic to handle an LLM failure, and `synthesize` has the
+identical exposure. This required adding `provider` to `LLMResponse`, since the parse
+boundary knows the model but not the provider; the alternative of making `provider` optional
+on `LLMError` was rejected because it discards information the Phase 4 provider comparison
+needs.
+
+**Known wrinkle.** Transient and configuration exceptions are enumerated explicitly and
+anything else falls through to `LLMProtocolError`, which currently mislabels Anthropic's 529
+`OverloadedError` and 503 `ServiceUnavailableError`. Behaviour is identical today — both are
+skipped — but the logs name the wrong cause, and enumerating an open hierarchy means the list
+is wrong again on the next SDK release.

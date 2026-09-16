@@ -4,24 +4,22 @@ Open work, phased. Phase numbers match `README.md` and `ARCHITECTURE.md`.
 
 Status: **Phases 0–3 complete.** The agent runs unattended and publishes daily; triage
 quality is measured against 50 blind-labelled articles with a measured noise floor.
-Phase 4 (local-model comparison) is in progress on the `phase-3-vllm` branch.
+Phase 4 (local-model comparison) is in progress on the `phase-3-vllm` branch: the
+`LLMError` taxonomy and the provider seam are done, the vLLM run itself is not.
 
 ## Now (correctness / operations)
 
-- [ ] **Sonnet introductory pricing has expired.** `telemetry.PRICING` still carries
-      `$2/$10` per MTok; the introductory rate ended 2026-09-01. Real rate is `$3/$15`.
-      Every `runs` row and `history.jsonl` entry written since then understates cost by
-      ~33%. Update the table, and decide whether past rows are worth backfilling or just
-      annotating. Consider making an expiry date a data field rather than a comment, so
-      the next lapse fails loudly instead of silently mispricing.
+- [ ] **`daily-assistant-sanity --help` runs the paid check** instead of printing usage
+      (`TICKET-036`). The module parses no arguments at all, so any flag falls through to
+      `build_client()` and a live evaluation. Give it an `argparse` parser like the other
+      two commands.
 - [ ] **Australian DST shifts the digest an hour** (first Sunday of October). The cron is
       `30 22 * * *` UTC = 08:00 ACST, but becomes 09:00 ACDT. GitHub cron has no timezone
       support, so this is either an accepted annual drift or two dated cron lines.
 - [ ] **Failure floor in `run()`**: if articles were ingested but zero triaged, raise
-      instead of recording a `completed` run. Currently a run that triages nothing still
-      calls `finish_run(status="completed")` — a bad API key would produce exactly this,
-      and it would look like a quiet day rather than an outage. Pairs with `LLMConfigError`
-      below: config failures should abort, transient ones should skip.
+      instead of recording a `completed` run. `LLMConfigurationError` now aborts, which
+      covers the bad-API-key case, but a run where every article fails transiently still
+      reports success over an empty digest.
 - [ ] **Fail fast on empty profile/sources** (`profile.py`). `load_profile` returns
       `safe_load(f)` unguarded — an empty file yields `None` and fails later somewhere
       unrelated. `load_sources` is worse: `or {}` turns a missing file into an empty source
@@ -30,34 +28,39 @@ Phase 4 (local-model comparison) is in progress on the `phase-3-vllm` branch.
 - [ ] **Detect a missed scheduled run** (`TICKET-022`): GitHub's cron dropped a firing
       silently — no error, no `runs` row. Surface it when no new row appears within a
       window past the scheduled time.
+- [ ] **Make the pricing expiry data, not a comment** (`TICKET-038`). An expiry that changes
+      behaviour should be a date the program compares against, so the next lapse warns
+      instead of silently mispricing.
 
 ## Phase 4 — local model comparison (in progress)
 
-- [ ] Finish the Chat Completions refactor: two stale assertions in
-      `test_adapters.py` still assert the Responses-API tool shape (`tools` and
-      `tool_choice`), and `openai._exceptions` is imported but unused.
-- [ ] **`LLMError` taxonomy in `protocol.py`** — the seam normalizes response shape but not
-      error shape, so `anthropic.*`, `openai.*` and `json.JSONDecodeError` all leak through
-      it. Partition by what the caller would do differently (transient / config / protocol),
-      translate in the adapter only, chain with `raise ... from exc`. Today `run.py` catches
-      bare `Exception` per article, so a rate limit and an `AttributeError` in the adapter
-      are indistinguishable.
-- [ ] Fix error-check ordering in `OpenAIAdapter`: `finish_reason == "length"` is tested
-      *after* the `tool_call is None` check, so a truncated response reports the misleading
-      error. `AnthropicLLMClient` gets this right; the OpenAI side inverted it.
-- [ ] `strict: True` is sent but unenforceable — neither the triage nor the synthesize
-      schema sets `additionalProperties: false`, which OpenAI strict mode requires at every
-      object level. Either satisfy it or drop the flag; an unenforced guarantee is worse
-      than none.
-- [ ] **Prompt caching** before the benchmark, not after. The profile is byte-identical
+- [ ] **Make the local endpoint configurable.** `MODELS["local"]` is still the placeholder
+      `"<vllm model id>"` and the base URL is hardcoded to `localhost:8000`. Both belong in
+      settings or on the CLI — otherwise the model name is changed by editing source.
+- [ ] **Prompt caching before the benchmark, not after.** The profile is byte-identical
       across every triage call in a run; cache the prefix and measure the saving with
       existing telemetry. Do it first so the Haiku baseline is measured under the
       configuration actually intended to run.
+- [ ] **Record `provider` in `history.jsonl`.** `LLMResponse` now carries it, and the
+      comparison is the reason it was added.
+- [ ] **Count schema violations as a benchmark result.** Invalid output is now
+      `LLMProtocolError` rather than a crash, so "returned unusable output N times of 50" is
+      measurable — and it is where small models are expected to lose.
 - [ ] vLLM on the RTX 4090 behind the `LLMClient` seam; benchmark against Haiku on the
       golden set. Needs the home machine.
 
 ## Soon (quality / measurement)
 
+- [ ] **Remaining seam tests.** A cross-adapter parity test (same failure, same `LLMError`
+      subclass from both adapters); a malformed-JSON adapter test — the behaviour is
+      correct but pinned by nothing; and an invariant that no module outside `adapters.py`
+      and `factory.py` imports `anthropic` or `openai`.
+- [ ] **Unknown provider errors are labelled protocol errors.** Anything not enumerated in
+      the transient or config tuples falls through to `LLMProtocolError`, which catches
+      Anthropic's 529 `OverloadedError` and 503 `ServiceUnavailableError` — the most common
+      transient failures in practice. Behaviour is identical today (both are skipped), but
+      the logs name the wrong cause. Consider enumerating only the closed config set and
+      treating the remaining `APIError` as transient.
 - [ ] **Fetch full article text.** `TICKET-029` found a third of triage inputs too thin to
       judge, confirmed by the `input_insufficient` flag in the golden set. This is the
       change most likely to actually move F1 — the bottleneck is input quality, not the
@@ -69,14 +72,16 @@ Phase 4 (local-model comparison) is in progress on the `phase-3-vllm` branch.
       sides see the same dilution.)
 - [ ] `Storage()` default `db_path="seen.db"` is CWD-relative — anchor to repo root like
       `profile._resolve_path`. CI has a different working directory.
-- [ ] Lazy logging (`logger.info("… %s", x)`) — 11 f-string call sites remain.
+- [ ] Lazy logging (`logger.info("… %s", x)`) — f-string call sites remain in `run.py` and
+      `eval/sanity.py`.
 - [ ] Bump `actions/checkout@v4` → `v5`; bump `astral-sh/setup-uv@v5` when a Node-24
       release lands.
 - [ ] Tag sources with topics in `source.yaml`, validate with Pydantic, and detect orphans
       (a topic with no feeds, or a feed serving no live topic). Would have caught the
       migration-corpus problem months earlier.
 - [ ] Bounded-concurrency triage — N sequential calls per run. Forces real thinking about
-      rate limits and partial failure; pairs naturally with `LLMError`.
+      rate limits and partial failure; the `LLMError` taxonomy is the prerequisite and is
+      now in place.
 
 ## Phase 5 — semantic memory
 
@@ -90,10 +95,21 @@ Phase 4 (local-model comparison) is in progress on the `phase-3-vllm` branch.
 
 ## Recently completed
 
+- [x] **`LLMError` taxonomy at the client seam** — transient / configuration / protocol,
+      translated in the adapters, chained with `from exc`; schema violations converted at
+      the parse boundary; `provider` added to `LLMResponse`. Config errors now abort the
+      run, transient and protocol errors skip one article (`TICKET-037`).
+- [x] **Provider selection unified** — `build_client(local)` returns `(client, models)` so
+      the adapter and the model ids cannot disagree (`TICKET-035`).
+- [x] **Entry-point invariant test** derived from `[project.scripts]` (`TICKET-036`).
+- [x] Sonnet pricing corrected to the standard rate (`TICKET-038`).
+- [x] `OpenAICompatibleAdapter` against the Chat Completions API; `strict: true` dropped
+      rather than carried unenforced.
+- [x] Error-check ordering in the OpenAI adapter — truncation is tested before the
+      missing-tool-call check, so the reported cause is the real one.
 - [x] Eval harness — 50 blind-labelled articles, precision/recall + flip report, noise floor
       measured, live runs appended to `history.jsonl` (Phase 3, 2026-09).
 - [x] `LLMClient` Protocol + adapter/decorator layering (`TICKET-024`).
-- [x] `OpenAIAdapter` against the Chat Completions API.
 - [x] CI profile secret (`PROFILE_YAML`) — publishing daily since 2026-08.
 - [x] mypy clean across `src/`.
 

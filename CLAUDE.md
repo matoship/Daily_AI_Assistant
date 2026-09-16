@@ -106,6 +106,16 @@ Only `fetched` is swept by the 48h `mark_outdated_before` — it is the only lim
   than a clever pure function does (`TICKET-033`).
 - **A computed signal nothing reads is not observability.** Adding a field is half the
   work; the other half is a consumer (`TICKET-030`, `TICKET-032`).
+- **Two values that must agree should be produced by one expression.** `build_client`
+  returns `(client, models)` because choosing them separately let the adapter and the model
+  ids disagree, invisibly, in two files at once (`TICKET-035`).
+- **Narrow an `except` only after everything it wraps has been converted**, or in the same
+  commit. The width of a handler is a contract with everything underneath it (`TICKET-037`).
+- **A test's expected values come from the source of truth, not from the code.** Editing a
+  test until it matches the implementation turns a check into a transcript (`TICKET-038`).
+- **Enter through the same door the user does.** Console scripts call `main()` with no
+  arguments; three separate breakages shipped green because no test used that path
+  (`TICKET-036`).
 - **Named SQL params** (`:cutoff`), never positional — adding a placeholder silently
   shifts every parameter after it.
 - **State tables and event logs stay separate.** `articles` is overwritten; `triage_logs`
@@ -133,10 +143,10 @@ Only `fetched` is swept by the 48h `mark_outdated_before` — it is the only lim
 
 | Path | What |
 |---|---|
-| `tickets/` | 34 postmortems: symptom → root cause → fix → lesson. Claude maintains these. |
+| `tickets/` | 38 postmortems: symptom → root cause → fix → lesson. Claude maintains these. |
 | `TODO.md` | Open work, phased. |
 | `ARCHITECTURE.md` | Deeper design notes. |
-| `DECISIONS.md` | 25 decisions with rejected alternatives; ⚖️ marks contested ones. |
+| `DECISIONS.md` | 26 decisions with rejected alternatives; ⚖️ marks contested ones. |
 | `notes/` | Kaifeng's own learning notes. **Gitignored** — local only. |
 
 Add a ticket whenever a real incident is closed. Keep it factual: what broke, why, how
@@ -162,10 +172,12 @@ measured against 50 blind-labelled articles, with a measured noise floor.
 Scope narrowed in September 2026: the skilled-migration half was retired after evaluation
 showed those feeds carried essentially none of the intended signal, and the authoritative
 source had stopped publishing (`TICKET-031`). Four pre-flight-tested engineering sources
-remain. `profile.yaml` may still carry a dormant `immigration` topic with no feeds behind
-it — a decision left open.
+remain, and `engineering` is now the only topic in `profile.yaml`.
 
-Next: `OpenAIAdapter` behind the `LLMClient` seam, then a local model on an RTX 4090 via
-vLLM benchmarked against Haiku on the golden set. After that: embeddings for near-duplicate
-merge, then a hand-rolled agent loop (source discovery is the best-motivated first task —
-propose a feed, fetch it, triage a sample, keep it if the hit rate clears a bar).
+Phase 4 is under way on `phase-3-vllm`: `OpenAICompatibleAdapter` and the `LLMError`
+taxonomy are done. Next is prompt caching (before the benchmark, so the Haiku baseline is
+measured under the configuration that will actually run), then a local model on an RTX 4090
+via vLLM benchmarked against Haiku on the golden set. After that: embeddings for
+near-duplicate merge, then a hand-rolled agent loop (source discovery is the best-motivated
+first task — propose a feed, fetch it, triage a sample, keep it if the hit rate clears a
+bar).
