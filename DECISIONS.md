@@ -481,3 +481,30 @@ anything else falls through to `LLMProtocolError`, which currently mislabels Ant
 `OverloadedError` and 503 `ServiceUnavailableError`. Behaviour is identical today — both are
 skipped — but the logs name the wrong cause, and enumerating an open hierarchy means the list
 is wrong again on the next SDK release.
+
+---
+
+## 27. Prompt caching deferred until after the local-model benchmark
+
+**Context.** Every triage call in a run repeats the same instructions and profile ahead of
+the article, which looks like a textbook case for prompt caching. The plan was to enable it
+before the Phase 4 benchmark, so the Haiku baseline would be measured under the configuration
+intended to run in production.
+
+**Alternative considered:** enabling Anthropic prompt caching before the benchmark. Rejected
+because the reusable prefix was measured at roughly 150 tokens (a ~118-token profile plus
+instructions), while Haiku 4.5 does not cache prefixes shorter than 4096 tokens. Below the
+minimum the request succeeds and simply is not cached, so the change would ship, report no
+error, and save nothing — and the "production configuration" it was meant to lock in would
+be indistinguishable from the current one. It would also add a provider-specific cache
+breakpoint to a prompt that both adapters share.
+
+**Decision.** Build and benchmark the vLLM path first; revisit caching afterwards.
+
+**Consequence.** Caching remains open work, with two routes that would make it measurable
+rather than nominal: vLLM's automatic prefix caching, which operates on KV-cache blocks and
+can be evaluated by time-to-first-token on local hardware; or a prefix that legitimately
+grows past the minimum, such as few-shot examples. Few-shot examples must not come from the
+golden set, or the evaluation would be scoring answers it was shown. In either case the cache
+hit is confirmed from usage telemetry, not assumed from the request.
+

@@ -184,7 +184,15 @@ class OpenAICompatibleAdapter(LLMClient):
                 model=model,
             ) from e
 
-        tool_calls = response.choices[0].message.tool_calls
+        choice = response.choices[0]
+        if choice.finish_reason == "length":
+            raise LLMProtocolError(
+                "OpenAI API response was incomplete. Consider increasing max_tokens.",
+                provider="openai",
+                model=model,
+            )
+
+        tool_calls = choice.message.tool_calls
 
         if tool_calls is None:
             raise LLMProtocolError(
@@ -197,14 +205,6 @@ class OpenAICompatibleAdapter(LLMClient):
             (item for item in tool_calls if item.type == "function"),
             None,
         )
-
-        choice = response.choices[0]
-        if choice.finish_reason == "length":
-            raise LLMProtocolError(
-                "OpenAI API response was incomplete. Consider increasing max_tokens.",
-                provider="openai",
-                model=model,
-            )
 
         if tool_call is None:
             raise LLMProtocolError(

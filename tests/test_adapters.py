@@ -307,7 +307,7 @@ def test_openai_create_raises_when_response_is_incomplete():
         choices=[
             SimpleNamespace(
                 message=SimpleNamespace(
-                    tool_calls=[SimpleNamespace(type="function", arguments={})]
+                    tool_calls=None
                 ),
                 finish_reason="length",
             )
@@ -347,6 +347,37 @@ def test_openai_create_raises_when_response_has_no_function_call():
     with pytest.raises(
         LLMProtocolError, match="OpenAI did not return a function_call item"
     ):
+        adapter.create(
+            model="gpt-5-mini",
+            max_tokens=32,
+            prompt="Find jobs.",
+            tool_name="search",
+            tool_description="Search for jobs.",
+            tool_schema={"type": "object", "properties": {"query": {"type": "string"}}},
+        )
+
+
+def test_openai_create_raises_when_function_arguments_are_invalid_json():
+    response = SimpleNamespace(
+        choices=[
+            SimpleNamespace(
+                message=SimpleNamespace(
+                    tool_calls=[
+                        SimpleNamespace(
+                            type="function",
+                            function=SimpleNamespace(arguments='{"query": '),
+                        )
+                    ]
+                ),
+                finish_reason="tool_calls",
+            )
+        ],
+        model="gpt-5-mini",
+    )
+    client = FakeOpenAIClient(response)
+    adapter = OpenAICompatibleAdapter(client)
+
+    with pytest.raises(LLMProtocolError, match="OpenAI response returns invalid JSON"):
         adapter.create(
             model="gpt-5-mini",
             max_tokens=32,

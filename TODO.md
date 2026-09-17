@@ -37,10 +37,6 @@ Phase 4 (local-model comparison) is in progress on the `phase-3-vllm` branch: th
 - [ ] **Make the local endpoint configurable.** `MODELS["local"]` is still the placeholder
       `"<vllm model id>"` and the base URL is hardcoded to `localhost:8000`. Both belong in
       settings or on the CLI — otherwise the model name is changed by editing source.
-- [ ] **Prompt caching before the benchmark, not after.** The profile is byte-identical
-      across every triage call in a run; cache the prefix and measure the saving with
-      existing telemetry. Do it first so the Haiku baseline is measured under the
-      configuration actually intended to run.
 - [ ] **Record `provider` in `history.jsonl`.** `LLMResponse` now carries it, and the
       comparison is the reason it was added.
 - [ ] **Count schema violations as a benchmark result.** Invalid output is now
@@ -48,6 +44,15 @@ Phase 4 (local-model comparison) is in progress on the `phase-3-vllm` branch: th
       measurable — and it is where small models are expected to lose.
 - [ ] vLLM on the RTX 4090 behind the `LLMClient` seam; benchmark against Haiku on the
       golden set. Needs the home machine.
+- [ ] **Prompt caching, after vLLM** (`DECISIONS.md` 27). Deferred, not dropped: the
+      triage prompt's reusable prefix is ~150 tokens, far below Haiku 4.5's 4096-token
+      caching minimum, so provider-side caching would currently no-op without an error.
+      Two routes make it real: (a) vLLM's automatic prefix caching, which reuses KV-cache
+      blocks with no comparable minimum — measure time-to-first-token with it on and off
+      on the 4090; (b) a prefix that genuinely grows past the minimum, e.g. few-shot
+      examples — which must not be drawn from the golden set, or the eval scores its own
+      answers. Either way, confirm the hit in telemetry (`cache_read_input_tokens` on
+      Anthropic) rather than assuming it.
 
 ## Soon (quality / measurement)
 

@@ -146,7 +146,7 @@ Only `fetched` is swept by the 48h `mark_outdated_before` — it is the only lim
 | `tickets/` | 38 postmortems: symptom → root cause → fix → lesson. Claude maintains these. |
 | `TODO.md` | Open work, phased. |
 | `ARCHITECTURE.md` | Deeper design notes. |
-| `DECISIONS.md` | 26 decisions with rejected alternatives; ⚖️ marks contested ones. |
+| `DECISIONS.md` | 27 decisions with rejected alternatives; ⚖️ marks contested ones. |
 | `notes/` | Kaifeng's own learning notes. **Gitignored** — local only. |
 
 Add a ticket whenever a real incident is closed. Keep it factual: what broke, why, how
@@ -175,9 +175,10 @@ source had stopped publishing (`TICKET-031`). Four pre-flight-tested engineering
 remain, and `engineering` is now the only topic in `profile.yaml`.
 
 Phase 4 is under way on `phase-3-vllm`: `OpenAICompatibleAdapter` and the `LLMError`
-taxonomy are done. Next is prompt caching (before the benchmark, so the Haiku baseline is
-measured under the configuration that will actually run), then a local model on an RTX 4090
-via vLLM benchmarked against Haiku on the golden set. After that: embeddings for
+taxonomy are done. Next is a local model on an RTX 4090 via vLLM, benchmarked against Haiku
+on the golden set. Prompt caching follows it rather than preceding it: the triage prefix is
+~150 tokens, below Haiku 4.5's 4096-token caching minimum, so it would silently no-op
+(`DECISIONS.md` 27). After that: embeddings for
 near-duplicate merge, then a hand-rolled agent loop (source discovery is the best-motivated
 first task — propose a feed, fetch it, triage a sample, keep it if the hit rate clears a
 bar).
