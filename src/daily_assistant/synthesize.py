@@ -1,7 +1,6 @@
 from daily_assistant.models import Article, TriageResult, DigestItem
-from daily_assistant.protocol import LLMResponse, LLMClient,LLMProtocolError
+from daily_assistant.protocol import LLMResponse, LLMClient, LLMProtocolError
 from pydantic import ValidationError
-
 
 
 def synthesize(

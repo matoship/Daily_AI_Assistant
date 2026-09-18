@@ -222,10 +222,10 @@ class OpenAICompatibleAdapter(LLMClient):
             )
         try:
             tool_input = json.loads(function.arguments)
-        except json.JSONDecodeError:
+        except json.JSONDecodeError as exc:
             raise LLMProtocolError(
                 "OpenAI response returns invalid JSON ", provider="openai", model=model
-            )
+            ) from exc
 
         if response.usage is None:
             raise LLMProtocolError(

@@ -1,8 +1,7 @@
 from daily_assistant.models import Article, TriageResult
-from daily_assistant.protocol import LLMResponse, LLMClient,LLMProtocolError
+from daily_assistant.protocol import LLMResponse, LLMClient, LLMProtocolError
 from daily_assistant.profile import category_options
 from pydantic import ValidationError
-
 
 
 def triage_article(

@@ -306,9 +306,7 @@ def test_openai_create_raises_when_response_is_incomplete():
     response = SimpleNamespace(
         choices=[
             SimpleNamespace(
-                message=SimpleNamespace(
-                    tool_calls=None
-                ),
+                message=SimpleNamespace(tool_calls=None),
                 finish_reason="length",
             )
         ],
