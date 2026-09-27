@@ -39,6 +39,6 @@ def test_build_client_local(monkeypatch):
 
     client, models = build_client(True)
 
-    assert models["triage"] == "<vllm model id>"
+    assert models["triage"] == "Qwen/Qwen3-4B-Instruct-2507"
     assert captured["api_key"] == "dummy"
     assert isinstance(client._client, factory_module.OpenAICompatibleAdapter)

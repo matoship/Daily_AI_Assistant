@@ -16,7 +16,10 @@ MODELS: dict[str, ModelConfig] = {
         "triage": "claude-haiku-4-5-20251001",
         "synthesis": "claude-sonnet-5",
     },
-    "local": {"triage": "<vllm model id>", "synthesis": "<same id>"},
+    "local": {
+        "triage": "Qwen/Qwen3-4B-Instruct-2507",
+        "synthesis": "Qwen/Qwen3-4B-Instruct-2507",
+    },
 }
 
 
