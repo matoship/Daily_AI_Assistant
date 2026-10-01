@@ -17,8 +17,8 @@ MODELS: dict[str, ModelConfig] = {
         "synthesis": "claude-sonnet-5",
     },
     "local": {
-        "triage": "Qwen/Qwen3-4B-Instruct-2507",
-        "synthesis": "Qwen/Qwen3-4B-Instruct-2507",
+        "triage": get_settings().local_model,
+        "synthesis": get_settings().local_model,
     },
 }
 
@@ -30,7 +30,10 @@ def build_client(
         return (
             TrackedClient(
                 OpenAICompatibleAdapter(
-                    OpenAI(base_url="http://localhost:8000/v1", api_key="dummy")
+                    OpenAI(
+                        base_url=get_settings().vllm_base_url,
+                        api_key=get_settings().local_api_key,
+                    )
                 )
             ),
             MODELS["local"],

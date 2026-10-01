@@ -10,6 +10,9 @@ class Settings(BaseSettings):
     }
     anthropic_api_key: str = Field(..., min_length=1)
     openai_api_key: str | None = Field(None, min_length=1)
+    vllm_base_url: str | None = Field(None, min_length=1)
+    local_api_key: str | None = Field(None, min_length=1)
+    local_model: str | None = Field(None, min_length=1)
 
 
 @lru_cache()
