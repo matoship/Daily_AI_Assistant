@@ -1,0 +1,99 @@
+<!doctype html><html lang='en'><head><meta charset='utf-8'><meta name='viewport' content='width=device-width, initial-scale=1'><title>Daily Digest - 2026-10-15</title><style>
+:root {
+    color-scheme: light dark;
+    --bg: #f7f7f8;
+    --surface: #ffffff;
+    --text: #1a1a1a;
+    --muted: #5b5f66;
+    --border: #e3e4e7;
+    --accent: #2f5fd8;
+    --callout-bg: #eef2fd;
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg: #14151a;
+        --surface: #1c1e24;
+        --text: #eceef1;
+        --muted: #9aa0aa;
+        --border: #2c2f37;
+        --accent: #7ea1ff;
+        --callout-bg: #1f2740;
+    }
+}
+* { box-sizing: border-box; }
+body {
+    margin: 0;
+    padding: 2.5rem 1.25rem;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.55;
+}
+main {
+    max-width: 42rem;
+    margin: 0 auto;
+}
+header { margin-bottom: 2rem; }
+h1 { font-size: 1.5rem; margin: 0 0 0.25rem; }
+.subtitle { color: var(--muted); font-size: 0.9rem; margin: 0; }
+nav.back { margin-bottom: 1.5rem; }
+nav.back a { color: var(--accent); text-decoration: none; font-size: 0.9rem; }
+nav.back a:hover { text-decoration: underline; }
+article.digest-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 1.25rem;
+}
+.badge {
+    display: inline-block;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    color: var(--accent);
+    background: var(--callout-bg);
+    border-radius: 999px;
+    padding: 0.2rem 0.65rem;
+    margin-bottom: 0.6rem;
+}
+article.digest-item h2 { font-size: 1.15rem; margin: 0 0 0.5rem; }
+article.digest-item p { margin: 0 0 0.75rem; color: var(--text); }
+.why-it-matters {
+    background: var(--callout-bg);
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    font-size: 0.92rem;
+}
+.why-it-matters strong { color: var(--accent); }
+.sources {
+    margin-top: 0.75rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--border);
+    font-size: 0.85rem;
+    color: var(--muted);
+}
+.sources a { color: var(--muted); margin-right: 0.75rem; }
+.sources a:hover { color: var(--accent); }
+.empty {
+    color: var(--muted);
+    text-align: center;
+    padding: 3rem 1rem;
+}
+ul.archive { list-style: none; margin: 0; padding: 0; }
+ul.archive li {
+    border: 1px solid var(--border);
+    background: var(--surface);
+    border-radius: 8px;
+    margin-bottom: 0.6rem;
+}
+ul.archive a {
+    display: block;
+    padding: 0.85rem 1.1rem;
+    color: var(--text);
+    text-decoration: none;
+    font-weight: 500;
+}
+ul.archive a:hover { color: var(--accent); }
+</style></head><body><main><nav class='back'><a href='index.html'>&larr; Archive</a></nav><header><h1>Daily Digest</h1><p class='subtitle'>2026-10-15</p></header><article class='digest-item'><span class='badge'>engineering</span><h2>AI Gateways Mature: 2026 Rankings Put Bifrost, Portkey, LiteLLM, Kong Head-to-Head</h2><p>A comparative roundup evaluates nine leading AI gateway solutions for 2026, including Bifrost, Portkey, LiteLLM, and Kong, assessing them on criteria like multi-provider routing, observability, caching, rate limiting, and cost management for LLM applications.</p><p class='why-it-matters'><strong>Why it matters:</strong> As an AI Engineer building LLM applications on ServiceNow, choosing the right gateway layer directly impacts reliability, cost control, and vendor flexibility in production systems. This comparison is directly actionable for architecture decisions as you grow toward an AI Application Engineer role.</p><div class='sources'><a href='https://www.marktechpost.com/2026/10/14/best-ai-gateways-2026/'>source 1</a></div></article><article class='digest-item'><span class='badge'>engineering</span><h2>Liquid AI&#x27;s New MoE Model Targets Efficient On-Device Agents</h2><p>Liquid AI released LFM2.5-24B-A2B, a mixture-of-experts model with 24B total parameters but only 2B active at inference, designed for on-device AI agents that need strong performance with low compute footprint.</p><p class='why-it-matters'><strong>Why it matters:</strong> Sparse MoE architectures like this are increasingly relevant for deploying cost-efficient, low-latency LLM agents—useful knowledge for designing scalable AI applications beyond cloud-only inference.</p><div class='sources'><a href='https://www.marktechpost.com/2026/10/14/liquid-ai-lfm2-5-24b-a2b/'>source 1</a></div></article><article class='digest-item'><span class='badge'>engineering</span><h2>Google Launches Gemini 4 Argon API with 1M Token Output Limit</h2><p>Google released the Gemini 4 Argon API, notable for supporting up to 1 million tokens of output in a single response, a significant jump aimed at long-form generation and complex multi-step agentic tasks.</p><p class='why-it-matters'><strong>Why it matters:</strong> Massive output limits open new possibilities for building agentic LLM applications that generate large structured outputs (e.g., full codebases, reports) without chunking workarounds—directly relevant to your LLM application engineering work.</p><div class='sources'><a href='https://www.marktechpost.com/2026/10/13/google-gemini-4-argon-api-release/'>source 1</a></div></article><article class='digest-item'><span class='badge'>engineering</span><h2>Google Antigravity SDK Adds Local Model Support for Privacy and Efficiency</h2><p>Google&#x27;s Antigravity SDK now supports running local models, improving token efficiency and allowing code to stay private by avoiding cloud round-trips for certain development tasks.</p><p class='why-it-matters'><strong>Why it matters:</strong> Local model support is a practical option for privacy-sensitive enterprise environments like ServiceNow deployments, and reduces token costs—both important considerations when architecting LLM-powered tools at work.</p><div class='sources'><a href='https://www.infoq.com/news/2026/10/antigravity-sdk-local-models/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global'>source 1</a></div></article><article class='digest-item'><span class='badge'>engineering</span><h2>Anthropic&#x27;s New Coding Tool &#x27;Scion&#x27; Draws Heavy Inspiration from Mononoke</h2><p>A deep-dive post analyzes how Anthropic&#x27;s Scion tool borrows design concepts and architecture from the Mononoke source control tool, highlighting parallels in their approaches to large-scale code management.</p><p class='why-it-matters'><strong>Why it matters:</strong> Understanding how major AI labs build internal engineering tooling offers insight into best practices for scaling developer tools and infrastructure—useful context as you develop deeper engineering expertise.</p><div class='sources'><a href='https://sunshowers.io/posts/anthropic-mononoke/'>source 1</a></div></article></main></body></html>
