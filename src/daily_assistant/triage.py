@@ -1,9 +1,12 @@
 from daily_assistant.models import Article, TriageResult
-from daily_assistant.protocol import LLMResponse, LLMClient
+from daily_assistant.protocol import LLMResponse, LLMClient, LLMProtocolError
 from daily_assistant.profile import category_options
+from pydantic import ValidationError
 
 
-def triage_article(article: Article, profile: dict, client: LLMClient) -> TriageResult:
+def triage_article(
+    article: Article, profile: dict, client: LLMClient, model: str
+) -> TriageResult:
     """
     Triage an article based on the user's profile and return a TriageResult.
     """
@@ -26,7 +29,7 @@ def triage_article(article: Article, profile: dict, client: LLMClient) -> Triage
     categories = category_options(profile) + ["other"]
     # Call the model
     response: LLMResponse = client.create(
-        model="claude-haiku-4-5-20251001",
+        model=model,
         max_tokens=600,
         prompt=prompt,
         tool_name="provide_triage_result",
@@ -57,4 +60,11 @@ def triage_article(article: Article, profile: dict, client: LLMClient) -> Triage
         temperature=0,
     )
 
-    return TriageResult(**response.tool_input)
+    try:
+        return TriageResult(**response.tool_input)
+    except ValidationError as exc:
+        raise LLMProtocolError(
+            f"Invalid triage result: {exc}",
+            provider=response.provider,
+            model=response.model,
+        ) from exc

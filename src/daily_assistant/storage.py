@@ -119,6 +119,8 @@ class Storage:
             (datetime.now(timezone.utc).isoformat(), "running"),
         )
         self.conn.commit()
+        if cursor.lastrowid is None:
+            raise RuntimeError("Failed to start a new run in the database.")
         return cursor.lastrowid
 
     def finish_run(self, run_id: int, **metrics) -> None:

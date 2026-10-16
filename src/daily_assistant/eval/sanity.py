@@ -6,6 +6,7 @@ import logging
 from daily_assistant.profile import load_profile
 from daily_assistant.telemetry import estimate_cost
 from daily_assistant.factory import build_client
+import argparse
 
 logger = logging.getLogger(__name__)
 
@@ -46,7 +47,9 @@ def check_fixture(fixture: Fixture, result: TriageResult) -> bool:
     return True
 
 
-def run_sanity(fixtures: list[Fixture], profile: dict, client) -> list[dict]:
+def run_sanity(
+    fixtures: list[Fixture], profile: dict, client, model: str
+) -> list[dict]:
     """For each fixture: build an Article, call the real triage_article(), judge it,
     return a list of per-fixture results (id, passed, actual relevance, article title)
     for reporting."""
@@ -55,7 +58,7 @@ def run_sanity(fixtures: list[Fixture], profile: dict, client) -> list[dict]:
     for fixture in fixtures:
         logger.info(f"Running sanity check for fixture ID: {fixture.id}")
         article = fixture.article
-        triage_result = triage_article(article, profile, client)
+        triage_result = triage_article(article, profile, client, model)
         passed = check_fixture(fixture, triage_result)
         results.append(
             {
@@ -76,17 +79,11 @@ def summarize_results(results: list[dict]) -> dict[str, int]:
     return {"total": total, "passed": passed, "failed": failed}
 
 
-def main(path: str | Path = "src/daily_assistant/eval/sanity_fixtures.yaml") -> int:
-
-    logging.basicConfig(
-        level=logging.INFO,
-        format="%(asctime)s %(levelname)-8s %(name)s: %(message)s",
-    )
-    logging.getLogger("httpx").setLevel(logging.WARNING)
+def run_sanity_check(path: str | Path, *, local: bool) -> int:
     fixtures: list[Fixture] = load_fixtures(path)
     profile = load_profile()
-    client = build_client()  # Build the TrackedClient with AnthropicLLMClient
-    results = run_sanity(fixtures, profile, client)
+    client, models = build_client(local)
+    results = run_sanity(fixtures, profile, client, models["triage"])
     failed = [result for result in results if not result["passed"]]
     summary = summarize_results(results)
     for result in results:
@@ -101,13 +98,31 @@ def main(path: str | Path = "src/daily_assistant/eval/sanity_fixtures.yaml") -> 
         summary["total"],
     )
     logger.info("Sanity run cost: $%.4f", estimate_cost(client.usage_by_model))
-
     if failed:
         logger.error(
             f"Sanity check failed: {len(failed)} fixture(s) did not meet their thresholds."
         )
         return 1
     return 0
+
+
+def main(argv: list[str] | None = None) -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--path",
+        default="src/daily_assistant/eval/sanity_fixtures.yaml",
+        help="Path to the sanity fixtures YAML file.",
+    )
+    parser.add_argument(
+        "-v", "--vllm", action="store_true", help="Use local vLLM instance."
+    )
+    args = parser.parse_args(argv)
+    logging.basicConfig(
+        level=logging.INFO,
+        format="%(asctime)s %(levelname)-8s %(name)s: %(message)s",
+    )
+    logging.getLogger("httpx").setLevel(logging.WARNING)
+    return run_sanity_check(args.path, local=args.vllm)
 
 
 if __name__ == "__main__":

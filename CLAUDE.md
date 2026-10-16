@@ -95,11 +95,27 @@ Only `fetched` is swept by the 48h `mark_outdated_before` — it is the only lim
   type-checks, not as an error (`Field(..., min_length=1)`).
 - **Mocks must match the real dependency's shape**, not the code's assumption about it.
   Shared fakes live in `tests/conftest.py` and conform to the Protocol.
+- **Failure-path fixtures must be internally consistent, not merely well-formed.** Ask
+  whether the field values could co-occur in a real response: a truncated one carries
+  *both* a truncation signal and malformed output, because they share a cause. Build from a
+  shared complete-response helper and override only the fields that express the failure —
+  the override is the test's thesis. (Not N independent hand-built fakes: that is how the
+  two `create()` stubs drifted apart in `TICKET-027`.)
 - **Test by blast radius, not complexity.** The untested function is the one that breaks —
   three times now. Twenty trivial lines at the end of a paid operation deserve a test more
   than a clever pure function does (`TICKET-033`).
 - **A computed signal nothing reads is not observability.** Adding a field is half the
   work; the other half is a consumer (`TICKET-030`, `TICKET-032`).
+- **Two values that must agree should be produced by one expression.** `build_client`
+  returns `(client, models)` because choosing them separately let the adapter and the model
+  ids disagree, invisibly, in two files at once (`TICKET-035`).
+- **Narrow an `except` only after everything it wraps has been converted**, or in the same
+  commit. The width of a handler is a contract with everything underneath it (`TICKET-037`).
+- **A test's expected values come from the source of truth, not from the code.** Editing a
+  test until it matches the implementation turns a check into a transcript (`TICKET-038`).
+- **Enter through the same door the user does.** Console scripts call `main()` with no
+  arguments; three separate breakages shipped green because no test used that path
+  (`TICKET-036`).
 - **Named SQL params** (`:cutoff`), never positional — adding a placeholder silently
   shifts every parameter after it.
 - **State tables and event logs stay separate.** `articles` is overwritten; `triage_logs`
@@ -127,13 +143,26 @@ Only `fetched` is swept by the 48h `mark_outdated_before` — it is the only lim
 
 | Path | What |
 |---|---|
-| `tickets/` | 34 postmortems: symptom → root cause → fix → lesson. Claude maintains these. |
+| `tickets/` | 38 postmortems: symptom → root cause → fix → lesson. Claude maintains these. |
 | `TODO.md` | Open work, phased. |
 | `ARCHITECTURE.md` | Deeper design notes. |
+| `DECISIONS.md` | 27 decisions with rejected alternatives; ⚖️ marks contested ones. |
 | `notes/` | Kaifeng's own learning notes. **Gitignored** — local only. |
 
 Add a ticket whenever a real incident is closed. Keep it factual: what broke, why, how
 it was fixed, and the generalizable lesson.
+
+Add an entry to `DECISIONS.md` whenever a design choice is settled and a real alternative
+was rejected — a milestone, a seam, a schema, a methodology. Record the rejected option and
+why it lost, not just the winner; a decision log that only lists winners is a changelog.
+
+Keep it **impersonal and public-facing**: "Alternative considered: X. Rejected because Y."
+Never narrate who proposed or opposed what — the repo is public, and the engineering
+reasoning is the durable part. A personal record of disagreements belongs in `notes/`.
+
+**Tickets and decisions are different.** A ticket is something that *broke*; a decision is a
+choice between options that *existed*. Some incidents produce both (`TICKET-024` →
+decision 6) — cross-reference, don't duplicate.
 
 ## State
 
@@ -143,10 +172,13 @@ measured against 50 blind-labelled articles, with a measured noise floor.
 Scope narrowed in September 2026: the skilled-migration half was retired after evaluation
 showed those feeds carried essentially none of the intended signal, and the authoritative
 source had stopped publishing (`TICKET-031`). Four pre-flight-tested engineering sources
-remain. `profile.yaml` may still carry a dormant `immigration` topic with no feeds behind
-it — a decision left open.
+remain, and `engineering` is now the only topic in `profile.yaml`.
 
-Next: `OpenAIAdapter` behind the `LLMClient` seam, then a local model on an RTX 4090 via
-vLLM benchmarked against Haiku on the golden set. After that: embeddings for near-duplicate
-merge, then a hand-rolled agent loop (source discovery is the best-motivated first task —
-propose a feed, fetch it, triage a sample, keep it if the hit rate clears a bar).
+Phase 4 is under way on `phase-3-vllm`: `OpenAICompatibleAdapter` and the `LLMError`
+taxonomy are done. Next is a local model on an RTX 4090 via vLLM, benchmarked against Haiku
+on the golden set. Prompt caching follows it rather than preceding it: the triage prefix is
+~150 tokens, below Haiku 4.5's 4096-token caching minimum, so it would silently no-op
+(`DECISIONS.md` 27). After that: embeddings for
+near-duplicate merge, then a hand-rolled agent loop (source discovery is the best-motivated
+first task — propose a feed, fetch it, triage a sample, keep it if the hit rate clears a
+bar).

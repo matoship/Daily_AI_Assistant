@@ -11,7 +11,7 @@ def fetch_articles(source: Source) -> list[Article]:
     Fetch articles from a given source using its RSS feed.
     """
     feed = feedparser.parse(source.url)
-    articles = []
+    articles: list[Article] = []
     if feed.bozo:
         logger.error(
             f"Error parsing feed for source {source.name}: {feed.bozo_exception}"

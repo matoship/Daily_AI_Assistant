@@ -1,3 +1,5 @@
+import pytest
+
 import daily_assistant.eval.sanity as sanity
 from daily_assistant.models import Article, ExpectedThreshold, Fixture, TriageResult
 
@@ -56,14 +58,14 @@ def test_run_sanity_uses_fixture_thresholds(monkeypatch):
         )
     )
 
-    def fake_triage_article(article, profile, client):
+    def fake_triage_article(article, profile, client, model):
         return TriageResult(
             relevance=7, category="engineering", reason="On topic", story_hint="AI"
         )
 
     monkeypatch.setattr(sanity, "triage_article", fake_triage_article)
 
-    results = sanity.run_sanity(fixtures, {"identity": {}}, object())
+    results = sanity.run_sanity(fixtures, {"identity": {}}, object(), "triage-model")
 
     assert results == [
         {
@@ -105,23 +107,24 @@ def test_main_returns_nonzero_when_fixture_fails(monkeypatch):
 
     monkeypatch.setattr(profile_module, "load_profile", lambda: {"identity": {}})
 
-    import daily_assistant.telemetry as telemetry_module
-
+    fake_client = type("FakeClient", (), {"usage_by_model": {}})()
     monkeypatch.setattr(
-        telemetry_module, "TrackedClient", lambda *args, **kwargs: object()
+        sanity,
+        "build_client",
+        lambda local: (fake_client, {"triage": "triage-model"}),
     )
+    monkeypatch.setattr(sanity, "estimate_cost", lambda usage: 0.0)
 
-    import daily_assistant.config as config_module
-
-    monkeypatch.setattr(
-        config_module,
-        "get_settings",
-        lambda: type("Settings", (), {"anthropic_api_key": "test-key"})(),
-    )
-
-    def fake_triage_article(article, profile, client):
+    def fake_triage_article(article, profile, client, model):
         return TriageResult(relevance=7, category="engineering", reason="Low")
 
     monkeypatch.setattr(sanity, "triage_article", fake_triage_article)
 
-    assert sanity.main("ignored") == 1
+    assert sanity.main(["--vllm"]) == 1
+
+
+@pytest.mark.parametrize("argv, exit_code", [(["--help"], 0), (["--unknown"], 2)])
+def test_main_exits_before_running_pipeline(argv, exit_code):
+    with pytest.raises(SystemExit) as exc_info:
+        sanity.main(argv)
+    assert exc_info.value.code == exit_code

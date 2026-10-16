@@ -5,7 +5,8 @@ import argparse
 from daily_assistant.telemetry import estimate_cost
 from yaml import safe_load
 from daily_assistant.factory import build_client
-from daily_assistant.models import GoldLabel
+from daily_assistant.protocol import LLMClient, LLMProtocolError
+from daily_assistant.models import GoldLabel, TriageFailure
 from daily_assistant.triage import triage_article
 from daily_assistant.profile import load_profile
 import json
@@ -74,7 +75,7 @@ def metrics(conf) -> dict:  # precision/recall/F1 — pure
 def group_by_category(
     rows: list[tuple[GoldLabel, int, str]],
 ) -> dict[str, list[tuple[GoldLabel, int, str]]]:
-    grouped = {}
+    grouped: dict[str, list[tuple[GoldLabel, int, str]]] = {}
     for row in rows:
         category = row[0].gold_category
         if category not in grouped:
@@ -92,7 +93,7 @@ def calculate_confusion_and_metrics(
 
 
 def evaluate_offline(
-    gold,
+    gold: list[GoldLabel],
 ) -> list[tuple[GoldLabel, int, str]]:  # uses frozen scores, free
     rows = []
     for goldlabel in gold:
@@ -101,21 +102,37 @@ def evaluate_offline(
 
 
 def evaluate_live(
-    gold, profile, client
-) -> list[tuple[GoldLabel, int, str]]:  # re-runs triage
-    rows = []
+    gold: list[GoldLabel], profile: dict, client: LLMClient, model: str
+) -> tuple[list[tuple[GoldLabel, int, str]], list[TriageFailure]]:  # re-runs triage
+    rows: list[tuple[GoldLabel, int, str]] = []
+    errors: list[TriageFailure] = []
     for goldlabel in gold:
-        triaged = triage_article(goldlabel.article, profile, client)
-        rows.append((goldlabel, triaged.relevance, triaged.category))
-    return rows
+        try:
+            triaged = triage_article(goldlabel.article, profile, client, model)
+            rows.append((goldlabel, triaged.relevance, triaged.category))
+        except LLMProtocolError as exc:
+            logger.exception(
+                "Failed to triage article: %s",
+                goldlabel.article.url,
+            )
+            errors.append(
+                TriageFailure(
+                    article_url=goldlabel.article.url,
+                    error_type=type(exc).__name__,
+                    error=str(exc),
+                )
+            )
+    return rows, errors
 
 
-def format_report(confusion, metrics_result) -> str:  # overall + subgroup breakdown
+def format_report(
+    confusion, metrics_result, *, scored: int, failed: int
+) -> str:  # overall + subgroup breakdown
     def format_metric(value: float | None, *, fallback: str = "n/a") -> str:
         return fallback if value is None else f"{value:.2f}"
 
     header = f"{'subgroup':<24} {'TP':>4} {'FP':>4} {'FN':>4} {'TN':>4} {'P':>6} {'R':>6} {'F1':>6}"
-    lines = [header, "-" * len(header)]
+    lines = [f"Scored: {scored} | Failed: {failed}", header, "-" * len(header)]
 
     for category, conf in confusion.items():
         label = category.replace("_", " ").title()
@@ -144,6 +161,9 @@ def format_report(confusion, metrics_result) -> str:  # overall + subgroup break
 def compare_changes(
     rows: list[tuple[GoldLabel, int, str]],
     live_rows: list[tuple[GoldLabel, int, str]],
+    *,
+    scored: int,
+    failed: int,
     gold_t: int = 5,
     model_t: int = 5,
 ) -> str:
@@ -211,10 +231,12 @@ def compare_changes(
         "sufficient": [row for row in live_rows if not row[0].input_insufficient],
     }
     for category in dict.fromkeys(row[0].gold_category for row in live_rows):
-        category_rows = [row for row in live_rows if row[0].gold_category == category]
-        live_subgroups[category] = category_rows
+        live_category_rows = [
+            row for row in live_rows if row[0].gold_category == category
+        ]
+        live_subgroups[category] = live_category_rows
         live_subgroups[f"{category}_sufficient"] = [
-            row for row in category_rows if not row[0].input_insufficient
+            row for row in live_category_rows if not row[0].input_insufficient
         ]
 
     for category, subgroup_rows in live_subgroups.items():
@@ -223,7 +245,9 @@ def compare_changes(
         )
 
     flip_table = "\n".join(lines)
-    metrics_table = format_report(live_confusion, live_metrics)
+    metrics_table = format_report(
+        live_confusion, live_metrics, scored=scored, failed=failed
+    )
     return f"Classification flips\n{flip_table}\n\nLive evaluation metrics\n{metrics_table}"
 
 
@@ -235,6 +259,7 @@ def write_report_to_file(
     live_rows: list[tuple[GoldLabel, int, str]],
     path: str | Path = "src/daily_assistant/eval/history.jsonl",
     metrics_result: dict[str, dict[str, float]] | None = None,
+    errors: list[TriageFailure] | None = None,
 ) -> None:
     # Stable representation: identical profiles produce identical hashes
     canonical_profile = json.dumps(
@@ -267,6 +292,7 @@ def write_report_to_file(
         "cost_estimate": cost_estimate,
         "live_rows": serializable_live_rows,
         "metrics_result": metrics_result,
+        "errors": [error.model_dump(mode="json") for error in (errors or [])],
     }
 
     resolved_path = _resolve_path(path)
@@ -276,13 +302,19 @@ def write_report_to_file(
         file.write(json.dumps(record, ensure_ascii=False) + "\n")
 
 
-def main(argv=None):
-    parser = argparse.ArgumentParser(description="A script with a --live flag.")
+def main(argv: list[str] | None = None):
+    parser = argparse.ArgumentParser(
+        description="A script with a --live or --vllm flag."
+    )
     parser.add_argument(
         "-l", "--live", action="store_true", help="Enable live evaluation mode"
     )
+    parser.add_argument(
+        "-v", "--vllm", action="store_true", help="Enable VLLM evaluation mode"
+    )
     args = parser.parse_args(argv)
-
+    live = args.live
+    vllm = args.vllm
     logging.basicConfig(
         level=logging.INFO,
         format="%(asctime)s %(levelname)-8s %(name)s: %(message)s",
@@ -313,14 +345,14 @@ def main(argv=None):
             metrics_result[f"{category}_sufficient"],
         ) = calculate_confusion_and_metrics(cat_rows)
 
-    if args.live:
+    if live:
         # Evaluate live triage results
         logger.info(
             "Running live evaluation mode. This will re-run triage for each article in the golden set."
         )
         profile = load_profile()
-        client = build_client()
-        live_rows = evaluate_live(golden_set, profile, client)
+        client, models = build_client(vllm)
+        live_rows, errors = evaluate_live(golden_set, profile, client, models["triage"])
         sufficient_rows_live = [r for r in live_rows if not r[0].input_insufficient]
         confusion["overall_live"], metrics_result["overall_live"] = (
             calculate_confusion_and_metrics(live_rows)
@@ -337,16 +369,24 @@ def main(argv=None):
                 confusion[f"{category}_sufficient_live"],
                 metrics_result[f"{category}_sufficient_live"],
             ) = calculate_confusion_and_metrics(cat_rows)
-        report = compare_changes(rows, live_rows)
+        live_urls = {row[0].article.url for row in live_rows}
+        filtered_rows = [row for row in rows if row[0].article.url in live_urls]
+        report = compare_changes(
+            filtered_rows,
+            live_rows,
+            scored=len(live_rows),
+            failed=len(errors),
+        )
         write_report_to_file(
             report,
             profile=profile,
             client_usage=client.usage_by_model,
             live_rows=live_rows,
             metrics_result=metrics_result,
+            errors=errors,
         )
     else:
-        report = format_report(confusion, metrics_result)
+        report = format_report(confusion, metrics_result, scored=len(rows), failed=0)
     logger.info("\n%s", report)
 
 

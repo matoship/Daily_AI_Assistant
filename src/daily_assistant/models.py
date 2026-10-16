@@ -53,4 +53,10 @@ class GoldLabel(BaseModel):  # parsed from YAML -> validate at the boundary
     model_category: str
 
 
+class TriageFailure(BaseModel):
+    article_url: str
+    error_type: str
+    error: str
+
+
 ArticleStatus = Literal["fetched", "scored", "digested", "outdated"]

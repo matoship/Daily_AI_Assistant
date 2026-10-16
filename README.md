@@ -31,8 +31,21 @@ assumed) via per-model token and cost telemetry stored with every run. Claude re
 **structured output** at every step, validated with Pydantic, so scores and digest entries
 are type-checked rather than parsed out of prose.
 
-Both LLM calls go through an `LLMClient` **Protocol**, so the provider is named in exactly
-one place — which is what makes swapping in a locally-served model a one-line change.
+## The provider seam
+
+Both LLM calls depend only on an `LLMClient` **Protocol**, so a provider is named in exactly
+one place (`factory.py`). Two adapters implement it — the Anthropic SDK and any
+OpenAI-compatible endpoint, which is what a locally-served model exposes.
+
+The seam covers failures as well as responses. Provider exceptions, malformed tool
+arguments and schema violations are all translated into a small hierarchy —
+`LLMTransientError`, `LLMConfigurationError`, `LLMProtocolError` — so callers choose policy
+by catching a type instead of importing an SDK. The daily run skips one article on a
+transient or protocol error and aborts on a configuration error; the eval harness
+deliberately catches nothing, because partial metrics are worse than no metrics.
+
+That distinction is the point: an interface is its signature *plus* its exception contract
+([`DECISIONS.md`](DECISIONS.md) 26, [`TICKET-037`](tickets/TICKET-037-narrowed-except-before-conversion-finished.md)).
 
 ## Measuring whether it actually works
 
@@ -47,25 +60,31 @@ project answers it with evidence:
   — which specific articles changed verdict — appending each run to `history.jsonl` with a
   profile hash, model id and cost.
 
-Two things that measurement produced, which intuition would have missed:
+Three things that measurement produced, which intuition would have missed:
 
 - A profile edit that *felt* like an improvement dropped F1 from 0.75 to 0.59. Caught
   before it shipped.
 - Half the daily corpus turned out to carry essentially none of the signal it was added
   for — no prompt change could have fixed it, and every health check looked green the whole
   time ([`TICKET-031`](tickets/TICKET-031-immigration-corpus-contains-no-signal.md)).
+- Triage is ~98% reproducible run to run, but with only 15 gold-positive articles a single
+  flip moves F1 by 0.04 — so the report leads with **flip counts, not metric deltas**
+  ([`TICKET-034`](tickets/TICKET-034-stale-baseline-and-hypersensitive-metrics.md)).
 
-The [postmortem log](tickets/README.md) documents 34 real incidents — a silently missed
+The [postmortem log](tickets/README.md) documents 38 real incidents — a silently missed
 cron firing, truncated responses dropping articles for weeks, an XSS gap caught before it
-shipped, and a fix that recreated the flaw it was written about.
+shipped, three console entry points broken by signature changes, and a fix that recreated
+the flaw it was written about.
 
-Full design and rationale: [`ARCHITECTURE.md`](ARCHITECTURE.md).
+Full design and rationale: [`ARCHITECTURE.md`](ARCHITECTURE.md). Design choices with their
+rejected alternatives: [`DECISIONS.md`](DECISIONS.md).
 
 ## Tech stack
 
 Python 3.12 · [`uv`](https://github.com/astral-sh/uv) · Claude API (Anthropic) ·
-Pydantic / pydantic-settings · SQLite · feedparser · pytest · mypy · ruff ·
-GitHub Actions (daily cron) · GitHub Pages (static delivery)
+OpenAI-compatible client (for locally-served models) · Pydantic / pydantic-settings ·
+SQLite · feedparser · pytest · mypy · ruff · GitHub Actions (daily cron) ·
+GitHub Pages (static delivery)
 
 ## Status
 
@@ -76,7 +95,9 @@ Built in phases; each maps to a core AI-engineering skill. See the
 - [x] **Phase 1** — ingestion + SQLite dedup ("memory")
 - [x] **Phase 2** — triage + synthesis, cost telemetry, static-site delivery, daily automation
 - [x] **Phase 3** — eval harness: labelled golden set, precision/recall + flip report, noise floor measured
-- [ ] **Phase 4** *(next)* — local model via vLLM behind the `LLMClient` seam, benchmarked against Haiku on the golden set
+- [ ] **Phase 4** *(in progress)* — local model via vLLM behind the `LLMClient` seam,
+      benchmarked against Haiku on the golden set. The OpenAI-compatible adapter and the
+      error taxonomy are done; the benchmark itself needs the GPU host.
 - [ ] Phase 5 — semantic memory (embeddings) for near-duplicate merge and story continuity
 - [ ] Phase 6 — hand-rolled agent loop, including automated source discovery
 
@@ -93,17 +114,19 @@ src/daily_assistant/
   synthesize.py   # Sonnet: cluster selected articles -> DigestItem[]
   render.py       # DigestItem[] -> escaped HTML, light/dark (pure)
   run.py          # composition root; main() writes docs/ and publishes
-  protocol.py     # LLMClient Protocol + LLMResponse — the provider seam
-  adapters.py     # AnthropicLLMClient — adapts the SDK to the Protocol
+  protocol.py     # LLMClient Protocol, LLMResponse, LLMError hierarchy — the seam
+  adapters.py     # AnthropicLLMClient + OpenAICompatibleAdapter
   telemetry.py    # TrackedClient decorator: per-model token + cost accounting
-  factory.py      # build_client() — the only place a provider is named
+  factory.py      # build_client() -> (client, models) — the only place a provider is named
   profile.py      # load profile / sources from YAML
-  config.py       # settings from .env (never hardcode the API key)
+  config.py       # settings from .env (never hardcode credentials)
   profile.yaml    # personal interest profile — topics are data, not code
   source.yaml     # curated sources, each with a justification
   eval/           # golden set, sanity fixtures, blind labeler, precision/recall report
 tests/            # pytest — LLM and network dependencies mocked
 tickets/          # postmortem log: symptom -> root cause -> fix -> lesson
+docker/           # health check for the local model endpoint
+docs/             # published digest pages (GitHub Pages)
 .github/workflows/daily-digest.yaml
 ```
 
@@ -120,6 +143,19 @@ uv run mypy src/
 uv run daily-assistant         # full pipeline -> docs/
 uv run daily-assistant-sanity  # plumbing check against live triage (~1c)
 uv run daily-assistant-report  # score triage against the golden set (offline: free)
+```
+
+To run against a locally-served model instead of the Claude API, add the endpoint to `.env`
+and pass `--vllm`:
+
+```bash
+# .env
+VLLM_BASE_URL=http://localhost:8000/v1
+LOCAL_API_KEY=dummy
+LOCAL_MODEL=<model id served by vLLM>
+
+uv run daily-assistant --vllm
+uv run daily-assistant-report --live --vllm   # same golden set, local model
 ```
 
 In production this runs once a day via
