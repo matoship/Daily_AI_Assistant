@@ -492,19 +492,43 @@ before the Phase 4 benchmark, so the Haiku baseline would be measured under the 
 intended to run in production.
 
 **Alternative considered:** enabling Anthropic prompt caching before the benchmark. Rejected
-because the reusable prefix was measured at roughly 150 tokens (a ~118-token profile plus
-instructions), while Haiku 4.5 does not cache prefixes shorter than 4096 tokens. Below the
-minimum the request succeeds and simply is not cached, so the change would ship, report no
-error, and save nothing — and the "production configuration" it was meant to lock in would
-be indistinguishable from the current one. It would also add a provider-specific cache
-breakpoint to a prompt that both adapters share.
+because the reusable prefix is far below the minimum length that Anthropic will cache. The
+request render order is `tools` → `system` → `messages`, so the cacheable prefix is the tool
+definition plus the instructions and profile that precede the per-article text:
+
+| Component | Chars | Approx. tokens |
+|---|---:|---:|
+| tool schema + name + description | 439 | ~110–125 |
+| instructions + profile | 599 | ~150–170 |
+| **cacheable prefix** | **1038** | **~260–300** |
+| full single-article request | 2048 | ~510–585 |
+
+Haiku 4.5 does not cache prefixes shorter than **4096** tokens, so the prefix reaches about
+7% of the minimum and would need roughly **13×** growth to qualify. Below the minimum the
+request succeeds and simply is not cached — no error, `cache_creation_input_tokens: 0` — so
+the change would ship, report nothing, and save nothing, and the "production configuration"
+it was meant to lock in would be indistinguishable from the current one. It would also add a
+provider-specific cache breakpoint to a prompt that both adapters share.
+
+Worth recording because an earlier estimate put the prefix at ~150 tokens by counting only
+the instructions and profile. The tool definition is the *most* cacheable part of the request
+— it renders first — and omitting it understated the prefix by roughly half. The conclusion
+is unchanged either way, which is why the error survived review: a number only gets checked
+when it is close to the threshold it is being compared against.
 
 **Decision.** Build and benchmark the vLLM path first; revisit caching afterwards.
 
 **Consequence.** Caching remains open work, with two routes that would make it measurable
 rather than nominal: vLLM's automatic prefix caching, which operates on KV-cache blocks and
-can be evaluated by time-to-first-token on local hardware; or a prefix that legitimately
-grows past the minimum, such as few-shot examples. Few-shot examples must not come from the
-golden set, or the evaluation would be scoring answers it was shown. In either case the cache
-hit is confirmed from usage telemetry, not assumed from the request.
+has no comparable minimum, evaluated by **time to first token** on local hardware — prefix
+caching shortens prefill, so it should not move tokens per second, and a reported throughput
+gain would indicate something else changed; or a prefix that legitimately grows past the
+minimum, such as few-shot examples. At 13× the current prefix that means roughly a dozen
+worked examples, not two or three — and they must not come from the golden set, or the
+evaluation would be scoring answers it was shown. In either case the cache hit is confirmed
+from usage telemetry (`cache_read_input_tokens`), not assumed from the request.
+
+The token figures above are character-derived estimates at 3.5–4 chars/token; the exact
+counts come from `messages.count_tokens`, which is free. Nothing downstream depends on the
+precision, since the gap to the minimum is an order of magnitude.
 

@@ -23,8 +23,9 @@ def test_format_report_renders_table_like_summary():
         "other": {"precision": 0, "recall": 0.0, "f1": 0.0},
     }
 
-    report = format_report(confusion, metrics_result)
+    report = format_report(confusion, metrics_result, scored=47, failed=3)
 
+    assert "Scored: 47 | Failed: 3" in report
     assert "subgroup" in report
     assert "TP" in report
     assert "FP" in report
@@ -65,7 +66,7 @@ def test_compare_changes_renders_classification_flip_table():
         (labels[4], 9, ""),
     ]
 
-    report = compare_changes(rows, live_rows)
+    report = compare_changes(rows, live_rows, scored=5, failed=0)
 
     assert "subgroup" in report
     assert "FN->TP" in report
@@ -84,6 +85,7 @@ def test_compare_changes_renders_classification_flip_table():
         in report
     )
     assert "Live evaluation metrics" in report
+    assert "Scored: 5 | Failed: 0" in report
     assert "subgroup                   TP   FP   FN   TN" in report
     assert "2    1    1    1   0.67   0.67   0.67" in report
     assert "Immigration Sufficient" in report

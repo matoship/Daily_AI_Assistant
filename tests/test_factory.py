@@ -24,21 +24,32 @@ def test_build_client_online(monkeypatch):
 
 
 def test_build_client_local(monkeypatch):
-    captured = {}
 
-    setting = SimpleNamespace(base_url="http://localhost:8000/v1", api_key="dummy")
+    def fake_get_settings():
+        return SimpleNamespace(
+            local_model="test-local-model",
+            vllm_base_url="http://localhost:8000/v1",
+            local_api_key="dummy",
+        )
 
-    def fake_openai_client(
-        api_key: str,
-        base_url: str,
-    ):
-        captured["api_key"] = api_key
-        return setting
-
-    monkeypatch.setattr(factory_module, "OpenAI", fake_openai_client)
+    monkeypatch.setattr(factory_module, "get_settings", fake_get_settings)
 
     client, models = build_client(True)
 
-    assert models["triage"] == "Qwen/Qwen3-4B-Instruct-2507"
-    assert captured["api_key"] == "dummy"
+    assert client._client._client.base_url == "http://localhost:8000/v1/"
+    assert client._client._client.api_key == "dummy"
+    assert models["triage"] == "test-local-model"
+    assert models["synthesis"] == "test-local-model"
     assert isinstance(client._client, factory_module.OpenAICompatibleAdapter)
+
+
+def test_build_client_missing_Anthropic_key(monkeypatch):
+    def fake_get_settings():
+        return SimpleNamespace(anthropic_api_key=None)
+
+    monkeypatch.setattr(factory_module, "get_settings", fake_get_settings)
+
+    try:
+        build_client(False)
+    except ValueError as e:
+        assert str(e) == "Anthropic API key must be configured"

@@ -34,19 +34,29 @@ Phase 4 (local-model comparison) is in progress on the `phase-3-vllm` branch: th
 
 ## Phase 4 — local model comparison (in progress)
 
-- [ ] **Make the local endpoint configurable.** `MODELS["local"]` is still the placeholder
-      `"<vllm model id>"` and the base URL is hardcoded to `localhost:8000`. Both belong in
-      settings or on the CLI — otherwise the model name is changed by editing source.
-- [ ] **Record `provider` in `history.jsonl`.** `LLMResponse` now carries it, and the
-      comparison is the reason it was added.
-- [ ] **Count schema violations as a benchmark result.** Invalid output is now
-      `LLMProtocolError` rather than a crash, so "returned unusable output N times of 50" is
-      measurable — and it is where small models are expected to lose.
+- [ ] **Print coverage in the report.** `evaluate_live` collects failures and
+      `write_report_to_file` persists them, but `format_report` never shows them — so a run
+      that scored 40 of 50 prints the same shape of table as one that scored all 50. In a
+      model comparison that hides the result: the model that fails more has fewer articles
+      scored, its failures never reach F1, and it can look better by being worse. One
+      parameter and one output line (`scored 40/50, 10 failed`) removes the trap. Whether a
+      failure should also *count* as a miss is a separate question — decide it when there
+      are real failure counts to look at, not before.
+- [ ] **Validate the local settings when `local=True`.** `LOCAL_MODEL`, `VLLM_BASE_URL` and
+      `LOCAL_API_KEY` are optional with `None` defaults, so `build_client(local=True)` hands
+      `model=None` to the SDK and fails somewhere downstream instead of at the missing
+      config. The Anthropic path fails fast; the local path does not.
+- [ ] **`MODELS` resolves settings at import.** The dict is built at module scope from
+      `get_settings()`, so importing `factory` requires credentials, `MODELS["local"]`
+      freezes at import, and `test_build_client_local` reads the developer's real `.env`
+      (it passes at home and fails elsewhere). Resolving the ids inside `build_client` fixes
+      all three.
 - [ ] vLLM on the RTX 4090 behind the `LLMClient` seam; benchmark against Haiku on the
       golden set. Needs the home machine.
 - [ ] **Prompt caching, after vLLM** (`DECISIONS.md` 27). Deferred, not dropped: the
-      triage prompt's reusable prefix is ~150 tokens, far below Haiku 4.5's 4096-token
-      caching minimum, so provider-side caching would currently no-op without an error.
+      cacheable prefix — tool schema plus instructions and profile — is ~260–300 tokens,
+      about 7% of Haiku 4.5's 4096-token minimum and roughly 13× short of it, so
+      provider-side caching would currently no-op without an error.
       Two routes make it real: (a) vLLM's automatic prefix caching, which reuses KV-cache
       blocks with no comparable minimum — measure time-to-first-token with it on and off
       on the 4090; (b) a prefix that genuinely grows past the minimum, e.g. few-shot
@@ -100,6 +110,11 @@ Phase 4 (local-model comparison) is in progress on the `phase-3-vllm` branch: th
 
 ## Recently completed
 
+- [x] **Local endpoint is configurable** — `VLLM_BASE_URL`, `LOCAL_API_KEY` and
+      `LOCAL_MODEL` come from settings; no model id in source.
+- [x] **Triage failures are collected and persisted** — `evaluate_live` returns
+      `(rows, errors)` with a `TriageFailure` per unusable response, written to
+      `history.jsonl`. Surfacing them in the report is still open, above.
 - [x] **`LLMError` taxonomy at the client seam** — transient / configuration / protocol,
       translated in the adapters, chained with `from exc`; schema violations converted at
       the parse boundary; `provider` added to `LLMResponse`. Config errors now abort the

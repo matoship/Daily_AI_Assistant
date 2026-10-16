@@ -11,37 +11,39 @@ class ModelConfig(TypedDict):
     synthesis: str
 
 
-MODELS: dict[str, ModelConfig] = {
-    "anthropic": {
-        "triage": "claude-haiku-4-5-20251001",
-        "synthesis": "claude-sonnet-5",
-    },
-    "local": {
-        "triage": get_settings().local_model,
-        "synthesis": get_settings().local_model,
-    },
-}
-
-
 def build_client(
     local: bool = False,
 ) -> tuple[TrackedClient, ModelConfig]:
+    settings = get_settings()
+
     if local:
-        return (
-            TrackedClient(
-                OpenAICompatibleAdapter(
-                    OpenAI(
-                        base_url=get_settings().vllm_base_url,
-                        api_key=get_settings().local_api_key,
-                    )
+        if settings.local_model is None:
+            raise ValueError("Local model must be configured")
+        if settings.vllm_base_url is None:
+            raise ValueError("vLLM base URL must be configured")
+        if settings.local_api_key is None:
+            raise ValueError("Local API key must be configured")
+        models: ModelConfig = {
+            "triage": settings.local_model,
+            "synthesis": settings.local_model,
+        }
+        client = TrackedClient(
+            OpenAICompatibleAdapter(
+                OpenAI(
+                    base_url=settings.vllm_base_url,
+                    api_key=settings.local_api_key,
                 )
-            ),
-            MODELS["local"],
+            )
         )
-    else:
-        return (
-            TrackedClient(
-                AnthropicLLMClient(Anthropic(api_key=get_settings().anthropic_api_key))
-            ),
-            MODELS["anthropic"],
-        )
+        return client, models
+
+    models = {
+        "triage": "claude-haiku-4-5-20251001",
+        "synthesis": "claude-sonnet-5",
+    }
+    if settings.anthropic_api_key is None:
+        raise ValueError("Anthropic API key must be configured")
+    client = TrackedClient(
+        AnthropicLLMClient(Anthropic(api_key=settings.anthropic_api_key))
+    )
+    return client, models

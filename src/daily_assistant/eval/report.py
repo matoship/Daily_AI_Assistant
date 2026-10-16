@@ -125,12 +125,14 @@ def evaluate_live(
     return rows, errors
 
 
-def format_report(confusion, metrics_result) -> str:  # overall + subgroup breakdown
+def format_report(
+    confusion, metrics_result, *, scored: int, failed: int
+) -> str:  # overall + subgroup breakdown
     def format_metric(value: float | None, *, fallback: str = "n/a") -> str:
         return fallback if value is None else f"{value:.2f}"
 
     header = f"{'subgroup':<24} {'TP':>4} {'FP':>4} {'FN':>4} {'TN':>4} {'P':>6} {'R':>6} {'F1':>6}"
-    lines = [header, "-" * len(header)]
+    lines = [f"Scored: {scored} | Failed: {failed}", header, "-" * len(header)]
 
     for category, conf in confusion.items():
         label = category.replace("_", " ").title()
@@ -159,6 +161,9 @@ def format_report(confusion, metrics_result) -> str:  # overall + subgroup break
 def compare_changes(
     rows: list[tuple[GoldLabel, int, str]],
     live_rows: list[tuple[GoldLabel, int, str]],
+    *,
+    scored: int,
+    failed: int,
     gold_t: int = 5,
     model_t: int = 5,
 ) -> str:
@@ -240,7 +245,9 @@ def compare_changes(
         )
 
     flip_table = "\n".join(lines)
-    metrics_table = format_report(live_confusion, live_metrics)
+    metrics_table = format_report(
+        live_confusion, live_metrics, scored=scored, failed=failed
+    )
     return f"Classification flips\n{flip_table}\n\nLive evaluation metrics\n{metrics_table}"
 
 
@@ -364,7 +371,12 @@ def main(argv: list[str] | None = None):
             ) = calculate_confusion_and_metrics(cat_rows)
         live_urls = {row[0].article.url for row in live_rows}
         filtered_rows = [row for row in rows if row[0].article.url in live_urls]
-        report = compare_changes(filtered_rows, live_rows)
+        report = compare_changes(
+            filtered_rows,
+            live_rows,
+            scored=len(live_rows),
+            failed=len(errors),
+        )
         write_report_to_file(
             report,
             profile=profile,
@@ -374,7 +386,7 @@ def main(argv: list[str] | None = None):
             errors=errors,
         )
     else:
-        report = format_report(confusion, metrics_result)
+        report = format_report(confusion, metrics_result, scored=len(rows), failed=0)
     logger.info("\n%s", report)
 
 
