@@ -128,8 +128,12 @@ overwrite. Git is the archive.
   validated into Pydantic models (`TriageResult`, `DigestItem`). No free-text parsing.
 - **Provider seam:** `triage.py` and `synthesize.py` depend only on the `LLMClient`
   Protocol. Swapping providers is a change in `factory.py` and one new adapter.
-- **Cost envelope:** measured, not assumed — around a cent or two per daily run in steady
-  state, ~$0.12 for a 50-article evaluation run. Verified against the Anthropic console.
+- **Cost envelope:** measured, not assumed. Eight consecutive nightly runs (Oct 2026) cost
+  **$0.053–$0.081**, averaging **$0.067** over 17–28 articles each; a 50-article `--live`
+  evaluation costs **~$0.12**, from the three runs recorded in `eval/history.jsonl`. Both
+  figures come from the `estimated_cost_usd` telemetry, priced by `telemetry.PRICING` — so
+  they track the published rates rather than a billing read, and a stale price table makes
+  them wrong silently (`TICKET-038`).
 
 ## Evaluation
 

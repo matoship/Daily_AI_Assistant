@@ -40,7 +40,7 @@ implementation?* If not, it pins nothing. This has caught real bugs here repeate
 ```bash
 uv run pytest -q                  # test suite (fast, mocked, no API cost)
 uv run mypy src/                  # type check
-uv run daily-assistant            # full pipeline: fetch → digest → docs/ (~1-2c)
+uv run daily-assistant            # full pipeline: fetch → digest → docs/ (~5-8c)
 uv run daily-assistant-sanity     # eval sanity fixtures against live triage (~1c)
 uv run daily-assistant-report     # score triage vs golden set (offline free, --live ~13c)
 ```

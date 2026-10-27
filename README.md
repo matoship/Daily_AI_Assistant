@@ -26,8 +26,8 @@ flowchart TD
 ```
 
 Two-tier model use — cheap **Haiku** to triage every article, expensive **Sonnet** only for
-the low-volume synthesis step — keeps the daily cost to a couple of cents, measured (not
-assumed) via per-model token and cost telemetry stored with every run. Claude returns
+the low-volume synthesis step — holds a daily run to **5–8¢** across 17–28 articles, measured
+(not assumed) via per-model token and cost telemetry stored with every run. Claude returns
 **structured output** at every step, validated with Pydantic, so scores and digest entries
 are type-checked rather than parsed out of prose.
 
