@@ -143,7 +143,7 @@ Only `fetched` is swept by the 48h `mark_outdated_before` — it is the only lim
 
 | Path | What |
 |---|---|
-| `tickets/` | 38 postmortems: symptom → root cause → fix → lesson. Claude maintains these. |
+| `tickets/` | 41 postmortems: symptom → root cause → fix → lesson. Claude maintains these. |
 | `TODO.md` | Open work, phased. |
 | `ARCHITECTURE.md` | Deeper design notes. |
 | `DECISIONS.md` | 27 decisions with rejected alternatives; ⚖️ marks contested ones. |

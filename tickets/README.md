@@ -46,3 +46,6 @@ Each ticket: what broke, why, how it was fixed, and the generalizable lesson. Nu
 | [036](TICKET-036-console-entry-points-broke-three-times.md) | Console entry points broke three times on signature changes | CI/config + test coverage gap |
 | [037](TICKET-037-narrowed-except-before-conversion-finished.md) | Narrowing an `except` before finishing the conversion turned skips into aborts | regression / incomplete refactor |
 | [038](TICKET-038-half-applied-price-fix-locked-in-by-its-test.md) | A half-applied price fix was locked in by updating its test to match | silent data bug / test methodology |
+| [039](TICKET-039-tool-call-parser-ignored-without-auto-tool-choice.md) | `--tool-call-parser` silently ignored; the error asked for the flag already passed | CI/config / misleading diagnostic |
+| [040](TICKET-040-unexplained-flashinfer-flag-nvcc-mismatch.md) | An unexplained environment variable was hiding a CUDA toolchain mismatch | CI/config / undocumented workaround |
+| [041](TICKET-041-run-recorded-completed-before-digest-written.md) | Runs recorded `completed` and articles `digested` before the page was written | silent data bug / state ordering |
