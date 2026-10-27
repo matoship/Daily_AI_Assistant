@@ -26,7 +26,9 @@ def main() -> int:
             else:
                 stderr.write("Health check failed: Model not found.\n")
                 return 1
-
+    except json.JSONDecodeError as e:
+        stderr.write(f"Health check failed: Invalid JSON response: {e}\n")
+        return 1
     except (URLError, TimeoutError) as e:
         stderr.write(f"Health check failed: {e}\n")
         return 1
