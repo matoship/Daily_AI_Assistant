@@ -1,0 +1,99 @@
+<!doctype html><html lang='en'><head><meta charset='utf-8'><meta name='viewport' content='width=device-width, initial-scale=1'><title>Daily Digest - 2026-11-02</title><style>
+:root {
+    color-scheme: light dark;
+    --bg: #f7f7f8;
+    --surface: #ffffff;
+    --text: #1a1a1a;
+    --muted: #5b5f66;
+    --border: #e3e4e7;
+    --accent: #2f5fd8;
+    --callout-bg: #eef2fd;
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg: #14151a;
+        --surface: #1c1e24;
+        --text: #eceef1;
+        --muted: #9aa0aa;
+        --border: #2c2f37;
+        --accent: #7ea1ff;
+        --callout-bg: #1f2740;
+    }
+}
+* { box-sizing: border-box; }
+body {
+    margin: 0;
+    padding: 2.5rem 1.25rem;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.55;
+}
+main {
+    max-width: 42rem;
+    margin: 0 auto;
+}
+header { margin-bottom: 2rem; }
+h1 { font-size: 1.5rem; margin: 0 0 0.25rem; }
+.subtitle { color: var(--muted); font-size: 0.9rem; margin: 0; }
+nav.back { margin-bottom: 1.5rem; }
+nav.back a { color: var(--accent); text-decoration: none; font-size: 0.9rem; }
+nav.back a:hover { text-decoration: underline; }
+article.digest-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 1.25rem;
+}
+.badge {
+    display: inline-block;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    color: var(--accent);
+    background: var(--callout-bg);
+    border-radius: 999px;
+    padding: 0.2rem 0.65rem;
+    margin-bottom: 0.6rem;
+}
+article.digest-item h2 { font-size: 1.15rem; margin: 0 0 0.5rem; }
+article.digest-item p { margin: 0 0 0.75rem; color: var(--text); }
+.why-it-matters {
+    background: var(--callout-bg);
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    font-size: 0.92rem;
+}
+.why-it-matters strong { color: var(--accent); }
+.sources {
+    margin-top: 0.75rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--border);
+    font-size: 0.85rem;
+    color: var(--muted);
+}
+.sources a { color: var(--muted); margin-right: 0.75rem; }
+.sources a:hover { color: var(--accent); }
+.empty {
+    color: var(--muted);
+    text-align: center;
+    padding: 3rem 1rem;
+}
+ul.archive { list-style: none; margin: 0; padding: 0; }
+ul.archive li {
+    border: 1px solid var(--border);
+    background: var(--surface);
+    border-radius: 8px;
+    margin-bottom: 0.6rem;
+}
+ul.archive a {
+    display: block;
+    padding: 0.85rem 1.1rem;
+    color: var(--text);
+    text-decoration: none;
+    font-weight: 500;
+}
+ul.archive a:hover { color: var(--accent); }
+</style></head><body><main><nav class='back'><a href='index.html'>&larr; Archive</a></nav><header><h1>Daily Digest</h1><p class='subtitle'>2026-11-02</p></header><article class='digest-item'><span class='badge'>engineering</span><h2>DeepSeek open-sources dsh-superagent, a router-worker coding agent</h2><p>DeepSeek has released dsh-superagent, an open-source coding agent architecture that uses a &#x27;router-worker&#x27; pattern: a lightweight router model triages and delegates coding tasks to specialized worker models/agents, aiming to improve efficiency and task-specific accuracy over monolithic single-agent setups.</p><p class='why-it-matters'><strong>Why it matters:</strong> As an AI Engineer building LLM applications, this router-worker pattern is directly applicable to designing more efficient multi-agent pipelines in your own work (e.g., ServiceNow automation agents). Open-sourcing it also gives you a reference implementation to study or fork for agentic coding assistants, which aligns with your goal of becoming an AI Application Engineer.</p><div class='sources'><a href='https://www.marktechpost.com/2026/11/01/deepseek-dsh-superagent-router-worker-coding-agent/'>source 1</a></div></article><article class='digest-item'><span class='badge'>engineering</span><h2>Nace AI releases Drex Max v1, a 27B decision model for local Apple Silicon inference</h2><p>Nace AI open-sourced Drex Max v1, a 27-billion parameter decision-making model optimized to run locally on Apple Silicon hardware, enabling on-device inference without relying on cloud APIs.</p><p class='why-it-matters'><strong>Why it matters:</strong> On-device, cost-free inference is increasingly relevant for prototyping LLM applications and reducing dependency on paid API infrastructure—useful knowledge as you build and evaluate local vs. cloud deployment tradeoffs for AI application engineering work.</p><div class='sources'><a href='https://www.marktechpost.com/2026/11/01/nace-ai-open-sources-drex-max-v1-local-inference/'>source 1</a></div></article><article class='digest-item'><span class='badge'>engineering</span><h2>Show HN: HackerBooks brings HN-style discovery to books</h2><p>A new Show HN project, HackerBooks, curates and surfaces books mentioned across Hacker News discussions, similar in concept to HackerTube&#x27;s approach for video content.</p><p class='why-it-matters'><strong>Why it matters:</strong> A lightweight tool for discovering technical and engineering books recommended by the HN community—could be a handy way to find reading material relevant to AI/LLM engineering as you grow toward your AI Application Engineer goal.</p><div class='sources'><a href='https://hackerbooks.org'>source 1</a></div></article><article class='digest-item'><span class='badge'>engineering</span><h2>AWS compute capacity largely sold out through 2027</h2><p>AWS has reportedly sold out most of its reserved compute capacity through 2027, with only limited headroom kept aside for on-demand usage, signaling intense demand for cloud infrastructure, likely driven by AI workloads.</p><p class='why-it-matters'><strong>Why it matters:</strong> This is a critical signal for infrastructure planning in LLM application engineering—tight AWS capacity could affect availability, pricing, and scaling plans for GPU/compute-heavy workloads, making alternative providers or local inference (like the Drex Max model above) more attractive options to consider.</p><div class='sources'><a href='https://www.infoq.com/news/2026/11/aws-capacity-sold-out/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global'>source 1</a></div></article><article class='digest-item'><span class='badge'>engineering</span><h2>Show HN: OmniDiff, a fast content-aware Git diff tool written in Rust</h2><p>OmniDiff is a new open-source Git difftool built in Rust, designed to be fast and content-aware, improving on standard diff tools by better understanding file content/structure during comparisons.</p><p class='why-it-matters'><strong>Why it matters:</strong> A faster, smarter diff tool can meaningfully improve day-to-day developer productivity, particularly useful for reviewing code changes in engineering workflows like your ServiceNow/LLM application development.</p><div class='sources'><a href='https://github.com/ivankovic/omnidiff'>source 1</a></div></article></main></body></html>
