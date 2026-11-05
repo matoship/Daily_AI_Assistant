@@ -1,0 +1,99 @@
+<!doctype html><html lang='en'><head><meta charset='utf-8'><meta name='viewport' content='width=device-width, initial-scale=1'><title>Daily Digest - 2026-11-05</title><style>
+:root {
+    color-scheme: light dark;
+    --bg: #f7f7f8;
+    --surface: #ffffff;
+    --text: #1a1a1a;
+    --muted: #5b5f66;
+    --border: #e3e4e7;
+    --accent: #2f5fd8;
+    --callout-bg: #eef2fd;
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg: #14151a;
+        --surface: #1c1e24;
+        --text: #eceef1;
+        --muted: #9aa0aa;
+        --border: #2c2f37;
+        --accent: #7ea1ff;
+        --callout-bg: #1f2740;
+    }
+}
+* { box-sizing: border-box; }
+body {
+    margin: 0;
+    padding: 2.5rem 1.25rem;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.55;
+}
+main {
+    max-width: 42rem;
+    margin: 0 auto;
+}
+header { margin-bottom: 2rem; }
+h1 { font-size: 1.5rem; margin: 0 0 0.25rem; }
+.subtitle { color: var(--muted); font-size: 0.9rem; margin: 0; }
+nav.back { margin-bottom: 1.5rem; }
+nav.back a { color: var(--accent); text-decoration: none; font-size: 0.9rem; }
+nav.back a:hover { text-decoration: underline; }
+article.digest-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 1.25rem;
+}
+.badge {
+    display: inline-block;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    color: var(--accent);
+    background: var(--callout-bg);
+    border-radius: 999px;
+    padding: 0.2rem 0.65rem;
+    margin-bottom: 0.6rem;
+}
+article.digest-item h2 { font-size: 1.15rem; margin: 0 0 0.5rem; }
+article.digest-item p { margin: 0 0 0.75rem; color: var(--text); }
+.why-it-matters {
+    background: var(--callout-bg);
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    font-size: 0.92rem;
+}
+.why-it-matters strong { color: var(--accent); }
+.sources {
+    margin-top: 0.75rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--border);
+    font-size: 0.85rem;
+    color: var(--muted);
+}
+.sources a { color: var(--muted); margin-right: 0.75rem; }
+.sources a:hover { color: var(--accent); }
+.empty {
+    color: var(--muted);
+    text-align: center;
+    padding: 3rem 1rem;
+}
+ul.archive { list-style: none; margin: 0; padding: 0; }
+ul.archive li {
+    border: 1px solid var(--border);
+    background: var(--surface);
+    border-radius: 8px;
+    margin-bottom: 0.6rem;
+}
+ul.archive a {
+    display: block;
+    padding: 0.85rem 1.1rem;
+    color: var(--text);
+    text-decoration: none;
+    font-weight: 500;
+}
+ul.archive a:hover { color: var(--accent); }
+</style></head><body><main><nav class='back'><a href='index.html'>&larr; Archive</a></nav><header><h1>Daily Digest</h1><p class='subtitle'>2026-11-05</p></header><article class='digest-item'><span class='badge'>engineering</span><h2>Ripple-65B Preview: A New U.S. Open-Weight Leader for Agentic Coding</h2><p>Ricursive released a preview of Ripple-65B, an open-weight language model claimed to be state-of-the-art among U.S.-developed models for agentic coding tasks—i.e., multi-step coding workflows involving planning, tool use, and iterative execution rather than single-shot code generation.</p><p class='why-it-matters'><strong>Why it matters:</strong> As an AI engineer building LLM applications on ServiceNow, tracking agentic coding models is directly relevant to your work and career goal of becoming an AI Application Engineer. Open-weight models performing well on agentic tasks could inform build-vs-buy decisions for internal tooling and signal where the open-source ecosystem is closing the gap with closed frontier models.</p><div class='sources'><a href='https://www.ricursive.com/ripple'>source 1</a></div></article><article class='digest-item'><span class='badge'>engineering</span><h2>Inkitt&#x27;s One-Shot PR Creator Shows Resumable Agent Orchestration in Production</h2><p>Inkitt built an internal system that generates complete pull requests from a single prompt, using a resumable agent orchestration architecture that can pause, recover, and continue complex multi-step coding agent workflows reliably in production.</p><p class='why-it-matters'><strong>Why it matters:</strong> This is a concrete, production-grade example of agentic engineering patterns—orchestration, resumability, and reliability—that are core challenges in building robust LLM applications. Directly applicable to designing more resilient agent workflows in your own ServiceNow/LLM application work.</p><div class='sources'><a href='https://www.infoq.com/news/2026/11/inkitt-one-shot-pr-creator-agent/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global'>source 1</a></div></article><article class='digest-item'><span class='badge'>engineering</span><h2>Go Ships a New JSON API (jsonv2)</h2><p>The Go team published details on a new, modernized JSON API (jsonv2) aimed at addressing long-standing pain points in the standard library&#x27;s JSON encoding/decoding, improving performance, correctness, and ergonomics for Go developers.</p><p class='why-it-matters'><strong>Why it matters:</strong> If any part of your ServiceNow/LLM tooling touches Go-based services or integrations, this is a useful low-level engineering update on data serialization performance and API design—a good reference point for evaluating how foundational libraries evolve to meet modern application demands.</p><div class='sources'><a href='https://go.dev/blog/jsonv2'>source 1</a></div></article><article class='digest-item'><span class='badge'>engineering</span><h2>Anthropic Advances &#x27;Provable Inference&#x27; for LLMs</h2><p>Anthropic shared research progress on provable inference—techniques aimed at giving verifiable guarantees or stronger assurances about what happens during LLM inference, moving toward more trustworthy and auditable model behavior.</p><p class='why-it-matters'><strong>Why it matters:</strong> Verifiable inference is increasingly important for enterprise LLM deployments (like ServiceNow applications) where trust, auditability, and correctness guarantees matter for adoption. This research could shape future tooling standards relevant to your career trajectory in AI application engineering.</p><div class='sources'><a href='https://www.anthropic.com/research/provable-inference'>source 1</a></div></article><article class='digest-item'><span class='badge'>engineering</span><h2>Tencent Unveils Hy4 Research Model</h2><p>Tencent&#x27;s AI research division introduced Hy4, a new model/research effort from their Hunyuan (Hy) line, though specific technical details were limited in the release.</p><p class='why-it-matters'><strong>Why it matters:</strong> Keeping tabs on major non-U.S. labs like Tencent helps you track the global competitive landscape in foundation models, which is useful context when evaluating model options for LLM application engineering work.</p><div class='sources'><a href='https://hy.tencent.ai/research/hy4'>source 1</a></div></article></main></body></html>
