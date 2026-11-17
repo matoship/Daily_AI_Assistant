@@ -1,0 +1,99 @@
+<!doctype html><html lang='en'><head><meta charset='utf-8'><meta name='viewport' content='width=device-width, initial-scale=1'><title>Daily Digest - 2026-11-17</title><style>
+:root {
+    color-scheme: light dark;
+    --bg: #f7f7f8;
+    --surface: #ffffff;
+    --text: #1a1a1a;
+    --muted: #5b5f66;
+    --border: #e3e4e7;
+    --accent: #2f5fd8;
+    --callout-bg: #eef2fd;
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg: #14151a;
+        --surface: #1c1e24;
+        --text: #eceef1;
+        --muted: #9aa0aa;
+        --border: #2c2f37;
+        --accent: #7ea1ff;
+        --callout-bg: #1f2740;
+    }
+}
+* { box-sizing: border-box; }
+body {
+    margin: 0;
+    padding: 2.5rem 1.25rem;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.55;
+}
+main {
+    max-width: 42rem;
+    margin: 0 auto;
+}
+header { margin-bottom: 2rem; }
+h1 { font-size: 1.5rem; margin: 0 0 0.25rem; }
+.subtitle { color: var(--muted); font-size: 0.9rem; margin: 0; }
+nav.back { margin-bottom: 1.5rem; }
+nav.back a { color: var(--accent); text-decoration: none; font-size: 0.9rem; }
+nav.back a:hover { text-decoration: underline; }
+article.digest-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 1.25rem;
+}
+.badge {
+    display: inline-block;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    color: var(--accent);
+    background: var(--callout-bg);
+    border-radius: 999px;
+    padding: 0.2rem 0.65rem;
+    margin-bottom: 0.6rem;
+}
+article.digest-item h2 { font-size: 1.15rem; margin: 0 0 0.5rem; }
+article.digest-item p { margin: 0 0 0.75rem; color: var(--text); }
+.why-it-matters {
+    background: var(--callout-bg);
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    font-size: 0.92rem;
+}
+.why-it-matters strong { color: var(--accent); }
+.sources {
+    margin-top: 0.75rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--border);
+    font-size: 0.85rem;
+    color: var(--muted);
+}
+.sources a { color: var(--muted); margin-right: 0.75rem; }
+.sources a:hover { color: var(--accent); }
+.empty {
+    color: var(--muted);
+    text-align: center;
+    padding: 3rem 1rem;
+}
+ul.archive { list-style: none; margin: 0; padding: 0; }
+ul.archive li {
+    border: 1px solid var(--border);
+    background: var(--surface);
+    border-radius: 8px;
+    margin-bottom: 0.6rem;
+}
+ul.archive a {
+    display: block;
+    padding: 0.85rem 1.1rem;
+    color: var(--text);
+    text-decoration: none;
+    font-weight: 500;
+}
+ul.archive a:hover { color: var(--accent); }
+</style></head><body><main><nav class='back'><a href='index.html'>&larr; Archive</a></nav><header><h1>Daily Digest</h1><p class='subtitle'>2026-11-17</p></header><article class='digest-item'><span class='badge'>engineering</span><h2>Uber Cuts Contract Review Time 20% with Rules-Based + RAG Legal AI Agent</h2><p>Uber built an internal legal AI agent that automates contract redlining by combining deterministic rule engines with retrieval-augmented generation (RAG). The hybrid approach lets the system apply hard legal/compliance rules precisely while using RAG to pull relevant contract clauses and precedent language, cutting legal contract review time by 20% without sacrificing accuracy.</p><p class='why-it-matters'><strong>Why it matters:</strong> This is a strong real-world example of combining RAG with rule-based logic to build reliable enterprise agents—directly relevant to your work building LLM applications on ServiceNow, where similar hybrid patterns (deterministic workflow logic + generative retrieval) are key to production-grade AI agents.</p><div class='sources'><a href='https://www.infoq.com/news/2026/11/uber-legal-redlining-agent/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global'>source 1</a></div></article><article class='digest-item'><span class='badge'>engineering</span><h2>Meta&#x27;s JiTTests: LLM-Generated Tests That Try to Break Risky Code Before It Ships</h2><p>Meta introduced JiTTests, a system that uses LLMs to generate &#x27;just-in-time&#x27; tests specifically designed to fail on risky or privacy-sensitive code changes before they&#x27;re merged. The approach targets catching subtle bugs (like privacy violations) that traditional test suites often miss, by having the LLM reason about what could go wrong with a given diff and writing adversarial tests accordingly.</p><p class='why-it-matters'><strong>Why it matters:</strong> As LLM-driven development tooling matures, this shows how generative AI can be applied to software quality and safety gates—useful context for engineering robust AI-assisted development pipelines and for thinking about how to harden your own LLM application code against edge cases.</p><div class='sources'><a href='https://www.marktechpost.com/2026/11/16/meta-jittests-llm-catching-tests-privacy-bugs/'>source 1</a></div></article><article class='digest-item'><span class='badge'>engineering</span><h2>Hark Ships Handoff², a 2x Faster Computer-Use Agent</h2><p>Hark released Handoff², an updated computer-use agent for its Hark Pro platform that doubles the speed of prior agent interactions with desktop/GUI environments, improving task completion latency for automated computer-use workflows.</p><p class='why-it-matters'><strong>Why it matters:</strong> Computer-use agents are becoming a core building block for automating enterprise workflows (similar to ServiceNow automation use cases); tracking performance gains in this space helps you benchmark and evaluate tooling options for agentic automation projects.</p><div class='sources'><a href='https://www.marktechpost.com/2026/11/16/hark-handoff-2-computer-use-agent-2x-faster/'>source 1</a></div></article><article class='digest-item'><span class='badge'>engineering</span><h2>Governed Autonomous Intelligence: Designing AI for Mission-Critical Utility Systems</h2><p>This article explores architectural patterns for deploying autonomous AI agents in mission-critical utility (energy/infrastructure) settings, emphasizing governance frameworks, guardrails, and human oversight mechanisms needed to safely operate AI in high-stakes environments.</p><p class='why-it-matters'><strong>Why it matters:</strong> Governance and guardrail design are increasingly central to enterprise AI engineering roles, including ServiceNow-based AI workflows; understanding how mission-critical industries structure autonomy and oversight can inform best practices for your own agent deployments.</p><div class='sources'><a href='https://www.infoq.com/articles/utility-governed-autonomous-intelligence-ai/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global'>source 1</a></div></article><article class='digest-item'><span class='badge'>engineering</span><h2>AWS Open-Sources Local Emulator for 200+ Services to Support Coding Agents</h2><p>AWS has open-sourced an emulator that replicates over 200 AWS services locally, enabling coding agents and developers to test cloud-dependent code without deploying to live AWS infrastructure, speeding up iteration and reducing cost/risk during agentic coding workflows.</p><p class='why-it-matters'><strong>Why it matters:</strong> This lowers the barrier for safely testing AI coding agents against realistic cloud environments—valuable if you&#x27;re building or evaluating agentic coding tools, and relevant to local/sandboxed testing patterns you might apply when developing ServiceNow or LLM-integrated applications.</p><div class='sources'><a href='https://www.infoq.com/news/2026/11/aws-emulator-agents/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global'>source 1</a></div></article></main></body></html>
